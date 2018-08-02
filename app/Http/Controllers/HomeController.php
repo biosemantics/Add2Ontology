@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     public function index()
@@ -21,15 +21,24 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function specimenTwo()
+    public function wizard()
     {
         return view('home');
     }
 
-    public function specimenThree()
+    public function quickForm()
     {
         return view('home');
     }
 
+    public function webProtege()
+    {
+        return view('home');
+    }
+
+    public function termsWiki()
+    {
+        return view('home');
+    }
 
 }

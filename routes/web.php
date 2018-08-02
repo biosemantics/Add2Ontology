@@ -10,18 +10,19 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//
+//Route::get('/', function () {
+//    return view('home');
+//});
+//
+//Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/specimen-2', 'HomeController@specimenTwo')->name('specimen-2');
-Route::get('/specimen-3', 'HomeController@specimenThree')->name('specimen-3');
-
-Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
-    Route::get('companies', 'CompaniesController@index')->name('companies.index');
-    Route::get('activity_log', 'ActivityLogController@index')->name('activity.index');
-});
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/wizard', 'HomeController@wizard')->name('wizard');
+Route::get('/quick-form', 'HomeController@quickForm')->name('quick-form');
+Route::get('/web-protege', 'HomeController@webProtege')->name('web-protege');
+Route::get('/terms-wiki', 'HomeController@termsWiki')->name('terms-wiki');
+//
+//Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
+//    Route::get('activity_log', 'ActivityLogController@index')->name('activity.index');
+//});

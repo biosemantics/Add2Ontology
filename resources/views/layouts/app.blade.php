@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Add to Ontology') }}</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -31,7 +31,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Measurement Recorder') }}
+                        {{ config('app.name', 'Add to Ontology') }}
                     </a>
                 </div>
 
@@ -43,34 +43,11 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
-                        @else
-{{--                            <li><a href="{{ route('admin.companies.index') }}">Companies</a></li>--}}
-{{--                            <li><a href="{{ route('admin.measurements.index') }}">Measurements</a></li>--}}
-                            <li><a href="{{ route('admin.activity.index') }}">Activity Log</a></li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endguest
+                        <li><a href="{{ route('terms-wiki') }}">Terms Wiki</a></li>
+                        <li><a href="{{ route('web-protege') }}">Web Protege</a></li>
+                        <li><a href="{{ route('quick-form') }}">Quick Form</a></li>
+                        <li><a href="{{ route('wizard') }}">Wizard</a></li>
+                    </ul>
                     </ul>
                 </div>
             </div>

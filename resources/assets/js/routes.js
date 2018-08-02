@@ -1,27 +1,38 @@
 /**
  * Created by ZEUS on 5/22/2018.
  */
-import Specimen1 from './components/Pages/speciment1.vue';
-import Specimen2 from './components/Pages/speciment2.vue';
-import Specimen3 from './components/Pages/speciment3.vue';
+import Home from './components/Pages/home.vue';
+import Wizard from './components/Pages/wizard.vue';
+import QuickForm from './components/Pages/quick_form.vue';
+import WebProtege from './components/Pages/web_protege.vue';
+import TermsWiki from './components/Pages/terms_wiki.vue';
 
 const routes = [
     {
-        path: '/mr/shared/public/home',
-        component: Specimen1,
-        name: 'specimen-1'
+        path: '/',
+        component: Home,
+        name: 'home'
     },
     {
-        path: '/specimen-2',
-        component: Specimen2,
-        name: 'specimen-2'
+        path: '/wizard',
+        component: Wizard,
+        name: 'wizard'
     },
     {
-        path: '/specimen-3',
-        component: Specimen3,
-        name: 'specimen-3'
+        path: '/quick-form',
+        component: QuickForm,
+        name: 'quick-form'
     },
-
+    {
+        path: '/web-protege',
+        component: WebProtege,
+        name: 'web-protege'
+    },
+    {
+        path: '/terms-wiki',
+        component: TermsWiki,
+        name: 'terms-wiki'
+    },
 ];
 
 export default routes;

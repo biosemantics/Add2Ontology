@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMetaLogsTable extends Migration
+class CreateActivityLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateMetaLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('meta_logs', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('character_id');
-            $table->string('username');
-            $table->string('description');
+            $table->string('user_email');
+            $table->integer('type');
+            $table->string('detail');
+            $table->string('detail_addition')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateMetaLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meta_logs');
+        Schema::dropIfExists('activity_logs');
     }
 }

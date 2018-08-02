@@ -6,15 +6,11 @@
  */
 
 require('./bootstrap');
-import 'raphael';
-import 'wheelnav';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Tabs from 'vue-tabs-component';
 import routes from './routes';
-import Navigation from './components/Navigation/navigation.vue';
-import Layout from './components/Layout/layout.vue';
 import store from './store.js';
 
 Vue.use(Tabs);
@@ -27,9 +23,6 @@ export var router = new VueRouter({
     mode: 'history',
     routes: routes
 });
-
-Vue.component('layout', Layout);
-Vue.component('page-navigation', Navigation);
 
 
 new Vue({
