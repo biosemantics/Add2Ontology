@@ -95,7 +95,7 @@
                         'detail': app.username + ' submit on Quick Form',
                         'detail_addition': ''
                     };
-                    axios.post('/api/v1/activity-log', jsonRequest)
+                    axios.post('/add2ontology/public/api/v1/activity-log', jsonRequest)
                         .then(function (resp) {
                             console.log("activity-log resp", resp);
                         })

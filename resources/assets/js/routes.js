@@ -9,27 +9,27 @@ import TermsWiki from './components/Pages/terms_wiki.vue';
 
 const routes = [
     {
-        path: '/',
+        path: '/add2ontology/public/',
         component: Home,
         name: 'home'
     },
     {
-        path: '/wizard',
+        path: '/add2ontology/public/wizard',
         component: Wizard,
         name: 'wizard'
     },
     {
-        path: '/quick-form',
+        path: '/add2ontology/public/quick-form',
         component: QuickForm,
         name: 'quick-form'
     },
     {
-        path: '/web-protege',
+        path: '/add2ontology/public/web-protege',
         component: WebProtege,
         name: 'web-protege'
     },
     {
-        path: '/terms-wiki',
+        path: '/add2ontology/public/terms-wiki',
         component: TermsWiki,
         name: 'terms-wiki'
     },
