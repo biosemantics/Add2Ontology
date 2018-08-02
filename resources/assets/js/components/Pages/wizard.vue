@@ -17426,6 +17426,7 @@
                                 app.status = 5;
                             } else if (app.term.hasPart == 'no-user') {
                                 app.hasParts = app.userHasParts;
+                                app.modalShowFlag = true;
                             }
                         }
                         break;
