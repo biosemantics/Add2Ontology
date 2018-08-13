@@ -3,7 +3,6 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3>Home</h3>
-                {{ $route.params.term }}
             </div>
             <div class="panel-body table-responsive">
                 <div class="tab-pane">
