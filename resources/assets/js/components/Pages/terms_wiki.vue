@@ -18,7 +18,7 @@
                             <input v-model="termsWikiIRI" style="width: 100%;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
-                            <img src="../../../../../public/images/terms_wiki.png" style="width: 100%;"/>
+                            <img src="/add2ontology/public/images/terms_wiki.png" style="width: 100%;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
