@@ -3,6 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3>Home</h3>
+                {{ $route.params.term }}
             </div>
             <div class="panel-body table-responsive">
                 <div class="tab-pane">
@@ -52,11 +53,14 @@
                 sessionStorage.setItem('username', app.username);
                 var jsonRequest = {
                     'user_email': app.username,
-                    'type': 1,
-                    'detail': 'User saved username',
-                    'detail_addition': 'User saved username as ' + app.username
+                    'action': 'Save Username',
+                    'action_details': app.username + ' saved as username for term ',
+                    'abnormal_system_response': null,
+                    'type': 'Home'
                 };
-                axios.post('/add2ontology/public/api/v1/activity-log', jsonRequest)
+                var term = 'TTBA';
+                console.log('term', app.$route.params.term);
+                axios.post('/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                     .then(function (resp) {
                         console.log("activity-log resp", resp);
                     })

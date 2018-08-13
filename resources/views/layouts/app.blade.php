@@ -30,7 +30,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('/' . $term) }}">
                         {{ config('app.name', 'Add to Ontology') }}
                     </a>
                 </div>
@@ -43,10 +43,10 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ route('terms-wiki') }}">Terms Wiki</a></li>
-                        <li><a href="{{ route('web-protege') }}">Web Protege</a></li>
-                        <li><a href="{{ route('quick-form') }}">Quick Form</a></li>
-                        <li><a href="{{ route('wizard') }}">Wizard</a></li>
+                        <li><a href="{{ url('terms-wiki/' . $term) }}">Terms Wiki</a></li>
+                        <li><a href="{{ url('web-protege/' . $term) }}">Web Protege</a></li>
+                        <li><a href="{{ url('quick-form/' . $term) }}">Quick Form</a></li>
+                        <li><a href="{{ url('wizard/' . $term) }}">Wizard</a></li>
                     </ul>
                     </ul>
                 </div>

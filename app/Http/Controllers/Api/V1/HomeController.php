@@ -9,8 +9,15 @@ use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
-    public function saveActivityLog(Request $request) {
-        $activityLog = ActivityLog::create($request->all());
+    public function saveActivityLog(Request $request, $term) {
+
+        $activityLog = ActivityLog::create([
+            'user_email' => $request->input('user_email'),
+            'action' => $request->input('action'),
+            'action_details' => $request->input('action_details') . ' ' . $term,
+            'abnormal_system_response' => $request->input('abnormal_system_response'),
+            'type' => $request->input('type'),
+        ]);
 
         return $activityLog;
     }

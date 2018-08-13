@@ -9,7 +9,7 @@
                     <form class="form-horizontal" autocomplete="off">
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Terms: [selected word/phrase]</label>
+                            <label class="col-md-4 control-label">Term: {{ $route.params.term }}</label>
                         </div>
 
                         <div class="form-group">
@@ -91,11 +91,12 @@
                 } else {
                     var jsonRequest = {
                         'user_email': app.username,
-                        'type': 3,
-                        'detail': app.username + ' submit on Quick Form',
-                        'detail_addition': ''
+                        'action': 'Submit Quick Form',
+                        'action_details': app.username + ' submitted for term ',
+                        'abnormal_system_response': null,
+                        'type': 'Quick Form'
                     };
-                    axios.post('/add2ontology/public/api/v1/activity-log', jsonRequest)
+                    axios.post('/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function (resp) {
                             console.log("activity-log resp", resp);
                         })

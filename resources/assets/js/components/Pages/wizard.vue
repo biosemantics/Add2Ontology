@@ -7,257 +7,319 @@
             <div class="panel-body table-responsive" style="font-size: 15px;">
                 <div class="tab-pane">
                     <form class="form-horizontal" autocomplete="off">
-                        <div v-if="status != 5" class="form-group">
-                            <label class="col-md-8 col-md-offset-2">
-                                Answer the following questions about [term to be added]. Your answer helps the computer understand the meaning of the term.
-                            </label>
-                        </div>
-                        <div v-if="status == 0">
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-2">
-                                    <label>Please provide  a human readable definition for [term to be added].</label>
+                        <div class="row">
+                            <div class="col-md-offset-1 col-md-4">
+                                <div v-if="status == -1 || status > 0">
+                                    Please provide  a human readable definition for {{ $route.params.term }}: {{ term.definition }}
                                 </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input v-model="term.definition" style="width: 100%;"/>
+                                <div v-if="status == -1 || status > 1">
+                                    Does {{ $route.params.term }} represent an anatomical structure or a character? :
+                                    <span v-if="term.represent == 'anatomical'">an anatomical structure</span>
+                                    <span v-if="term.represent == 'character'">a character</span>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-2">
-                                    <a class="btn btn-primary" v-on:click="submit(0)">Save</a>
+                                <div v-if="status > 2">
+                                    Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms?
+                                    <span v-if="term.synonym == 'yes'">Yes</span>
+                                    <span v-if="term.synonym == 'no'">No</span>
                                 </div>
-                            </div>
-                        </div>
-
-
-                        <div v-if="status == 1">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <label>Does [term to be added] represent</label>
+                                <div v-if="status > 3">
+                                    Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?
+                                    <span v-if="term.instance == 'yes'">Yes</span>
+                                    <span v-if="term.instance == 'no'">No, I am not aware of such larger structures.</span>
+                                    <span v-if="term.instance == 'no-user'">No, such larger structures are not shown in the tree.</span>
                                 </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question1-y" v-model="term.represent" value="anatomical" name="structure" />
-                                    <label for="question1-y">an anatomical structure? </label>
-                                    <div style="padding-left: 10px;">
-                                        If the term represents a physical object such as leaf, apex, pore, or imaginary anatomical structures such as axis, then choose “anatomical structure”.  Example anatomical structure terms (link to Carex Ontology anatomical entity branch on WebProtege)
-                                    </div>
+                                <div v-if="status > 4">
+                                    Are all instances of {{ $route.params.term }} have certain parts that are in the tree below?
+                                    <span v-if="term.hasPart == 'yes'">Yes</span>
+                                    <span v-if="term.hasPart == 'no'">No, I am not aware of such smaller structures.</span>
+                                    <span v-if="term.hasPart == 'no-user'">No, such smaller structures are not shown in the tree.</span>
                                 </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question1-n" v-model="term.represent" value="character" name="structure" />
-                                    <label for="question1-n">a character?</label>
-                                    <div style="padding-left: 10px;">
-                                        If the term represents a property such as color, shape, size, orientation, position etc. of a physical object, then choose “character”. Example character terms (link to Carex Ontology quality branch on WebProtege)
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-2">
-                                    <a class="btn btn-primary" v-on:click="submit(1)">Save</a>
+                                <div v-if="status == 5 && term.represent == 'character'">
+                                    Is {{ $route.params.term }} a synonym to any of the existing quality terms?
+                                    <span v-if="term.synonym == 'yes'">Yes</span>
+                                    <span v-if="term.synonym == 'no'">No</span>
                                 </div>
 
                             </div>
-                        </div>
-
-                        <div v-if="status == 2">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <label>Is [term to be added] a synonym to any of the existing anatomical structure terms? </label>
+                            <div class="col-md-6">
+                                <div v-if="status != 5" class="form-group">
+                                    <label class="col-md-12">
+                                        Answer the following questions about {{ $route.params.term }}. Your answer helps the computer understand the meaning of the term.
+                                    </label>
                                 </div>
-                                <div class="col-md-offset-2 col-md-4">
-                                    <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
-                                    <tree
-                                            :data="treeData"
-                                            :options="synonymsOption"
-                                            ref="tree"
-                                            @node:checked="onSynonymSelected"
-                                            @node:unchecked="onSynonymUnselected"
-                                    />
-                                </div>
-                                <div class="col-md-4">
-                                    <pre>{{ treeDetails.q2 }}</pre>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
-                                    <label for="question2-y">Yes </label>
-                                    <div style="padding-left: 10px;">
-                                        In the tree above, select the nodes that [term to be added] is a synonym of.
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
-                                    <label for="question2-n">No</label>
-                                    <div style="padding-left: 10px;">
-                                        In the tree above, select the nodes under which [term to be added] should be added.
-                                    </div>
-                                </div>
-                                <div v-if="status == 2" class="col-md-8 col-md-offset-2">
-                                    <a class="btn btn-primary" v-on:click="submit(2)">Save</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="status == -1">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <label>Is [term to be added] a synonym to any of the existing quality terms? </label>
-                                </div>
-                                <div class="col-md-offset-2 col-md-4">
-                                    <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
-                                    <tree
-                                            :data="treeData"
-                                            :options="synonymsOption"
-                                            ref="tree"
-                                            @node:checked="onCharacterSynonymSelected"
-                                            @node:unchecked="onSynonymUnselected"
-                                    />
-                                </div>
-                                <div class="col-md-4">
-                                    <pre>{{ treeDetails.qx }}</pre>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
-                                    <label for="questionx-y">Yes </label>
-                                    <div style="padding-left: 10px;">
-                                        In the tree above, select the nodes that [term to be added] is a synonym of.
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
-                                    <label for="questionx-n">No</label>
-                                    <div style="padding-left: 10px;">
-                                        In the tree above, select the nodes under which [term to be added] should be added.
-                                    </div>
-                                </div>
-                                <div v-if="status == -1" class="col-md-8 col-md-offset-2">
-                                    <a class="btn btn-primary" v-on:click="submit(-1)">Save</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="status == 3">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <label>Are all instances of [term to be added] part of some larger structures shown in the tree below? </label>
-                                </div>
-                                <div class="col-md-offset-2 col-md-4">
-                                    <tree
-                                            :data="treeData"
-                                            :options="synonymsOption"
-                                            ref="tree"
-                                            @node:checked="onPartOfSelected"
-                                            @node:unchecked="onSynonymUnselected"
-                                    />
-                                </div>
-                                <div class="col-md-4">
-                                    <pre>{{ treeDetails.q3 }}</pre>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
-                                    <label for="question3-y">Yes </label>
-                                    <div style="padding-left: 10px;">
-                                        Select the larger structures to which all instances of [term to be added] belong.
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question3-n" v-model="term.instance" value="no" name="structure" />
-                                    <label for="question3-n"> No, I am not aware of such larger structures.</label>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question3-n-user" v-model="term.instance" value="no-user" name="structure" />
-                                    <label for="question3-n-user">No, such larger structures are not shown in the tree. Here are these structures and their definitions:</label>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2" v-if="term.instance == 'no-user'">
-                                    <div style="padding-left: 10px;">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Term
-                                            </div>
-                                            <div class="col-md-4">
-                                                Human readable definition
-                                            </div>
+                                <div v-if="status == 0">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Please provide  a human readable definition for {{ $route.params.term }}.</label>
                                         </div>
-                                        <div class="row" v-for="i in userInstances.length" style="padding-top: 5px;">
-                                            <div class="col-md-4">
-                                                <input v-model="userInstances[i-1].term"/>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input v-model="userInstances[i-1].definition"/>
-                                            </div>
+                                        <div class="col-md-12">
+                                            <input v-model="term.definition" style="width: 100%;"/>
                                         </div>
                                     </div>
-                                    <div style="padding-left: 10px; margin-top: 20px;">
-                                        <a class="btn btn-primary "  v-on:click="addUserDefinition()"><span class="glyphicon glyphicon-plus"></span></a>
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2" style="margin-top: 20px;">
-                                    <a class="btn btn-primary" v-on:click="submit(3)">Save</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-if="status == 4">
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-8">
-                                    <label>Are all instances of [term to be added] have certain parts that are in the tree below? </label>
-                                </div>
-                                <div class="col-md-offset-2 col-md-4">
-                                    <tree
-                                            :data="treeData"
-                                            :options="synonymsOption"
-                                            ref="tree"
-                                            @node:checked="onHasPartSelected"
-                                            @node:unchecked="onSynonymUnselected"
-                                    />
-                                </div>
-                                <div class="col-md-4">
-                                    <pre>{{ treeDetails.q4 }}</pre>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
-                                    <label for="question4-y">Yes </label>
-                                    <div style="padding-left: 10px;">
-                                        Select the parts.
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question4-n" v-model="term.hasPart" value="no" name="structure" />
-                                    <label for="question4-n"> No, I am not aware of such smaller structures.</label>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2">
-                                    <input type="radio" id="question4-n-user" v-model="term.hasPart" value="no-user" name="structure" />
-                                    <label for="question4-n-user">No, such smaller structures are not shown in the tree. Here are these structures and their definitions:</label>
-                                </div>
-                                <div class="col-md-8 col-md-offset-2" v-if="term.hasPart == 'no-user'">
-                                    <div style="padding-left: 10px;">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                Term
-                                            </div>
-                                            <div class="col-md-4">
-                                                Human readable definition
-                                            </div>
-                                        </div>
-                                        <div class="row" v-for="i in userHasParts.length" style="padding-top: 5px;">
-                                            <div class="col-md-4">
-                                                <input v-model="userHasParts[i-1].term"/>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <input v-model="userHasParts[i-1].definition"/>
-                                            </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-primary" v-on:click="submit(0)">Save</a>
                                         </div>
                                     </div>
-                                    <div style="padding-left: 10px; margin-top: 20px;">
-                                        <a class="btn btn-primary "  v-on:click="addUserHasPart()"><span class="glyphicon glyphicon-plus"></span></a>
+                                </div>
+
+
+                                <div v-if="status == 1">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Does {{ $route.params.term }} represent</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question1-y" v-model="term.represent" value="anatomical" name="structure" />
+                                            <label for="question1-y">an anatomical structure? </label>
+                                            <div style="padding-left: 10px;">
+                                                If the term represents a physical object such as leaf, apex, pore, or imaginary anatomical structures such as axis, then choose “anatomical structure”.  Example anatomical structure terms (link to Carex Ontology anatomical entity branch on WebProtege)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey;">
+                                            <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
+                                            <tree
+                                                    :data="largeDataEntity"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onEntitySelected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6" style="margin-top: 20px">
+                                            <pre>{{ treeDetails.entity }}</pre>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 20px">
+                                            <input type="radio" id="question1-n" v-model="term.represent" value="character" name="structure" />
+                                            <label for="question1-n">a character?</label>
+                                            <div style="padding-left: 10px;">
+                                                If the term represents a property such as color, shape, size, orientation, position etc. of a physical object, then choose “character”. Example character terms (link to Carex Ontology quality branch on WebProtege)
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey;">
+                                            <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
+                                            <tree
+                                                    :data="largeDataQuality"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onQualitySelected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6" style="margin-top: 20px">
+                                            <pre>{{ treeDetails.quality }}</pre>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <a class="btn btn-primary" v-on:click="submit(1)">Save</a>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-md-offset-2" style="margin-top: 20px;">
-                                    <a class="btn btn-primary" v-on:click="submit(4)">Save</a>
+
+                                <div v-if="status == 2">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms? </label>
+                                        </div>
+                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                            <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
+                                            <tree
+                                                    :data="treeData"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onSynonymSelected"
+                                                    @node:unchecked="onSynonymUnselected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <pre>{{ treeDetails.q2 }}</pre>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
+                                            <label for="question2-y">Yes </label>
+                                            <div style="padding-left: 10px;">
+                                                In the tree above, select the nodes that [term to be added] is a synonym of.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
+                                            <label for="question2-n">No</label>
+                                            <div style="padding-left: 10px;">
+                                                In the tree above, select the nodes under which [term to be added] should be added.
+                                            </div>
+                                        </div>
+                                        <div v-if="status == 2" class="col-md-12">
+                                            <a class="btn btn-primary" v-on:click="submit(2)">Save</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="status == -1">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Is {{ $route.params.term }} a synonym to any of the existing quality terms? </label>
+                                        </div>
+                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                            <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
+                                            <tree
+                                                    :data="treeData"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onCharacterSynonymSelected"
+                                                    @node:unchecked="onSynonymUnselected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <pre>{{ treeDetails.qx }}</pre>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
+                                            <label for="questionx-y">Yes </label>
+                                            <div style="padding-left: 10px;">
+                                                In the tree above, select the nodes that {{ $route.params.term }} is a synonym of.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
+                                            <label for="questionx-n">No</label>
+                                            <div style="padding-left: 10px;">
+                                                In the tree above, select the nodes under which {{ $route.params.term }} should be added.
+                                            </div>
+                                        </div>
+                                        <div v-if="status == -1" class="col-md-12">
+                                            <a class="btn btn-primary" v-on:click="submit(-1)">Save</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="status == 3">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below? </label>
+                                        </div>
+                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                            <tree
+                                                    :data="treeData"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onPartOfSelected"
+                                                    @node:unchecked="onSynonymUnselected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <pre>{{ treeDetails.q3 }}</pre>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
+                                            <label for="question3-y">Yes </label>
+                                            <div style="padding-left: 10px;">
+                                                Select the larger structures to which all instances of {{ $route.params.term }} belong.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question3-n" v-model="term.instance" value="no" name="structure" />
+                                            <label for="question3-n"> No, I am not aware of such larger structures.</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question3-n-user" v-model="term.instance" value="no-user" name="structure" />
+                                            <label for="question3-n-user">No, such larger structures are not shown in the tree. Here are these structures and their definitions:</label>
+                                        </div>
+                                        <div class="col-md-12" v-if="term.instance == 'no-user'">
+                                            <div style="padding-left: 10px;">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        Term
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        Human readable definition
+                                                    </div>
+                                                </div>
+                                                <div class="row" v-for="i in userInstances.length" style="padding-top: 5px;">
+                                                    <div class="col-md-6">
+                                                        <input v-model="userInstances[i-1].term"/>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <input v-model="userInstances[i-1].definition"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="padding-left: 10px; margin-top: 20px;">
+                                                <a class="btn btn-primary "  v-on:click="addUserDefinition()"><span class="glyphicon glyphicon-plus"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 20px;">
+                                            <a class="btn btn-primary" v-on:click="submit(3)">Save</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="status == 4">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label>Are all instances of {{ $route.params.term }} have certain parts that are in the tree below? </label>
+                                        </div>
+                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                            <tree
+                                                    :data="treeData"
+                                                    :options="synonymsOption"
+                                                    ref="tree"
+                                                    @node:checked="onHasPartSelected"
+                                                    @node:unchecked="onSynonymUnselected"
+                                            />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <pre>{{ treeDetails.q4 }}</pre>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
+                                            <label for="question4-y">Yes </label>
+                                            <div style="padding-left: 10px;">
+                                                Select the parts.
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question4-n" v-model="term.hasPart" value="no" name="structure" />
+                                            <label for="question4-n"> No, I am not aware of such smaller structures.</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input type="radio" id="question4-n-user" v-model="term.hasPart" value="no-user" name="structure" />
+                                            <label for="question4-n-user">No, such smaller structures are not shown in the tree. Here are these structures and their definitions:</label>
+                                        </div>
+                                        <div class="col-md-12" v-if="term.hasPart == 'no-user'">
+                                            <div style="padding-left: 10px;">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        Term
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        Human readable definition
+                                                    </div>
+                                                </div>
+                                                <div class="row" v-for="i in userHasParts.length" style="padding-top: 5px;">
+                                                    <div class="col-md-4">
+                                                        <input v-model="userHasParts[i-1].term"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input v-model="userHasParts[i-1].definition"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="padding-left: 10px; margin-top: 20px;">
+                                                <a class="btn btn-primary "  v-on:click="addUserHasPart()"><span class="glyphicon glyphicon-plus"></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-top: 20px;">
+                                            <a class="btn btn-primary" v-on:click="submit(4)">Save</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="status == 5" class="col-md-12">
+                                    <div v-for="each in summary">
+                                        {{ each }}
+                                    </div>
+                                    <a class="btn btn-primary" v-on:click="Submit('final')" style="margin-top: 10px;">Submit</a>
                                 </div>
                             </div>
                         </div>
-                        <div v-if="status == 5" class="col-md-offset-2 col-md-8">
-                            <div v-for="each in summary">
-                                {{ each }}
-                            </div>
-                            <a class="btn btn-primary" v-on:click="Submit('final')" style="margin-top: 10px;">Submit</a>
-                        </div>
+
                         <div v-if="modalShowFlag" @close="modalShowFlag = false">
                             <transition name="modal">
                                 <div class="modal-mask">
@@ -272,13 +334,13 @@
                                                 <div class="row">
                                                     <div v-if="status == 2 || status == -1" class="col-md-12">
                                                         <div v-if="term.synonym == 'yes'">
-                                                            You added [term to be added] as synonyms to
+                                                            You are adding [term to be added] as synonyms to
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.synonym == 'no'">
-                                                            You added [term to be added] as subclass of
+                                                            You are adding [term to be added] as subclass of
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
@@ -363,7 +425,9 @@
                     q2: null,
                     qx: null,
                     q3: null,
-                    q4: null
+                    q4: null,
+                    entity: null,
+                    quality: null
                 },
                 arraySynonyms: [],
                 treeData: [
@@ -380,7 +444,7 @@
                 hasParts: [],
                 modalShowFlag: false,
                 temp : {
-                    text: 'test11',
+                    text: this.$route.params.term,
                     state: {
                         checked: false
                     },
@@ -17324,6 +17388,22 @@
             }
         },
         mounted() {
+            var app = this;
+            if (sessionStorage.getItem('definition') != null) {
+                app.term.definition = sessionStorage.getItem('definition');
+            }
+            if (sessionStorage.getItem('represent') != null) {
+                app.term.represent = sessionStorage.getItem('represent');
+            }
+            if (sessionStorage.getItem('synonym') != null) {
+                app.term.synonym = sessionStorage.getItem('synonym');
+            }
+            if (sessionStorage.getItem('instance') != null) {
+                app.term.instance = sessionStorage.getItem('instance');
+            }
+            if (sessionStorage.getItem('hasPart') != null) {
+                app.term.hasPart = sessionStorage.getItem('hasPart');
+            }
             console.log('Component mounted.')
         },
         beforeMount() {
@@ -17335,29 +17415,86 @@
                 console.log("term", app.term);
                 switch (status) {
                     case 0:
-                        if (app.term.definition == null) {
-                            alert('Please insert the human readable text.');
+                        if (app.term.definition == null || app.username == null) {
+                            alert('Please insert the username and human readable text.');
                         } else {
+                            sessionStorage.setItem('definition', app.term.definition);
+                            var jsonRequest = {
+                                'user_email': app.username,
+                                'action': 'Save Human Readable Definition',
+                                'action_details': app.term.definition + ' saved as human readable definition for term',
+                                'abnormal_system_response': null,
+                                'type': 'Human Readable Definition'
+                            };
+                            if (app.username == null) {
+                                alert('Please insert the username on homepage');
+                            } else {
+                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            }
                             app.status = 1;
                             app.summary.push(app.temp.text + " is set the human readable text as " + app.term.definition + ".");
                         }
                         break;
                     case 1:
+                        sessionStorage.setItem('represent', app.term.represent);
                         if (app.term.represent == null) {
                             alert("Please select the radio button for representing.")
                         } else {
                             if (app.term.represent == 'anatomical') {
                                 app.treeData.push(app.largeDataEntity);
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Save Representation',
+                                    'action_details': 'an anatomical structure saved as representation for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'TTBA representation'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                                 app.status = 2;
                                 app.summary.push(app.temp.text + " is set as an anatomical structure.");
                             } else {
                                 app.treeData.push(app.largeDataQuality);
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Save Representation',
+                                    'action_details': 'a character structure saved as representation for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'TTBA representation'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                                 app.status = -1;
                                 app.summary.push(app.temp.text + " is set as a character.");
                             }
                         }
                         break;
                     case 2:
+                        sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
                         } else {
@@ -17371,16 +17508,12 @@
 
 
                             } else if (app.term.synonym == 'no') {
-                                app.synonyms = app.$refs.tree.find({
-                                    state: {
-                                        checked: true
-                                    }
-                                }, true);
-                                app.modalShowFlag = true;
+                                app.status = 4;
                             }
                         }
                         break;
                     case -1:
+                        sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
                         } else {
@@ -17393,6 +17526,7 @@
                         }
                         break;
                     case 3:
+                        sessionStorage.setItem('instance', app.term.instance);
                         if (app.term.instance == null) {
                             alert("Please select radio button before clicking 'Save' button");
                         } else {
@@ -17413,6 +17547,7 @@
                         }
                         break;
                     case 4:
+                        sessionStorage.setItem('hasPart', app.term.hasPart);
                         if (app.term.hasPart == null) {
                             alert("Please select radio button before clicking 'Save' button");
                         } else {
@@ -17449,11 +17584,30 @@
                                 axios.post("http://shark.sbs.arizona.edu:8080/synonym", jsonRequest)
                                     .then(function(resp) {
                                         console.log("synonym resp", resp);
-//                                            app.synonyms[0].data.details[0].exact_synonym = resp.data;
-                                        app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
-                                        app.summary.push(app.temp.text + " is added as a synonym to class " + app.synonyms[0].text);
-                                        console.log("tree after updated", this.$refs.tree);
-                                        app.treeData = app.$refs.tree.model;
+                                        if (resp.data == "SUCCESSFULLY") {
+                                            app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
+                                            app.summary.push(app.temp.text + " is added as a synonym to class " + app.synonyms[0].text);
+                                            console.log("tree after updated", this.$refs.tree);
+                                            app.treeData = app.$refs.tree.model;
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Set Synonym',
+                                                'action_details': app.synonyms[0].text  + ' is set as synonym for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                            };
+                                            if (app.username == null) {
+                                                alert('Please insert the username on homepage');
+                                            } else {
+                                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
+                                            }
+                                        }
                                         app.modalShowFlag = false;
                                         app.status = 3;
                                     })
@@ -17469,10 +17623,6 @@
                         } else if (app.term.synonym == 'no') {
                             app.callLoopApi(0, 'class', null, null, null, null, status);
 
-                            console.log("tree after updated", this.$refs.tree);
-                            app.treeData = app.$refs.tree.model;
-                            app.modalShowFlag = false;
-                            app.status = 3;
                         }
                         break;
                     case -1:
@@ -17485,11 +17635,26 @@
                                 axios.post("http://shark.sbs.arizona.edu:8080/synonym", jsonRequest)
                                     .then(function(resp) {
                                         console.log("synonym resp", resp);
-//                                            app.synonyms[0].data.details[0].exact_synonym = resp.data;
-                                        app.summary.push(app.temp.text + " is added as a synonym to class " + app.synonyms[0].text);
-                                        app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
-                                        console.log("tree after updated", this.$refs.tree);
-                                        app.treeData = app.$refs.tree.model;
+                                        if (resp.data == "SUCCESSFULLY") {
+                                            app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
+                                            app.summary.push(app.temp.text + " is added as a synonym to class " + app.synonyms[0].text);
+                                            console.log("tree after updated", this.$refs.tree);
+                                            app.treeData = app.$refs.tree.model;
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Set Synonym',
+                                                'action_details': app.synonyms[0].text  + ' is set as synonym for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                            };
+                                            axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
+                                        }
                                         app.modalShowFlag = false;
                                         app.status = 5;
                                     })
@@ -17503,10 +17668,6 @@
                         } else if (app.term.synonym == 'no') {
                             app.callLoopApi(0, 'class', null, null, null, null, status);
 
-//                            console.log("tree after updated", this.$refs.tree);
-//                            app.treeData = app.$refs.tree.model;
-//                            app.modalShowFlag = false;
-//                            app.status = 5;
                         }
                         break;
                     case 3:
@@ -17525,16 +17686,7 @@
                                     app.callLoopApi(0, 'partOf', 'synonym', i, null, null, status);
 
                                 }
-//                                console.log("tree after updated", this.$refs.tree);
-//                                app.treeData = app.$refs.tree.model;
-//                                var selectedNode = this.$refs.tree.find({
-//                                    state: {checked: true}
-//                                }, true);
-//                                if (selectedNode != null) selectedNode.uncheck();
-//
-//                                app.modalShowFlag = false;
-//
-//                                app.status = 4;
+
                             } else if (app.TTBA.length > 0) {
                                 for (var i = 0; i < app.TTBA.length; i++) {
                                     app.tempIndex = i;
@@ -17547,16 +17699,6 @@
                                     app.callLoopApi(0, 'partOf', 'TTBA', i, null, null, status);
 
                                 }
-//                                console.log("tree after updated", this.$refs.tree);
-//                                app.treeData = app.$refs.tree.model;
-//                                var selectedNode = this.$refs.tree.find({
-//                                    state: {checked: true}
-//                                }, true);
-//                                if (selectedNode != null) selectedNode.uncheck();
-//
-//                                app.modalShowFlag = false;
-//
-//                                app.status = 4;
 
                             }
                         } else if (app.term.instance == 'no-user') {
@@ -17578,6 +17720,21 @@
                                         if (resp.data == 'UNSUCCESSFULLY' || resp.data == 'NO_OPERATION') {
 
                                         } else {
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Add Class',
+                                                'action_details': app.tempIndex  + ' is added as subclass of ' + superClass.text +' for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                            };
+                                            axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
+
                                             if (app.TTBA == null) {
                                                 app.callLoopApi(0, 'partOf', 'no-synonym', null, resp.data, app.tempIndex, app.status);
 
@@ -17590,24 +17747,9 @@
                                         console.log("class error", resp);
                                     });
                             }
-//                            console.log("tree after updated", this.$refs.tree);
-//                            app.treeData = app.$refs.tree.model;
-//                            var selectedNode = this.$refs.tree.find({
-//                                state: {checked: true}
-//                            }, true);
-//                            if (selectedNode != null) selectedNode.uncheck();
-//
-//                            app.modalShowFlag = false;
-
-
 
                             app.status = 4;
                         }
-//                        console.log("tree after updated", this.$refs.tree);
-//                        app.treeData = app.$refs.tree.model;
-//                        app.modalShowFlag = false;
-//
-//                        app.status = 4;
                         break;
 
                     case 4:
@@ -17625,10 +17767,6 @@
 
                                     app.callLoopApi(0, 'hasPart', 'synonym', i, null, null, status);
                                 }
-//                                console.log("tree after updated", this.$refs.tree);
-//                                app.treeData = app.$refs.tree.model;
-//                                app.modalShowFlag = false;
-//                                app.status = 5;
                             } else if (app.TTBA.length > 0) {
                                 for (var i = 0; i < app.TTBA.length; i++) {
                                     app.tempIndex = i;
@@ -17642,10 +17780,6 @@
 
 
                                 }
-//                                console.log("tree after updated", this.$refs.tree);
-//                                app.treeData = app.$refs.tree.model;
-//                                app.modalShowFlag = false;
-//                                app.status = 5;
 
                             }
                         } else if (app.term.hasPart == 'no-user') {
@@ -17667,6 +17801,20 @@
                                         if (resp.data == 'UNSUCCESSFULLY' || resp.data == 'NO_OPERATION') {
 
                                         } else {
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Add Class',
+                                                'action_details': app.tempIndex  + ' is added as subclass of ' + superClass.text +' for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                            };
+                                            axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
                                             if (app.TTBA == null) {
                                                 app.callLoopApi(0, 'hasPart', 'no-synonym', null, resp.data, app.status);
 
@@ -17680,10 +17828,6 @@
                                         console.log("class error", resp);
                                     });
                             }
-//                            console.log("tree after updated", this.$refs.tree);
-//                            app.treeData = app.$refs.tree.model;
-//                            app.modalShowFlag = false;
-//                            app.status = 5;
                         }
 
                         break;
@@ -17777,59 +17921,137 @@
                     .then(function(resp) {
                         console.log(key + " resp", resp);
                         if (resp.data == 'NO_OPERATION' || resp.data == 'UNSUCCESSFULLY') {
+                            app.treeData = app.$refs.tree.model;
+                            console.log("tree after updated", app.treeData);
                             if (status == -1) {
-//                                console.log("tree after updated", app.$refs.tree);
-//                                var selectedNode = app.$refs.tree.find({
-//                                    state: {checked: true}
-//                                }, true);
-//                                if (selectedNode != null) selectedNode.uncheck();
-//                                app.treeData = app.$refs.tree.model;
 
                                 app.modalShowFlag = false;
                                 app.status = 5;
                             } else {
-//                                console.log("tree after updated", app.$refs.tree);
-//                                var selectedNode = app.$refs.tree.find({
-//                                    state: {checked: true}
-//                                }, true);
-//                                if (selectedNode != null) selectedNode.uncheck();
-//                                app.treeData = app.$refs.tree.model;
 
                                 app.modalShowFlag = false;
                                 app.status = status + 1;
                             }
-//                            if (key == 'class' || key == 'synonym') {
-//                                if (index < app.synonyms.length - 1) {
-//                                    app.callLoopApi(index + 1, key, setting, optionIndex);
-//                                } else {
-//                                }
-//                            } else if (key == 'partOf' || key == 'hasPart') {
-//                                if (setting == 'no-synonym') {
-//                                    if (index < app.synonyms.length - 1) {
-//                                        app.callLoopApi(index + 1, key, setting, optionIndex, optionData);
-//                                    } else {
-//                                    }
-//                                } else if (setting == 'no-TTBA') {
-//                                    if (index < app.TTBA.length - 1) {
-//                                        app.callLoopApi(index + 1, key, setting, optionIndex, optionData);
-//                                    } else {
-//                                    }
-//                                } else {
-//                                    if (key == 'partOf') {
-//                                        if (index < app.instances.length - 1) {
-//                                            app.callLoopApi(index + 1, key, setting, optionIndex);
-//                                        } else {
-//                                        }
-//                                    } else {
-//                                        if (index < app.hasParts.length - 1) {
-//                                            app.callLoopApi(index + 1, key, setting, optionIndex);
-//                                        } else {
-//                                        }
-//                                    }
-//                                }
-//                            }
 
                         } else {
+
+                            if (key == 'synonym') {
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Set Synonym',
+                                    'action_details': app.synonyms[index].text  + ' is set as synonym for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                };
+                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            } else if (key == 'class') {
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Add Class',
+                                    'action_details': app.temp.text  + ' is added as subclass of ' + app.synonyms[index].text +' for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                };
+                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            } else if (key == 'partOf') {
+                                var jsonLog = {};
+                                if (setting == 'synonym') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': app.instances[index].text  + ' is added as part_of of ' + app.synonyms[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+
+                                } else if (setting == 'TTBA') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': app.instances[index].text  + ' is added as part_of of ' + app.TTBA[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                } else if (setting == 'no-synonym') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': optionData2  + ' is added as part_of of ' + app.synonyms[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                } else if (setting == 'no-TTBA') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': optionData2  + ' is added as part_of of ' + app.TTBA[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                }
+                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonLog)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            } else if (key == 'hasPart') {
+                                var jsonLog = {};
+                                if (setting == 'synonym') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add has_part',
+                                        'action_details': app.instances[index].text  + ' is added as has_part of ' + app.synonyms[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+
+                                } else if (setting == 'TTBA') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': app.instances[index].text  + ' is added as has_part of ' + app.TTBA[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                } else if (setting == 'no-synonym') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': optionData2  + ' is added as has_part of ' + app.synonyms[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                } else if (setting == 'no-TTBA') {
+                                    jsonLog = {
+                                        'user_email': app.username,
+                                        'action': 'Add part_of',
+                                        'action_details': optionData2  + ' is added as has_part of ' + app.TTBA[optionIndex].text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                }
+                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonLog)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            }
 
 
                             if (key == 'class') {
@@ -17838,6 +18060,7 @@
                                 app.summary.push(app.temp.text + " is added as a subclass of class " + app.synonyms[index].text);
 
                                 app.treeData = app.$refs.tree.model;
+                                console.log("tree after updated", app.treeData);
                                 if (index < app.synonyms.length - 1) {
                                     app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                 } else {
@@ -17858,6 +18081,7 @@
                                         );
                                         app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") part_of " + app.instances[index].text + " is added.");
                                         app.treeData = app.$refs.tree.model;
+                                        console.log("tree after updated", app.treeData);
                                         if (index < app.instances.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -17875,6 +18099,7 @@
                                         );
                                         app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") has_part " + app.hasParts[index].text + " is added.");
                                         app.treeData = app.$refs.tree.model;
+                                        console.log("tree after updated", app.treeData);
                                         if (index < app.hasParts.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -17895,6 +18120,7 @@
                                         );
                                         app.summary.push(TTBA[optionIndex].text + " part_of " + app.instances[index].text + " is added.");
                                         app.treeData = app.$refs.tree.model;
+                                        console.log("tree after updated", app.treeData);
                                         if (index < app.instances.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -17912,6 +18138,7 @@
                                         );
                                         app.summary.push(TTBA[optionIndex].text + " has_part " + app.hasParts[index].text + " is added.");
                                         app.treeData = app.$refs.tree.model;
+                                        console.log("tree after updated", app.treeData);
                                         if (index < app.hasParts.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -17935,6 +18162,7 @@
                                         resp.data
                                     );
                                     app.treeData = app.$refs.tree.model;
+                                    console.log("tree after updated", app.treeData);
                                     if (index < app.synonyms.length - 1) {
                                         app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                     } else {
@@ -17955,6 +18183,7 @@
                                         resp.data
                                     );
                                     app.treeData = app.$refs.tree.model;
+                                    console.log("tree after updated", app.treeData);
                                     if (index < app.TTBA.length - 1) {
                                         app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                     } else {
@@ -17972,6 +18201,7 @@
                                 app.synonyms[index].data.details[0].broad_synonym = app.temp.text;
                                 app.summary.push(app.temp.text + " is added as a synonym to class" + app.synonyms[index].text);
                                 app.treeData = app.$refs.tree.model;
+                                console.log("tree after updated", app.treeData);
                                 if (index < app.synonyms.length - 1) {
                                     app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                 } else {
@@ -18015,6 +18245,14 @@
             onHasPartSelected: function(node) {
                 var app = this;
                 app.treeDetails.q4 = node.data.details;
+            },
+            onEntitySelected: function(node) {
+                var app = this;
+                app.treeDetails.entity = node.data.details;
+            },
+            onQualitySelected: function(node) {
+                var app = this;
+                app.treeDetails.quality = node.data.details;
             },
             onSynonymUnselected: function(node) {
                 var app = this;
