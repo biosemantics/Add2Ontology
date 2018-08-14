@@ -77,7 +77,7 @@
                                                 If the term represents a physical object such as leaf, apex, pore, or imaginary anatomical structures such as axis, then choose “anatomical structure”.  Example anatomical structure terms (link to Carex Ontology anatomical entity branch on WebProtege)
                                             </div>
                                         </div>
-                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey;">
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="largeDataEntity"
@@ -96,7 +96,7 @@
                                                 If the term represents a property such as color, shape, size, orientation, position etc. of a physical object, then choose “character”. Example character terms (link to Carex Ontology quality branch on WebProtege)
                                             </div>
                                         </div>
-                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey;">
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="largeDataQuality"
@@ -122,7 +122,7 @@
                                         <div class="col-md-12">
                                             <label>Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="treeData"
@@ -159,7 +159,7 @@
                                         <div class="col-md-12">
                                             <label>Is {{ $route.params.term }} a synonym to any of the existing quality terms? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="treeData"
@@ -196,7 +196,7 @@
                                         <div class="col-md-12">
                                             <label>Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
                                             <tree
                                                     :data="treeData"
                                                     :options="synonymsOption"
@@ -256,7 +256,7 @@
                                         <div class="col-md-12">
                                             <label>Are all instances of {{ $route.params.term }} have certain parts that are in the tree below? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
                                             <tree
                                                     :data="treeData"
                                                     :options="synonymsOption"
