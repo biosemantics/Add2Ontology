@@ -54,7 +54,7 @@
                 if (app.username == null) {
                     alert('Please insert the username on homepage');
                 } else {
-                    axios.post('/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
                             console.log("activity-log resp", resp);
                         })
