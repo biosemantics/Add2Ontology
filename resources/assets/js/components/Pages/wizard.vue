@@ -17,18 +17,18 @@
                                     <span v-if="term.represent == 'anatomical'">an anatomical structure</span>
                                     <span v-if="term.represent == 'character'">a character</span>
                                 </div>
-                                <div v-if="status > 2">
+                                <div v-if="status > 2 && term.represent == 'anatomical'">
                                     Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms?
                                     <span v-if="term.synonym == 'yes'">Yes</span>
                                     <span v-if="term.synonym == 'no'">No</span>
                                 </div>
-                                <div v-if="status > 3">
+                                <div v-if="status > 3 && term.represent == 'anatomical'">
                                     Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?
                                     <span v-if="term.instance == 'yes'">Yes</span>
                                     <span v-if="term.instance == 'no'">No, I am not aware of such larger structures.</span>
                                     <span v-if="term.instance == 'no-user'">No, such larger structures are not shown in the tree.</span>
                                 </div>
-                                <div v-if="status > 4">
+                                <div v-if="status > 4 && term.represent == 'anatomical'">
                                     Are all instances of {{ $route.params.term }} have certain parts that are in the tree below?
                                     <span v-if="term.hasPart == 'yes'">Yes</span>
                                     <span v-if="term.hasPart == 'no'">No, I am not aware of such smaller structures.</span>
