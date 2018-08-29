@@ -81,9 +81,9 @@
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="largeDataEntity"
-                                                    :options="synonymsOption"
+                                                    :options="treeOption"
                                                     ref="tree"
-                                                    @node:checked="onEntitySelected"
+                                                    @node:selected="onEntitySelected"
                                             />
                                         </div>
                                         <div class="col-md-6" style="margin-top: 20px">
@@ -100,9 +100,9 @@
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="largeDataQuality"
-                                                    :options="synonymsOption"
+                                                    :options="treeOption"
                                                     ref="tree"
-                                                    @node:checked="onQualitySelected"
+                                                    @node:selected="onQualitySelected"
                                             />
                                         </div>
                                         <div class="col-md-6" style="margin-top: 20px">
@@ -438,6 +438,12 @@
                     autoCheckChildren: false,
                     parentSelect: true,
                     checkOnSelect: true
+                },
+                treeOption:{
+                    checkbox: false,
+                    autoCheckChildren: false,
+                    parentSelect: false,
+                    checkOnSelect: false
                 },
                 synonyms: [],
                 instances: [],
