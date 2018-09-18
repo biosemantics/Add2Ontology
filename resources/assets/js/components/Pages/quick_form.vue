@@ -7,24 +7,23 @@
             <div class="panel-body table-responsive" style="font-size: 15px;">
                 <div class="tab-pane">
                     <form class="form-horizontal" autocomplete="off">
-
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Term: {{ $route.params.term }}</label>
+                            <div class=" col-md-offset-1 col-md-9" style="font-size: 16px;">Fill the form below to add {{ $route.params.term }} to CAREX Ontology.</div>
                         </div>
-
                         <div class="form-group">
-                            <div class="col-md-6 col-md-offset-2">
+                            <label class="col-md-4" style="padding-left: 130px;">"{{ $route.params.term }}" is a </label>
+                            <div class="col-md-6 col-md-offset-4">
                                 <input type="radio" id="anatomical" v-model="quickForm.structure" value="anatomical" name="structure" />
                                 <label for="anatomical">Anatomical Structure</label>
                             </div>
-                            <div class="col-md-6 col-md-offset-2">
+                            <div class="col-md-6 col-md-offset-4">
                                 <input type="radio" id="character" v-model="quickForm.structure" value="character" name="structure" />
                                 <label for="character">Character or character state</label>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Definition for the term: </label>
+                            <label class="col-md-4" style="padding-left: 130px;">Definition for the term: </label>
 
                             <div class="col-md-6">
                                 <input type="text" v-model="quickForm.definition" class="form-control" name="definition">
@@ -32,7 +31,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Sentences using the term: </label>
+                            <label class="col-md-4" style="padding-left: 130px;">Sentences using the term: </label>
 
                             <div class="col-md-6">
                                 <input type="text" v-model="quickForm.sentences" class="form-control" name="sentences">
@@ -40,7 +39,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Related taxa: </label>
+                            <label class="col-md-4" style="padding-left: 130px;">Related taxa: </label>
 
                             <div class="col-md-6">
                                 <input type="text" v-model="quickForm.taxa" class="form-control" name="taxa">
