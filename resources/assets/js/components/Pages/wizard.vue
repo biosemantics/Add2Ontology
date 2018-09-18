@@ -322,10 +322,10 @@
                                         {{ each }}
                                     </div>
                                     <div v-if="summaryPartOf.length > 0">
-                                        "{{ $route.params.term }}" is part of <p v-for="each in summaryPartOf">"{{ each }}", </p>
+                                        "{{ $route.params.term }}" is part of <p style="display: inline;" v-for="each in summaryPartOf">"{{ each }}", </p>
                                     </div>
                                     <div v-if="summaryHasPart.length > 0">
-                                        "{{ $route.params.term }}" has part <p v-for="each in summaryHasPart">"{{ each }}", </p>
+                                        "{{ $route.params.term }}" has part <p style="display: inline;" v-for="each in summaryHasPart">"{{ each }}", </p>
                                     </div>
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-md-12">
