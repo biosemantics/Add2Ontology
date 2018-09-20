@@ -318,6 +318,7 @@
                                     </div>
                                 </div>
                                 <div v-if="status == 5" class="col-md-12">
+                                    <label>Summary:</label>
                                     <div v-for="each in summary">
                                         {{ each }}
                                     </div>
