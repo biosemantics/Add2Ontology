@@ -18038,7 +18038,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as part_of of ' + app.TTBA[optionIndex].text +' for term',
+                                        'action_details': optionData2  + ' is added as part_of of ' + app.TTBA[index].text +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
@@ -18081,7 +18081,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as has_part of ' + app.TTBA[optionIndex].text +' for term',
+                                        'action_details': optionData2  + ' is added as has_part of ' + app.TTBA[index].text +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
