@@ -17841,7 +17841,7 @@
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userHasParts.length; i++) {
-                                app.tempIndex = i;
+                                app.tempIndex = app.userHasParts[i].term;
                                 var jsonClassRequest = {
                                     "term": app.userHasParts[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
@@ -18237,13 +18237,14 @@
                                     if (key == "partOf") {
 //                                        app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData2);
+                                        app.TTBA[index].data.details[0][key].push(
+                                            resp.data
+                                        );
                                     } else {
 //                                        app.summary.push(app.TTBA[index].text + " has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData2);
                                     }
-                                    app.TTBA[index].data.details[0][key].push(
-                                        resp.data
-                                    );
+
                                     app.treeData = app.$refs.tree.model;
                                     console.log("tree after updated", app.treeData);
                                     if (index < app.TTBA.length - 1) {
