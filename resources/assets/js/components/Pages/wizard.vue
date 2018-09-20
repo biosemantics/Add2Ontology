@@ -18213,10 +18213,10 @@
                                 } else if (setting == 'no-synonym') {
                                     if (key == "partOf") {
 //                                        app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") part_of " + optionData2 + " is added.");
-                                        app.summaryPartOf.push(optionData2);
+                                        app.summaryPartOf.push(optionData.split('#')[1]);
                                     } else {
 //                                        app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") has_part " + optionData2 + " is added.");
-                                        app.summaryHasPart.push(optionData2);
+                                        app.summaryHasPart.push(optionData.split('#')[1]);
                                     }
                                     app.synonyms[index].data.details[0][key].push(
                                         resp.data
@@ -18234,15 +18234,15 @@
                                         }
                                     }
                                 } else if (setting == 'no-TTBA') {
-                                    console.log("*******testing******", key + ' *** ' + optionData2);
+                                    console.log("*******testing******", key + ' *** ' + optionData.split('#')[1]);
                                     if (key == "partOf") {
 //                                        app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
-                                        app.summaryPartOf.push(optionData2);
+                                        app.summaryPartOf.push(optionData.split('#')[1]);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
                                     } else {
 //                                        app.summary.push(app.TTBA[index].text + " has_part " + optionData2 + " is added.");
-                                        app.summaryHasPart.push(optionData2);
+                                        app.summaryHasPart.push(optionData.split('#')[1]);
                                     }
                                     app.TTBA[index].data.details[0][key].push(
                                         resp.data
