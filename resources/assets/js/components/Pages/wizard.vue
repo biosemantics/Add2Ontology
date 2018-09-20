@@ -17571,14 +17571,17 @@
                         if (app.term.instance == null) {
                             alert("Please select radio button before clicking 'Save' button");
                         } else {
-                            console.log("testing!!!");
                             if (app.term.instance == 'yes') {
                                 app.instances = app.$refs.tree.find({
                                     state: { checked: true }
                                 }, true);
                                 console.log('selected instances', app.instances);
+                                if (app.instances == null) {
+                                    alert('Please select the nodes before clicking Save button.');
+                                } else {
+                                    app.modalShowFlag = true;
+                                }
 
-                                app.modalShowFlag = true;
                             } else if (app.term.instance == 'no') {
                                 app.status = 4;
                             } else if (app.term.instance == 'no-user') {
@@ -17599,7 +17602,12 @@
                                     state: { checked: true }
                                 }, true);
 
-                                app.modalShowFlag = true;
+                                if (app.hasParts == null) {
+                                    alert('Please select the nodes before clicking Save button.');
+                                } else {
+                                    app.modalShowFlag = true;
+                                }
+
                             } else if (app.term.hasPart == 'no') {
                                 app.status = 5;
                             } else if (app.term.hasPart == 'no-user') {
@@ -17825,6 +17833,7 @@
                                 }
 
                             }
+                            app.status = 5;
                         } else if (app.term.hasPart == 'no-user') {
                             var superClass = app.$refs.tree.find({
                                 text: "material anatomical entity"
@@ -17871,6 +17880,7 @@
                                         console.log("class error", resp);
                                     });
                             }
+                            app.status = 5;
                         }
 
                         break;
