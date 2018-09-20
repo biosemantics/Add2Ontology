@@ -17903,32 +17903,32 @@
                     if (setting == 'synonym') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                                "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
-                                "partIRI": app.instances[index].data.details[0].IRI
+                                "bearerIRI": app.instances[index].data.details[0].IRI,
+                                "partIRI": app.synonyms[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                                "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
-                                "partIRI": app.hasParts[index].data.details[0].IRI
+                                "bearerIRI": app.hasParts[index].data.details[0].IRI,
+                                "partIRI": app.synonyms[optionIndex].data.details[0].IRI
                             };
                         }
                     } else if (setting == 'TTBA') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                                "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
-                                "partIRI": app.instances[index].data.details[0].IRI
+                                "bearerIRI": app.instances[index].data.details[0].IRI,
+                                "partIRI": app.TTBA[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                                "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
-                                "partIRI": app.hasParts[index].data.details[0].IRI
+                                "bearerIRI": app.hasParts[index].data.details[0].IRI,
+                                "partIRI": app.TTBA[optionIndex].data.details[0].IRI
                             };
                         }
 
                     } else if (setting == 'no-synonym') {
                         jsonRequest = {
-                            "bearerIRI": app.synonyms[index].data.details[0].IRI,
-                            "partIRI": optionData
+                            "bearerIRI": optionData,
+                            "partIRI": app.synonyms[index].data.details[0].IRI
                         };
                         if (key == 'partOf') {
                             if (!app.synonyms[index].data.details[0].partOf) {
@@ -17942,8 +17942,8 @@
 
                     } else if (setting == 'no-TTBA') {
                         jsonRequest = {
-                            "bearerIRI": app.TTBA[index].data.details[0].IRI,
-                            "partIRI": optionData
+                            "bearerIRI": optionData,
+                            "partIRI": app.TTBA[index].data.details[0].IRI
                         };
                         if (key == 'partOf') {
                             if (!app.TTBA[index].data.details[0].partOf) {
@@ -18030,7 +18030,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as part_of of ' + app.synonyms[optionIndex].text +' for term',
+                                        'action_details': app.synonyms[index].text + ' is added as part_of of ' + optionData2 +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
@@ -18038,7 +18038,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as part_of of ' + app.TTBA[index].text +' for term',
+                                        'action_details': app.TTBA[index].text + ' is added as part_of of ' + optionData2 +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
@@ -18073,7 +18073,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as has_part of ' + app.synonyms[optionIndex].text +' for term',
+                                        'action_details': app.synonyms[index].text + ' is added as has_part of ' + optionData2 +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
@@ -18081,7 +18081,7 @@
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
-                                        'action_details': optionData2  + ' is added as has_part of ' + app.TTBA[index].text +' for term',
+                                        'action_details': app.TTBA[index].text + ' is added as has_part of ' + optionData2 +' for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
