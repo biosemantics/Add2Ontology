@@ -17544,8 +17544,12 @@
                                 app.synonyms = this.$refs.tree.find({
                                     state: { checked: true }
                                     }, true);
+                                if (app.synonyms == null) {
+                                    alert('Please select the nodes before clicking Save button.');
 
-                                app.modalShowFlag = true;
+                                } else {
+                                    app.modalShowFlag = true;
+                                }
 
 
                             } else if (app.term.synonym == 'no') {
@@ -17563,7 +17567,12 @@
                                     checked: true
                                 }
                             }, true);
-                            app.modalShowFlag = true;
+
+                            if (app.synonyms == null) {
+                                alert('Please select the nodes before clicking Save button.');
+                            } else {
+                                app.modalShowFlag = true;
+                            }
                         }
                         break;
                     case 3:
