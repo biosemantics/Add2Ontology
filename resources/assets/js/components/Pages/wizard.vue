@@ -17416,6 +17416,7 @@
                 showTooltip: false,
                 mouseX: 0,
                 mouseY: 0,
+                parentNode: null,
             }
         },
         mounted() {
@@ -17535,6 +17536,7 @@
                         }
                         break;
                     case 2:
+                        app.parentNode = app.$refs.tree.find(app.temp.text, true)[0];
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
@@ -17670,6 +17672,8 @@
                                             }
                                         }
                                         app.modalShowFlag = false;
+                                        app.parentNode.unselect();
+                                        app.parentNode.collapse();
                                         app.status = 3;
                                     })
                                     .catch(function(resp) {
@@ -17808,7 +17812,8 @@
                                         console.log("class error", resp);
                                     });
                             }
-
+                            app.parentNode.unselect();
+                            app.parentNode.collapse();
                             app.status = 4;
                         }
                         break;
@@ -17991,7 +17996,8 @@
                                 app.modalShowFlag = false;
                                 app.status = 5;
                             } else {
-
+                                app.parentNode.unselect();
+                                app.parentNode.collapse();
                                 app.modalShowFlag = false;
                                 app.status = status + 1;
                             }
@@ -18131,6 +18137,8 @@
                                     if (status == -1) {
                                         app.status = 5;
                                     } else {
+                                        app.parentNode.unselect();
+                                        app.parentNode.collapse();
                                         app.status = status + 1;
                                     }
 //                                    app.treeData = app.$refs.tree.model;
@@ -18153,6 +18161,8 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
+                                                app.parentNode.unselect();
+                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18172,6 +18182,8 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
+                                                app.parentNode.unselect();
+                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18194,6 +18206,8 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
+                                                app.parentNode.unselect();
+                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18213,6 +18227,8 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
+                                                app.parentNode.unselect();
+                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18282,6 +18298,8 @@
                                     if (status == -1) {
                                         app.status = 5;
                                     } else {
+                                        app.parentNode.unselect();
+                                        app.parentNode.collapse();
                                         app.status = status + 1;
                                     }
 //                                    app.treeData = app.$refs.tree.model;
