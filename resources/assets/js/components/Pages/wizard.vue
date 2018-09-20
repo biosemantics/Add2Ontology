@@ -17622,6 +17622,7 @@
             },
             confirmSave: function(status) {
                 var app = this;
+                app.modalShowFlag = false;
 
                 switch (status) {
                     case 2:
@@ -17868,10 +17869,10 @@
                                                     console.log("activity-log error resp", resp);
                                                 });
                                             if (app.TTBA == null) {
-                                                app.callLoopApi(0, 'hasPart', 'no-synonym', null, resp.data, app.status);
+                                                app.callLoopApi(0, 'hasPart', 'no-synonym', null, resp.data, app.tempIndex, app.status);
 
                                             } else if (app.TTBA.length > 0) {
-                                                app.callLoopApi(0, 'hasPart', 'no-TTBA', null, resp.data, app.status);
+                                                app.callLoopApi(0, 'hasPart', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
 
                                             }
                                         }
