@@ -18234,6 +18234,7 @@
                                         }
                                     }
                                 } else if (setting == 'no-TTBA') {
+                                    console.log("*******testing******", key + ' *** ' + optionData2);
                                     if (key == "partOf") {
 //                                        app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData2);
