@@ -24,25 +24,25 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-3 text-center">
-                                <a :href="'/wizard/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontology/public/wizard/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
                                     Guide by Wizard
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/quick-form/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontology/public/quick-form/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Quick Form</p>
                                     Fill a form
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/web-protege/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontology/public/web-protege/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">WebProtege</p>
                                     Add term to WP directly
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/terms-wiki/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontology/public/terms-wiki/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
                                     Add term to wiki directly
                                 </a>
