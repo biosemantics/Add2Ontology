@@ -18219,7 +18219,7 @@
                                         if (status == -1) {
                                             app.status = 5;
                                         } else {
-                                            app.status = status + 1;
+//                                            app.status = status + 1;
                                         }
                                     }
                                 } else if (setting == 'no-TTBA') {
@@ -18242,7 +18242,7 @@
                                         if (status == -1) {
                                             app.status = 5;
                                         } else {
-                                            app.status = status + 1;
+//                                            app.status = status + 1;
                                         }
 //                                        app.treeData = app.$refs.tree.model;
                                     }
