@@ -18237,16 +18237,16 @@
                                     if (key == "partOf") {
 //                                        app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData2);
-                                        app.TTBA[index].data.details[0][key].push(
-                                            resp.data
-                                        );
+                                        app.treeData = app.$refs.tree.model;
+                                        console.log("tree after updated", app.treeData);
                                     } else {
 //                                        app.summary.push(app.TTBA[index].text + " has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData2);
                                     }
+                                    app.TTBA[index].data.details[0][key].push(
+                                        resp.data
+                                    );
 
-                                    app.treeData = app.$refs.tree.model;
-                                    console.log("tree after updated", app.treeData);
                                     if (index < app.TTBA.length - 1) {
                                         app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                     } else {
