@@ -17633,7 +17633,7 @@
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
-                                axios.post("http://shark.sbs.arizona.edu:8080/synonym", jsonRequest)
+                                axios.post("http://shark.sbs.arizona.edu:8080/esynonym", jsonRequest)
                                     .then(function(resp) {
                                         console.log("synonym resp", resp);
                                         if (resp.data == "SUCCESSFULLY") {
@@ -17667,7 +17667,7 @@
                                         console.log("synonym error", resp);
                                     });
                             } else {
-                                app.callLoopApi(0, 'synonym', null, null, null, null, status);
+                                app.callLoopApi(0, 'bsynonym', null, null, null, null, status);
 
                             }
 
@@ -17898,7 +17898,7 @@
 
                 console.log("status", status);
 
-                if (key == 'synonym') {
+                if (key == 'bsynonym') {
                     jsonRequest = {
                         "term": app.temp.text,
                         "classIRI": app.synonyms[index].data.details[0].IRI
@@ -17989,7 +17989,7 @@
 
                         } else {
 
-                            if (key == 'synonym') {
+                            if (key == 'bsynonym') {
                                 var jsonRequest = {
                                     'user_email': app.username,
                                     'action': 'Set Synonym',
@@ -18021,7 +18021,7 @@
                                     });
                             } else if (key == 'partOf') {
                                 var jsonLog = {};
-                                if (setting == 'synonym') {
+                                if (setting == 'bsynonym') {
                                     jsonLog = {
                                         'user_email': app.username,
                                         'action': 'Add part_of',
@@ -18261,7 +18261,7 @@
                                     }
                                 }
 
-                            } else if (key == 'synonym') {
+                            } else if (key == 'bsynonym') {
                                 app.synonyms[index].data.details[0].broad_synonym = app.temp.text;
                                 app.summary.push('"' + app.temp.text + '"' + ' is a synonym of "' + app.synonyms[index].text + '".');
                                 app.treeData = app.$refs.tree.model;
