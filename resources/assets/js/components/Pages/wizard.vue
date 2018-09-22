@@ -17613,11 +17613,11 @@
                                 var jsonRequest = {
                                     'user_email': app.username,
                                     'action': 'user supply',
-                                    'action_details': 'User supplied ' + app.userInstances[app.userInstances.length - 1].definition + ' for term',
+                                    'action_details': 'User supplied ' + app.userInstances[app.userInstances.length - 1].term + ' for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
-                                if (app.username == null) {
+                                if (app.username == null || app.username == 'null' || app.username == '') {
                                     alert('Please insert the username on homepage.');
                                 } else {
                                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -17664,7 +17664,7 @@
                                     'abnormal_system_response': null,
                                     'type': 'Summary'
                                 };
-                                if (app.username == null) {
+                                if (app.username == null || app.username == 'null' || app.username == '') {
                                     alert('Please insert the username on homepage.');
                                 } else {
                                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -17681,11 +17681,11 @@
                                 var jsonRequest = {
                                     'user_email': app.username,
                                     'action': 'user supply',
-                                    'action_details': 'User supplied ' + app.userHasParts[app.userHasParts.length - 1].definition + ' for term',
+                                    'action_details': 'User supplied ' + app.userHasParts[app.userHasParts.length - 1].term + ' for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
-                                if (app.username == null) {
+                                if (app.username == null || app.username == 'null' || app.username == '') {
                                     alert('Please insert the username on homepage.');
                                 } else {
                                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -17741,7 +17741,7 @@
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
                                             };
-                                            if (app.username == null) {
+                                            if (app.username == null || app.username == 'null' || app.username == '') {
                                                 alert('Please insert the username on homepage');
                                             } else {
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18020,8 +18020,8 @@
                             };
                         } else {
                             jsonRequest = {
-                                "bearerIRI": app.hasParts[index].data.details[0].IRI,
-                                "partIRI": app.synonyms[optionIndex].data.details[0].IRI
+                                "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
+                                "partIRI": app.hasParts[index].data.details[0].IRI
                             };
                         }
                     } else if (setting == 'TTBA') {
@@ -18032,36 +18032,46 @@
                             };
                         } else {
                             jsonRequest = {
-                                "bearerIRI": app.hasParts[index].data.details[0].IRI,
-                                "partIRI": app.TTBA[optionIndex].data.details[0].IRI
+                                "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
+                                "partIRI": app.hasParts[index].data.details[0].IRI
                             };
                         }
 
                     } else if (setting == 'no-synonym') {
-                        jsonRequest = {
-                            "bearerIRI": optionData,
-                            "partIRI": app.synonyms[index].data.details[0].IRI
-                        };
+
                         if (key == 'partOf') {
+                            jsonRequest = {
+                                "bearerIRI": optionData,
+                                "partIRI": app.synonyms[index].data.details[0].IRI
+                            };
                             if (!app.synonyms[index].data.details[0].partOf) {
                                 app.synonyms[index].data.details[0].partOf = [];
                             }
                         } else {
+                            jsonRequest = {
+                                "bearerIRI": app.synonyms[index].data.details[0].IRI,
+                                "partIRI": optionData
+                            };
                             if (!app.synonyms[index].data.details[0].hasPart) {
                                 app.synonyms[index].data.details[0].hasPart = [];
                             }
                         }
 
                     } else if (setting == 'no-TTBA') {
-                        jsonRequest = {
-                            "bearerIRI": optionData,
-                            "partIRI": app.TTBA[index].data.details[0].IRI
-                        };
+
                         if (key == 'partOf') {
+                            jsonRequest = {
+                                "bearerIRI": optionData,
+                                "partIRI": app.TTBA[index].data.details[0].IRI
+                            };
                             if (!app.TTBA[index].data.details[0].partOf) {
                                 app.TTBA[index].data.details[0].partOf = [];
                             }
                         } else {
+                            jsonRequest = {
+                                "bearerIRI": app.TTBA[index].data.details[0].IRI,
+                                "partIRI": optionData
+                            };
                             if (!app.TTBA[index].data.details[0].hasPart) {
                                 app.TTBA[index].data.details[0].hasPart = [];
                             }
@@ -18100,7 +18110,7 @@
                                     'abnormal_system_response': null,
                                     'type': 'Summary'
                                 };
-                                if (app.username == null) {
+                                if (app.username == null || app.username == 'null' || app.username == '') {
                                     alert('Please insert the username on homepage.');
                                 } else {
                                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18261,7 +18271,7 @@
                                             'abnormal_system_response': null,
                                             'type': 'Summary'
                                         };
-                                        if (app.username == null) {
+                                        if (app.username == null || app.username == 'null' || app.username == '') {
                                             alert('Please insert the username on homepage.');
                                         } else {
                                             axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18330,7 +18340,7 @@
                                                 'abnormal_system_response': null,
                                                 'type': 'Summary'
                                             };
-                                            if (app.username == null) {
+                                            if (app.username == null || app.username == 'null' || app.username == '') {
                                                 alert('Please insert the username on homepage.');
                                             } else {
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18396,7 +18406,7 @@
                                                 'abnormal_system_response': null,
                                                 'type': 'Summary'
                                             };
-                                            if (app.username == null) {
+                                            if (app.username == null || app.username == 'null' || app.username == '') {
                                                 alert('Please insert the username on homepage.');
                                             } else {
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18448,7 +18458,7 @@
                                                 'abnormal_system_response': null,
                                                 'type': 'Summary'
                                             };
-                                            if (app.username == null) {
+                                            if (app.username == null || app.username == 'null' || app.username == '') {
                                                 alert('Please insert the username on homepage.');
                                             } else {
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -18500,7 +18510,7 @@
                                                 'abnormal_system_response': null,
                                                 'type': 'Summary'
                                             };
-                                            if (app.username == null) {
+                                            if (app.username == null || app.username == 'null' || app.username == '') {
                                                 alert('Please insert the username on homepage.');
                                             } else {
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)

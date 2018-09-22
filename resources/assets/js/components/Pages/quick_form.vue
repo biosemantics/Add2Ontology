@@ -90,7 +90,7 @@
                 'abnormal_system_response': null,
                 'type': 'Quick Form'
             };
-            if (app.username == null) {
+            if (app.username == null || app.username == 'null' || app.username == '') {
                 alert('Please insert the username on homepage.');
             } else {
                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -108,7 +108,7 @@
             submit() {
                 var app = this;
                 console.log('quickForm submit', app.quickForm);
-                if (app.username == null) {
+                if (app.username == null || app.username == 'null' || app.username == '') {
                     alert('Please insert the username on homepage');
                 } else if (app.quickForm.structure == null) {
                     alert('You have to select "Anatomical Structure" or "Character or character state" before clicking "Done" button.')

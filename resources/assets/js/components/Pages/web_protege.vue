@@ -50,7 +50,7 @@
                 'abnormal_system_response': null,
                 'type': 'WebProtege'
             };
-            if (app.username == null) {
+            if (app.username == null || app.username == 'null' || app.username == '') {
                 alert('Please insert the username on homepage.');
             } else {
                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -71,7 +71,7 @@
                     'detail': app.username + ' entered URL',
                     'detail_addition': 'URL: https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b'
                 };
-                if (app.username == null) {
+                if (app.username == null || app.username == 'null' || app.username == '') {
                     alert('Please insert the username on homepage');
                 } else {
                     axios.post('/add2ontology/public/api/v1/activity-log', jsonRequest)
@@ -92,7 +92,7 @@
                     'abnormal_system_response': null,
                     'type': 'Web Protege'
                 };
-                if (app.username == null) {
+                if (app.username == null || app.username == 'null' || app.username == '') {
                     alert('Please insert the username on homepage');
                 } else if (app.webProtegeIRI == null) {
                     jsonRequest.action = 'clicked Done';

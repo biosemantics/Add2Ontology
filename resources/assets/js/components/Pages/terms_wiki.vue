@@ -50,7 +50,7 @@
                 'abnormal_system_response': null,
                 'type': 'Terms Wiki'
             };
-            if (app.username == null) {
+            if (app.username == null || app.username == 'null' || app.username == '') {
                 alert('Please insert the username on homepage.');
             } else {
                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -72,7 +72,7 @@
                     'abnormal_system_response': null,
                     'type': 'Terms Wiki'
                 };
-                if (app.username == null) {
+                if (app.username == null || app.username == 'null' || app.username == '') {
                     alert('Please insert the username on homepage');
                 } else if (app.termsWikiIRI == null) {
                     jsonRequest.action = 'clicked Done';
