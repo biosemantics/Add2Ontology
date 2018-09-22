@@ -74,7 +74,29 @@
                 };
                 if (app.username == null) {
                     alert('Please insert the username on homepage');
+                } else if (app.termsWikiIRI == null) {
+                    jsonRequest.action = 'clicked Done';
+                    jsonRequest.action_details = app.username + ' clicked Done for term ';
+                    jsonRequest.abnormal_system_response = 'without entry';
+                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                    alert('You need to enter IRI in the input box.');
                 } else if (app.termsWikiIRI.substring(0, 7) != 'http://') {
+                    jsonRequest.action_details = app.username + ' input invalid IRI for term ';
+                    jsonRequest.action = 'clicked Done';
+                    jsonRequest.abnormal_system_response = 'invalid entry';
+                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
                     alert('The format you input is not valid.');
                 } else {
                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)

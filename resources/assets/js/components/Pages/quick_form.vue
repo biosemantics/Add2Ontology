@@ -112,6 +112,20 @@
                     alert('Please insert the username on homepage');
                 } else if (app.quickForm.structure == null) {
                     alert('You have to select "Anatomical Structure" or "Character or character state" before clicking "Done" button.')
+                    var jsonRequest = {
+                        'user_email': app.username,
+                        'action': 'clicked Done',
+                        'action_details': app.username + ' submitted null for term ',
+                        'abnormal_system_response': 'without entry',
+                        'type': 'Quick Form'
+                    };
+                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function (resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function (resp) {
+                            console.log('activity-log error resp', resp);
+                        });
                 } else {
                     var jsonRequest = {
                         'user_email': app.username,
