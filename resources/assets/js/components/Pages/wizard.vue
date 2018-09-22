@@ -17681,7 +17681,7 @@
                                 var jsonRequest = {
                                     'user_email': app.username,
                                     'action': 'user supply',
-                                    'action_details': 'User supplied term for term',
+                                    'action_details': 'User supplied ' + app.userHasParts[app.userHasParts.length - 1].definition + ' for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
