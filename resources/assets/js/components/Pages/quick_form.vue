@@ -81,12 +81,37 @@
             var app = this;
             app.username = sessionStorage.getItem('username');
         },
+        mounted() {
+            var app = this;
+            var jsonRequest = {
+                'user_email': app.username,
+                'action': 'Module landed',
+                'action_details': 'QuickForm module was landed for term',
+                'abnormal_system_response': null,
+                'type': 'Quick Form'
+            };
+            if (app.username == null) {
+                alert('Please insert the username on homepage.');
+            } else {
+                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    .then(function(resp) {
+                        console.log("activity-log resp", resp);
+                    })
+                    .catch(function(resp) {
+                        console.log("activity-log error resp", resp);
+                    });
+
+
+            }
+        },
         methods: {
             submit() {
                 var app = this;
                 console.log('quickForm submit', app.quickForm);
                 if (app.username == null) {
                     alert('Please insert the username on homepage');
+                } else if (app.quickForm.structure == null) {
+                    alert('You have to select "Anatomical Structure" or "Character or character state" before clicking "Done" button.')
                 } else {
                     var jsonRequest = {
                         'user_email': app.username,
@@ -101,6 +126,36 @@
                         })
                         .catch(function (resp) {
                             console.log('activity-log error resp', resp);
+                        });
+                    var jsonClass = {
+                        "term": app.$route.params.term,
+                        "superclassIRI": null,
+                        "definition": app.quickForm.definition,
+                        "elucidation": "tba",
+                        "createdBy": app.username,
+                        "creationDate": new Date(),
+                        "definitionSrc": "tba",
+                        "examples": app.quickForm.sentences + '[' + app.quickForm.taxa + ']',
+                        "logicDefinition": "tba",
+                    };
+                    if (app.quickForm.structure == 'anatomical') {
+                        jsonClass.superclassIRI = 'http://purl.obolibrary.org/obo/UBERON_0001062';
+                    } else if (app.quickForm.structure == 'character') {
+                        jsonClass.superclassIRI = 'http://biosemantics.arizona.edu/ontologies/carex#quality';
+                    }
+                    axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
+                        .then(function(resp) {
+                            console.log('class resp', resp);
+                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                .then(function(resp) {
+                                    console.log('save resp', resp);
+                                })
+                                .catch(function(resp) {
+                                    console.log('save error resp', resp);
+                                });
+                        })
+                        .catch(function(resp) {
+                            console.log('class error resp', resp);
                         });
                 }
 

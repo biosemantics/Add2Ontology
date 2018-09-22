@@ -82,7 +82,7 @@
                                                 More anatomical structure are listed below.
                                             </div>
                                         </div>
-                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
                                                     :data="largeDataEntity"
                                                     :options="treeOption"
@@ -102,7 +102,7 @@
                                                 More character terms are listed below.
                                             </div>
                                         </div>
-                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
                                                     :data="largeDataQuality"
                                                     :options="treeOption"
@@ -127,7 +127,7 @@
                                         <div class="col-md-12">
                                             <label>Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
                                                     :data="treeData"
                                                     :options="synonymsOption"
@@ -163,7 +163,7 @@
                                         <div class="col-md-12">
                                             <label>Is {{ $route.params.term }} a synonym to any of the existing quality terms? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
                                             <tree
                                                     :data="treeData"
@@ -200,7 +200,7 @@
                                         <div class="col-md-12">
                                             <label>Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
                                                     :data="treeData"
                                                     :options="synonymsOption"
@@ -261,7 +261,7 @@
                                         <div class="col-md-12">
                                             <label>Are all instances of {{ $route.params.term }} have certain parts that are in the tree below? </label>
                                         </div>
-                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px;">
+                                        <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
                                                     :data="treeData"
                                                     :options="synonymsOption"
@@ -17437,7 +17437,26 @@
                 app.term.hasPart = sessionStorage.getItem('hasPart');
             }
             window.addEventListener('click', this.mousedown);
-            console.log('Component mounted.')
+            app.sortTreeData(app.largeDataEntity.children);
+            app.sortTreeData(app.largeDataQuality.children);
+            var jsonRequest = {
+                'user_email': app.username,
+                'action': 'Module landed',
+                'action_details': 'Wizard module was landed for term',
+                'abnormal_system_response': null,
+                'type': 'Wizard'
+            };
+            if (app.username == null) {
+                alert('Please insert the username on homepage.');
+            } else {
+                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    .then(function(resp) {
+                        console.log("activity-log resp", resp);
+                    })
+                    .catch(function(resp) {
+                        console.log("activity-log error resp", resp);
+                    });
+            }
         },
         beforeMount() {
 
@@ -17536,27 +17555,21 @@
                         }
                         break;
                     case 2:
-                        app.parentNode = app.$refs.tree.find(app.temp.text, true)[0];
+                        app.parentNode = app.$refs.tree.find('material anatomical entity', true);
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
                         } else {
-                            if (app.term.synonym == 'yes') {
+                            app.synonyms = app.$refs.tree.find({
+                                state: { checked: true }
+                                }, true);
+                            if (app.synonyms == null) {
+                                alert('Please select the nodes before clicking Save button.');
 
-                                app.synonyms = this.$refs.tree.find({
-                                    state: { checked: true }
-                                    }, true);
-                                if (app.synonyms == null) {
-                                    alert('Please select the nodes before clicking Save button.');
-
-                                } else {
-                                    app.modalShowFlag = true;
-                                }
-
-
-                            } else if (app.term.synonym == 'no') {
-                                app.status = 3;
+                            } else {
+                                app.modalShowFlag = true;
                             }
+
                         }
                         break;
                     case -1:
@@ -17597,7 +17610,24 @@
                                 app.status = 4;
                             } else if (app.term.instance == 'no-user') {
                                 app.instances = app.userInstances;
-
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'user supply',
+                                    'action_details': 'User supplied term for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage.');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                                 app.modalShowFlag = true;
                             }
 
@@ -17620,9 +17650,52 @@
                                 }
 
                             } else if (app.term.hasPart == 'no') {
+                                axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                    .then(function(resp) {
+                                        console.log('save resp', resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log('save error resp', resp);
+                                    });
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Summary landed',
+                                    'action_details': 'Summary Page was landed for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Summary'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage.');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                                 app.status = 5;
                             } else if (app.term.hasPart == 'no-user') {
                                 app.hasParts = app.userHasParts;
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'user supply',
+                                    'action_details': 'User supplied term for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage.');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                                 app.modalShowFlag = true;
                             }
                         }
@@ -17630,6 +17703,15 @@
                     default:
                         break;
                 }
+            },
+            collapseAndUncheck: function() {
+                var app = this;
+                var temp = app.$refs.tree.findAll({
+                    state: { checked: true }
+                }, true);
+                temp.uncheck();
+                console.log('parentNode', app.parentNode);
+                app.parentNode.collapse();
             },
             confirmSave: function(status) {
                 var app = this;
@@ -17650,8 +17732,8 @@
                                         if (resp.data == "SUCCESSFULLY") {
                                             app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
                                             app.summary.push('"' + app.temp.text + '"' + " is a synonym of " + '"' + app.synonyms[0].text + '".');
-                                            console.log("tree after updated", this.$refs.tree);
                                             app.treeData = app.$refs.tree.model;
+                                            console.log("tree after updated", app.$refs.tree);
                                             var jsonRequest = {
                                                 'user_email': app.username,
                                                 'action': 'Set Synonym',
@@ -17665,29 +17747,34 @@
                                                 axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                                                     .then(function(resp) {
                                                         console.log("activity-log resp", resp);
+                                                        app.modalShowFlag = false;
+                                                        app.collapseAndUncheck();
+                                                        app.status = 3;
+
                                                     })
                                                     .catch(function(resp) {
                                                         console.log("activity-log error resp", resp);
                                                     });
                                             }
+                                        } else {
+                                            app.collapseAndUncheck();
+                                            app.status = 3;
                                         }
-                                        app.modalShowFlag = false;
-                                        app.parentNode.unselect();
-                                        app.parentNode.collapse();
-                                        app.status = 3;
+
                                     })
                                     .catch(function(resp) {
                                         console.log("synonym error", resp);
                                     });
                             } else {
                                 app.callLoopApi(0, 'bsynonym', null, null, null, null, status);
+                                app.collapseAndUncheck();
 
                             }
 
 
                         } else if (app.term.synonym == 'no') {
                             app.callLoopApi(0, 'class', null, null, null, null, status);
-
+                            app.collapseAndUncheck();
                         }
                         break;
                     case -1:
@@ -17703,8 +17790,8 @@
                                         if (resp.data == "SUCCESSFULLY") {
                                             app.synonyms[0].data.details[0].exact_synonym = app.temp.text;
                                             app.summary.push('"' + app.temp.text + '"' + " is a synonym of " + '"' + app.synonyms[0].text + '".');
-                                            console.log("tree after updated", this.$refs.tree);
                                             app.treeData = app.$refs.tree.model;
+                                            console.log("tree after updated", app.$refs.tree);
                                             var jsonRequest = {
                                                 'user_email': app.username,
                                                 'action': 'Set Synonym',
@@ -17749,7 +17836,7 @@
                                     }
 
                                     app.callLoopApi(0, 'partOf', 'synonym', i, null, null, status);
-
+                                    app.collapseAndUncheck();
                                 }
 
                             } else if (app.TTBA.length > 0) {
@@ -17762,7 +17849,7 @@
                                         ];
                                     }
                                     app.callLoopApi(0, 'partOf', 'TTBA', i, null, null, status);
-
+                                    app.collapseAndUncheck();
                                 }
 
                             }
@@ -17802,9 +17889,10 @@
 
                                             if (app.TTBA == null) {
                                                 app.callLoopApi(0, 'partOf', 'no-synonym', null, resp.data, app.tempIndex, app.status);
-
+                                                app.collapseAndUncheck();
                                             } else if (app.TTBA.length > 0) {
                                                 app.callLoopApi(0, 'partOf', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
+                                                app.collapseAndUncheck();
                                             }
                                         }
                                     })
@@ -17812,8 +17900,6 @@
                                         console.log("class error", resp);
                                     });
                             }
-                            app.parentNode.unselect();
-                            app.parentNode.collapse();
                             app.status = 4;
                         }
                         break;
@@ -17996,10 +18082,35 @@
                                 app.modalShowFlag = false;
                                 app.status = 5;
                             } else {
-                                app.parentNode.unselect();
-                                app.parentNode.collapse();
                                 app.modalShowFlag = false;
                                 app.status = status + 1;
+                            }
+                            if (app.status == 5) {
+                                axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                    .then(function(resp) {
+                                        console.log('save resp', resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log('save error resp', resp);
+                                    });
+                                var jsonRequest = {
+                                    'user_email': app.username,
+                                    'action': 'Summary landed',
+                                    'action_details': 'Summary Page was landed for term',
+                                    'abnormal_system_response': null,
+                                    'type': 'Summary'
+                                };
+                                if (app.username == null) {
+                                    alert('Please insert the username on homepage.');
+                                } else {
+                                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                }
                             }
 
                         } else {
@@ -18136,9 +18247,32 @@
                                     app.modalShowFlag = false;
                                     if (status == -1) {
                                         app.status = 5;
+                                        axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                            .then(function(resp) {
+                                                console.log('save resp', resp);
+                                            })
+                                            .catch(function(resp) {
+                                                console.log('save error resp', resp);
+                                            });
+                                        var jsonRequest = {
+                                            'user_email': app.username,
+                                            'action': 'Summary landed',
+                                            'action_details': 'Summary Page was landed for term',
+                                            'abnormal_system_response': null,
+                                            'type': 'Summary'
+                                        };
+                                        if (app.username == null) {
+                                            alert('Please insert the username on homepage.');
+                                        } else {
+                                            axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
+                                        }
                                     } else {
-                                        app.parentNode.unselect();
-                                        app.parentNode.collapse();
                                         app.status = status + 1;
                                     }
 //                                    app.treeData = app.$refs.tree.model;
@@ -18161,8 +18295,6 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
-                                                app.parentNode.unselect();
-                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18182,9 +18314,32 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
-                                                app.parentNode.unselect();
-                                                app.parentNode.collapse();
                                                 app.status = status + 1;
+                                            }
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Summary landed',
+                                                'action_details': 'Summary Page was landed for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Summary'
+                                            };
+                                            if (app.username == null) {
+                                                alert('Please insert the username on homepage.');
+                                            } else {
+                                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
                                             }
 //                                            app.treeData = app.$refs.tree.model;
                                         }
@@ -18206,8 +18361,6 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
-                                                app.parentNode.unselect();
-                                                app.parentNode.collapse();
                                                 app.status = status + 1;
                                             }
 //                                            app.treeData = app.$refs.tree.model;
@@ -18218,8 +18371,8 @@
                                         );
 //                                        app.summary.push(TTBA[optionIndex].text + " has_part " + app.hasParts[index].text + " is added.");
                                         app.summaryHasPart.push(app.hasParts[index].text);
-                                        app.treeData = app.$refs.tree.model;
-                                        console.log("tree after updated", app.treeData);
+//                                        app.treeData = app.$refs.tree.model;
+//                                        console.log("tree after updated", app.treeData);
                                         if (index < app.hasParts.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -18227,9 +18380,32 @@
                                             if (status == -1) {
                                                 app.status = 5;
                                             } else {
-                                                app.parentNode.unselect();
-                                                app.parentNode.collapse();
                                                 app.status = status + 1;
+                                            }
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Summary landed',
+                                                'action_details': 'Summary Page was landed for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Summary'
+                                            };
+                                            if (app.username == null) {
+                                                alert('Please insert the username on homepage.');
+                                            } else {
+                                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
                                             }
 //                                            app.treeData = app.$refs.tree.model;
                                         }
@@ -18257,6 +18433,33 @@
                                         } else {
 //                                            app.status = status + 1;
                                         }
+                                        if (key == 'hasPart') {
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Summary landed',
+                                                'action_details': 'Summary Page was landed for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Summary'
+                                            };
+                                            if (app.username == null) {
+                                                alert('Please insert the username on homepage.');
+                                            } else {
+                                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
+                                            }
+                                        }
                                     }
                                 } else if (setting == 'no-TTBA') {
                                     console.log("*******testing******", key + ' *** ' + optionData.split('#')[1]);
@@ -18282,6 +18485,33 @@
                                         } else {
 //                                            app.status = status + 1;
                                         }
+                                        if (key == 'hasPart') {
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                            var jsonRequest = {
+                                                'user_email': app.username,
+                                                'action': 'Summary landed',
+                                                'action_details': 'Summary Page was landed for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Summary'
+                                            };
+                                            if (app.username == null) {
+                                                alert('Please insert the username on homepage.');
+                                            } else {
+                                                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
+                                            }
+                                        }
 //                                        app.treeData = app.$refs.tree.model;
                                     }
                                 }
@@ -18298,8 +18528,6 @@
                                     if (status == -1) {
                                         app.status = 5;
                                     } else {
-                                        app.parentNode.unselect();
-                                        app.parentNode.collapse();
                                         app.status = status + 1;
                                     }
 //                                    app.treeData = app.$refs.tree.model;
@@ -18363,6 +18591,22 @@
                     "term": null,
                     "definition": null
                 });
+            },
+            sorting: function(js_object, key_to_sort_by) {
+                function sortByKey(a, b) {
+                    var x = a[key_to_sort_by];
+                    var y = b[key_to_sort_by];
+                    return ((x > y) ? 1 : ((x < y) ? -1 : 0));
+                };
+
+                js_object.sort(sortByKey);
+            },
+            sortTreeData: function(children) {
+                var app = this;
+                app.sorting(children, 'text');
+                for (var i = 0; i < children.length; i++)
+                    if (children[i].hasOwnProperty('children'))
+                        app.sortTreeData(children[i].children);
             },
         }
     }

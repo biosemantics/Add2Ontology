@@ -41,6 +41,27 @@
         beforeMount() {
             console.log('Component mounted.')
         },
+        mounted() {
+            var app = this;
+            var jsonRequest = {
+                'user_email': app.username,
+                'action': 'Module Landed',
+                'action_details': 'WebProtege module was landed for term',
+                'abnormal_system_response': null,
+                'type': 'WebProtege'
+            };
+            if (app.username == null) {
+                alert('Please insert the username on homepage.');
+            } else {
+                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    .then(function(resp) {
+                        console.log("activity-log resp", resp);
+                    })
+                    .catch(function(resp) {
+                        console.log("activity-log error resp", resp);
+                    });
+            }
+        },
         methods: {
             clickLink: function() {
                 var app = this;
@@ -73,6 +94,8 @@
                 };
                 if (app.username == null) {
                     alert('Please insert the username on homepage');
+                } else if (app.webProtegeIRI.substring(0, 7) != 'http://') {
+                    alert('The input you provide is not valid.')
                 } else {
                     axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
@@ -80,6 +103,31 @@
                         })
                         .catch(function(resp) {
                             console.log("activity-log error resp", resp);
+                        });
+                    var jsonClass = {
+                        "term": app.$route.params.term + ' ' + app.webProtegeIRI,
+                        "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
+                        "definition": "tba",
+                        "elucidation": "tba",
+                        "createdBy": app.username,
+                        "creationDate": new Date(),
+                        "definitionSrc": "tba",
+                        "examples": "tba",
+                        "logicDefinition": "tba",
+                    };
+                    axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
+                        .then(function(resp) {
+                            console.log('class resp', resp);
+                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                .then(function(resp) {
+                                    console.log('save resp', resp);
+                                })
+                                .catch(function(resp) {
+                                    console.log('save error resp', resp);
+                                });
+                        })
+                        .catch(function(resp) {
+                            console.log('class error resp', resp);
                         });
                 }
             }
