@@ -17723,8 +17723,8 @@
 
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                    "user": app.username,
-                                    "ontology": "carex",
+                                    "user":app.route.user,
+                                    "ontology": app.route.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
@@ -17783,8 +17783,8 @@
                         if (app.term.synonym == 'yes') {
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                    "user": app.username,
-                                    "ontology": "carex",
+                                    "user":app.route.user,
+                                    "ontology": app.route.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
@@ -17864,8 +17864,8 @@
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
                                 var jsonClassRequest = {
-                                    "user": app.username,
-                                    "ontology": "carex",
+                                    "user":app.route.user,
+                                    "ontology": app.route.ontology,
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
                                     "definition": app.userInstances[i].definition,
@@ -17949,8 +17949,8 @@
                             for (var i = 0; i < app.userHasParts.length; i++) {
                                 app.tempIndex = app.userHasParts[i].term;
                                 var jsonClassRequest = {
-                                    "user": app.username,
-                                    "ontology": "carex",
+                                    "user":app.route.user,
+                                    "ontology": app.route.ontology,
                                     "term": app.userHasParts[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
                                     "definition": app.userHasParts[i].definition,
@@ -18008,15 +18008,15 @@
 
                 if (key == 'bsynonym') {
                     jsonRequest = {
-                         "user": app.username,
-                        "ontology": "carex",
+                         "user":app.route.user,
+                        "ontology": app.route.ontology,
                         "term": app.temp.text,
                         "classIRI": app.synonyms[index].data.details[0].IRI
                     };
                 } else if (key == 'class') {
                     jsonRequest = {
-                         "user": app.username,
-                        "ontology": "carex",
+                         "user":app.route.user,
+                        "ontology": app.route.ontology,
                         "term": app.temp.text,
                         "superclassIRI": app.synonyms[index].data.details[0].IRI,
                         "definition": app.term.definition,
@@ -18027,15 +18027,15 @@
                     if (setting == 'synonym') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.synonyms[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
                             };
@@ -18043,15 +18043,15 @@
                     } else if (setting == 'TTBA') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.TTBA[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
                             };
@@ -18061,8 +18061,8 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": optionData,
                                 "partIRI": app.synonyms[index].data.details[0].IRI
                             };
@@ -18071,8 +18071,8 @@
                             }
                         } else {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.synonyms[index].data.details[0].IRI,
                                 "partIRI": optionData
                             };
@@ -18085,8 +18085,8 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": optionData,
                                 "partIRI": app.TTBA[index].data.details[0].IRI
                             };
@@ -18095,8 +18095,8 @@
                             }
                         } else {
                             jsonRequest = {
-                                 "user": app.username,
-                                "ontology": "carex",
+                                 "user":app.route.user,
+                                "ontology": app.route.ontology,
                                 "bearerIRI": app.TTBA[index].data.details[0].IRI,
                                 "partIRI": optionData
                             };
@@ -18125,8 +18125,8 @@
                             }
                             if (app.status == 5) {
                                  jsonSaveRequest = {
-                                   "user": app.username,
-                                  "ontology": "carex",
+                                   "user": app.route.user,
+                                  "ontology": app.route.ontology,
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                     .then(function(resp) {

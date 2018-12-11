@@ -19,10 +19,11 @@
 
                         <div class="form-group">
                             <div class="col-md-12 " style="padding-top: 20px;">
-                                <h4>Use on of the following ways to add {{ $route.params.term }} to the CAREX ontology</h4>
+                                <h4>Use on of the following ways to add {{ $route.params.term}} to the CAREX ontology</h4>
                             </div>
                         </div>
                         <div class="form-group">
+                            <!--Heng's code 
                             <div class="col-md-3 text-center">
                                 <a :href="'/add2ontology/public/wizard/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
@@ -43,6 +44,31 @@
                             </div>
                             <div class="col-md-3 text-center">
                                 <a :href="'/add2ontology/public/terms-wiki/' + $route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
+                                    Add term to wiki directly
+                                </a>
+                            </div> -->
+                            <!--Hong's attempt -->
+                            <div class="col-md-3 text-center">
+                                <a :href="'/add2ontology/public/wizard/' + $route.params.user +'/'+$route.params.ontology+'/'+$route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
+                                    Guide by Wizard
+                                </a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a :href="'/add2ontology/public/quick-form/' + $route.params.user +'/'+$route.params.ontology+'/'+$route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Quick Form</p>
+                                    Fill a form
+                                </a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a :href="'/add2ontology/public/web-protege/' + $route.params.user +'/'+$route.params.ontology+'/'+$route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">WebProtege</p>
+                                    Add term to WP directly
+                                </a>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <a :href="'/add2ontology/public/terms-wiki/' + $route.params.user +'/'+$route.params.ontology+'/'+$route.params.term" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
                                     Add term to wiki directly
                                 </a>
