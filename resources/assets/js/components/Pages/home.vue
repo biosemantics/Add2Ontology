@@ -116,11 +116,6 @@
         },
         beforeMount() {
             var app = this;
-            if (sessionStorage.getItem('username')) {
-
-            } else {
-                sessionStorage.setItem('username', '');
-            }
             app.username = sessionStorage.getItem('username');
         },
         methods: {
