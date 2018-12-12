@@ -1,4 +1,5 @@
 <template>
+<!-- wow -->
     <div slot="section" class="">
         <div class="panel panel-default">
             <div class="panel-heading">
