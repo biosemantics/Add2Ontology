@@ -17651,7 +17651,11 @@
                                 }
 
                             } else if (app.term.hasPart == 'no') {
-                                axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                 jsonSaveRequest = {
+                                   "user": app.user,
+                                  "ontology": "carex",
+                                    };
+                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                     .then(function(resp) {
                                         console.log('save resp', resp);
                                     })
@@ -17724,6 +17728,8 @@
 
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
+                                    "user":app.user,
+                                    "ontology": "carex",
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
@@ -17782,6 +17788,8 @@
                         if (app.term.synonym == 'yes') {
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
+                                     "user":app.user,
+                                    "ontology": "carex",
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
@@ -17861,6 +17869,8 @@
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
                                 var jsonClassRequest = {
+                                     "user":app.user,
+                                    "ontology": "carex",
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
                                     "definition": app.userInstances[i].definition,
@@ -17944,6 +17954,8 @@
                             for (var i = 0; i < app.userHasParts.length; i++) {
                                 app.tempIndex = app.userHasParts[i].term;
                                 var jsonClassRequest = {
+                                     "user":app.user,
+                                    "ontology": "carex",
                                     "term": app.userHasParts[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
                                     "definition": app.userHasParts[i].definition,
@@ -18001,11 +18013,15 @@
 
                 if (key == 'bsynonym') {
                     jsonRequest = {
+                         "user":app.user,
+                        "ontology": "carex",
                         "term": app.temp.text,
                         "classIRI": app.synonyms[index].data.details[0].IRI
                     };
                 } else if (key == 'class') {
                     jsonRequest = {
+                         "user":app.user,
+                        "ontology": "carex",
                         "term": app.temp.text,
                         "superclassIRI": app.synonyms[index].data.details[0].IRI,
                         "definition": app.term.definition,
@@ -18016,11 +18032,15 @@
                     if (setting == 'synonym') {
                         if (key == 'partOf') {
                             jsonRequest = {
+                                 "user":app.user,
+                                "ontology": "carex",
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.synonyms[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
+                                 "user":app.user,
+                                "ontology": "carex",
                                 "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
                             };
@@ -18028,11 +18048,15 @@
                     } else if (setting == 'TTBA') {
                         if (key == 'partOf') {
                             jsonRequest = {
+                                 "user":app.user,
+                                "ontology": "carex",
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.TTBA[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
+                                 "user":app.user,
+                                "ontology": "carex",
                                 "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
                             };
@@ -18042,6 +18066,8 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
+                                 "user":app.user,
+                                 "ontology": "carex",
                                 "bearerIRI": optionData,
                                 "partIRI": app.synonyms[index].data.details[0].IRI
                             };
@@ -18050,6 +18076,8 @@
                             }
                         } else {
                             jsonRequest = {
+                                 "user":app.user,
+                                "ontology": "carex",
                                 "bearerIRI": app.synonyms[index].data.details[0].IRI,
                                 "partIRI": optionData
                             };
@@ -18062,6 +18090,8 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
+                                 "user":app.user,
+                                    "ontology": "carex",
                                 "bearerIRI": optionData,
                                 "partIRI": app.TTBA[index].data.details[0].IRI
                             };
@@ -18070,6 +18100,8 @@
                             }
                         } else {
                             jsonRequest = {
+                                 "user":app.user,
+                                    "ontology": "carex",
                                 "bearerIRI": app.TTBA[index].data.details[0].IRI,
                                 "partIRI": optionData
                             };
@@ -18097,7 +18129,7 @@
                                 app.status = status + 1;
                             }
                             if (app.status == 5) {
-                                axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                     .then(function(resp) {
                                         console.log('save resp', resp);
                                     })
@@ -18258,7 +18290,7 @@
                                     app.modalShowFlag = false;
                                     if (status == -1) {
                                         app.status = 5;
-                                        axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                        axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                             .then(function(resp) {
                                                 console.log('save resp', resp);
                                             })
@@ -18327,7 +18359,7 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
                                                 })
@@ -18393,7 +18425,7 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
                                                 })
@@ -18445,7 +18477,7 @@
 //                                            app.status = status + 1;
                                         }
                                         if (key == 'hasPart') {
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
                                                 })
@@ -18497,7 +18529,7 @@
 //                                            app.status = status + 1;
                                         }
                                         if (key == 'hasPart') {
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
                                                 })
