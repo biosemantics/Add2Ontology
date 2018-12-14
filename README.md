@@ -7,6 +7,7 @@
  * Node.js
  * Python 2.7 as python2 
  * MySQL
+ * .Net Framework 2.0 SDK
   
 ### How to use
 
