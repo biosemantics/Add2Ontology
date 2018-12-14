@@ -1,9 +1,13 @@
-## Laravel 5.6 + Vue.js - Simple CRUD Demo
-
-Simple project showing how Laravel works with Vue.js.
+###Add2Ontology
 
 ---
-
+### Requires
+  Composer: https://getcomposer.org/download/
+  Php
+  Node.js
+  Python2 
+  MySQL
+  
 ### How to use
 
 - Clone the repository with __git clone__
