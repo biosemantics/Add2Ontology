@@ -2,11 +2,11 @@
 
 ---
 ### Requires
-  Composer: https://getcomposer.org/download/
-  Php
-  Node.js
-  Python2 
-  MySQL
+ * Composer: https://getcomposer.org/download/
+ * Php
+ * Node.js
+ * Python 2.7 as python2 
+ * MySQL
   
 ### How to use
 
