@@ -17651,8 +17651,8 @@
                                 }
 
                             } else if (app.term.hasPart == 'no') {
-                                 jsonSaveRequest = {
-                                   "user": app.user,
+                                 var jsonSaveRequest = {
+                                   "user": app.username,
                                   "ontology": "carex",
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18129,6 +18129,10 @@
                                 app.status = status + 1;
                             }
                             if (app.status == 5) {
+                                  var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                     .then(function(resp) {
                                         console.log('save resp', resp);
@@ -18290,6 +18294,10 @@
                                     app.modalShowFlag = false;
                                     if (status == -1) {
                                         app.status = 5;
+                                          var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                         axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                             .then(function(resp) {
                                                 console.log('save resp', resp);
@@ -18359,6 +18367,10 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
+                                              var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
@@ -18425,6 +18437,10 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
+                                              var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
@@ -18477,6 +18493,10 @@
 //                                            app.status = status + 1;
                                         }
                                         if (key == 'hasPart') {
+                                              var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
@@ -18529,6 +18549,10 @@
 //                                            app.status = status + 1;
                                         }
                                         if (key == 'hasPart') {
+                                              var jsonSaveRequest = {
+                                   "user": app.username,
+                                  "ontology": "carex",
+                                    };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
