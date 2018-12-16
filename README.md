@@ -7,14 +7,14 @@
  * Node.js
  * Python 2.7 as python2 
  * MySQL
- * .Net Framework 2.0 SDK
+ * VCBuilder.exe (part of Visual C++ development environment)
   
 ### How to use
 
 - Clone the repository with __git clone__
 - Copy __.env.example__ file to __.env__ and edit database credentials there
 - Run __composer install__
-- Run __php artisan key:generate__
+- Run __php artisan key:generate__ [a new app needs a new APP Key in the .env file. This command should automatically insert a .env APP_KEY= in the .env file]
 - Run __php artisan migrate__
 - Run __npm install__ or __npm install -g --production windows-build-tools__ when VCBuilder.exe is not already installed
 - Run __npm run dev__
