@@ -1,9 +1,14 @@
-## Laravel 5.6 + Vue.js - Simple CRUD Demo
-
-Simple project showing how Laravel works with Vue.js.
+###Add2Ontology
 
 ---
-
+### Requires
+ * Composer: https://getcomposer.org/download/
+ * Php
+ * Node.js
+ * Python 2.7 as python2 
+ * MySQL
+ * .Net Framework 2.0 SDK
+  
 ### How to use
 
 - Clone the repository with __git clone__
@@ -11,7 +16,7 @@ Simple project showing how Laravel works with Vue.js.
 - Run __composer install__
 - Run __php artisan key:generate__
 - Run __php artisan migrate__
-- Run __npm install__
+- Run __npm install or __npm install -g --production windows-build-tools__ when VCBuilder.exe is not already installed
 - Run __npm run dev__
 - That's it - load the homepage, use __Register__ link and use the CRUD
 
