@@ -21,6 +21,9 @@
 - That's it - load the homepage, use __Register__ link and use the CRUD
 
 ---
+### For Description Editor, deployment url is  
+http://shark.sbs.arizona.edu/add2ontologymodular/public/wizard/anotherterm/hong/carex and 
+http://shark.sbs.arizona.edu/add2ontologymodular/public/quick-form/anotherterm/hong/carex
 
 ### License
 
