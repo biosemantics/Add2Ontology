@@ -17874,7 +17874,12 @@
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
                                     "definition": app.userInstances[i].definition,
-                                    "elucidation": null
+                                    "elucidation": null,
+                                    "createdBy": app.$route.params.user +" via add2ontology wizard",
+                                    "creationDate": new Date(),
+                                    "definitionSrc": "tba",
+                                    "examples": "tba",
+                                    "logicDefinition": "tba",
                                 };
                                 app.tempIndex = app.userInstances[i].term;
                                 axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
@@ -17953,13 +17958,18 @@
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userHasParts.length; i++) {
                                 app.tempIndex = app.userHasParts[i].term;
-                                var jsonClassRequest = {
+                                  var jsonClassRequest = {
                                   "user":"",
                                      "ontology": app.$route.params.ontology,
-                                    "term": app.userHasParts[i].term,
+                                    "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
-                                    "definition": app.userHasParts[i].definition,
-                                    "elucidation": null
+                                    "definition": app.userInstances[i].definition,
+                                    "elucidation": null,
+                                    "createdBy": app.$route.params.user +" via add2ontology wizard",
+                                    "creationDate": new Date(),
+                                    "definitionSrc": "tba",
+                                    "examples": "tba",
+                                    "logicDefinition": "tba",
                                 };
                                 axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
                                     .then(function(resp) {

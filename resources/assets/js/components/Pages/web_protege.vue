@@ -133,7 +133,7 @@
                         "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": "tba",
                         "elucidation": "tba",
-                        "createdBy": app.$route.params.user,
+                        "createdBy": app.$route.params.user +" via add2ontology webprotege",
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": "tba",

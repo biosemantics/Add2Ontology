@@ -148,7 +148,7 @@
                         "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": app.quickForm.definition,
                         "elucidation": "tba",
-                        "createdBy": app.$route.params.user,
+                        "createdBy": app.$route.params.user + " via add2ontology quick form",
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": app.quickForm.sentences + '[' + app.quickForm.taxa + ']',
