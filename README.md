@@ -16,11 +16,14 @@
 - Run __composer install__
 - Run __php artisan key:generate__
 - Run __php artisan migrate__
-- Run __npm install or __npm install -g --production windows-build-tools__ when VCBuilder.exe is not already installed
+- Run __npm install__ or __npm install -g --production windows-build-tools__ when VCBuilder.exe is not already installed
 - Run __npm run dev__
 - That's it - load the homepage, use __Register__ link and use the CRUD
 
 ---
+### For Description Editor, deployment url is  
+http://shark.sbs.arizona.edu/add2ontologymodular/public/wizard/anotherterm/hong/carex and 
+http://shark.sbs.arizona.edu/add2ontologymodular/public/quick-form/anotherterm/hong/carex
 
 ### License
 
