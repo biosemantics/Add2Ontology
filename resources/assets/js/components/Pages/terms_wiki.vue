@@ -18,7 +18,7 @@
                             <input v-model="termsWikiIRI" style="width: 100%;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
-                            <img src="/add2ontology/public/images/terms_wiki.png" style="width: 100%;"/>
+                            <img src="/add2ontologymodular/public/images/terms_wiki.png" style="width: 100%;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
@@ -44,41 +44,41 @@
         mounted() {
             var app = this;
             var jsonRequest = {
-                'user_email': app.username,
+                'user_email': app.$route.params.user,
                 'action': 'Module landed',
                 'action_details': 'TermsWiki module was landed for term',
                 'abnormal_system_response': null,
                 'type': 'Terms Wiki'
             };
-            if (app.username == null || app.username == 'null' || app.username == '') {
-                alert('Please insert the username on homepage.');
-            } else {
-                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+            //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
+            //    alert('Please insert the username on homepage.');
+            //} else {
+                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                     .then(function(resp) {
                         console.log("activity-log resp", resp);
                     })
                     .catch(function(resp) {
                         console.log("activity-log error resp", resp);
                     });
-            }
+            //}
         },
         methods: {
             done: function() {
                 var app = this;
                 var jsonRequest = {
-                    'user_email': app.username,
+                    'user_email': app.$route.params.user,
                     'action': 'Save IRI',
                     'action_details': app.termsWikiIRI + ' saved for term',
                     'abnormal_system_response': null,
                     'type': 'Terms Wiki'
                 };
-                if (app.username == null || app.username == 'null' || app.username == '') {
-                    alert('Please insert the username on homepage');
-                } else if (app.termsWikiIRI == null) {
+                //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
+                //    alert('Please insert the username on homepage');
+                /*} else*/ if (app.termsWikiIRI == null) {
                     jsonRequest.action = 'clicked Done';
-                    jsonRequest.action_details = app.username + ' clicked Done for term ';
+                    jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
                     jsonRequest.abnormal_system_response = 'without entry';
-                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
                             console.log("activity-log resp", resp);
                         })
@@ -87,10 +87,10 @@
                         });
                     alert('You need to enter IRI in the input box.');
                 } else if (app.termsWikiIRI.substring(0, 7) != 'http://') {
-                    jsonRequest.action_details = app.username + ' input invalid IRI for term ';
+                    jsonRequest.action_details = app.$route.params.user + ' input invalid IRI for term ';
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.abnormal_system_response = 'invalid entry';
-                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
                             console.log("activity-log resp", resp);
                         })
@@ -99,7 +99,7 @@
                         });
                     alert('The format you input is not valid.');
                 } else {
-                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
                             console.log("activity-log resp", resp);
                         })
@@ -107,11 +107,13 @@
                             console.log("activity-log error resp", resp);
                         });
                     var jsonClass = {
+                        "user":"",
+                        "ontology": app.$route.params.ontology,
                         "term": app.$route.params.term + ' ' + app.termsWikiIRI,
                         "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": "tba",
                         "elucidation": "tba",
-                        "createdBy": app.username,
+                        "createdBy": app.$route.params.user,
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": "tba",
@@ -120,7 +122,11 @@
                     axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
                         .then(function(resp) {
                             console.log('class resp', resp);
-                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                            var jsonSaveRequest = {
+                        "user":"",
+                        "ontology": app.$route.params.ontology
+                        };
+                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                 .then(function(resp) {
                                     console.log('save resp', resp);
                                 })

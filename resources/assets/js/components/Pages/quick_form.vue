@@ -84,16 +84,16 @@
         mounted() {
             var app = this;
             var jsonRequest = {
-                'user_email': app.username,
+                'user_email': app.$route.params.user,
                 'action': 'Module landed',
                 'action_details': 'QuickForm module was landed for term',
                 'abnormal_system_response': null,
                 'type': 'Quick Form'
             };
-            if (app.username == null || app.username == 'null' || app.username == '') {
-                alert('Please insert the username on homepage.');
-            } else {
-                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+            //if (app.username == null || app.username == 'null' || app.username == '') {
+            //    alert('Please insert the username on homepage.');
+            //} else {
+                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                     .then(function(resp) {
                         console.log("activity-log resp", resp);
                     })
@@ -102,24 +102,24 @@
                     });
 
 
-            }
+            //}
         },
         methods: {
             submit() {
                 var app = this;
                 console.log('quickForm submit', app.quickForm);
-                if (app.username == null || app.username == 'null' || app.username == '') {
-                    alert('Please insert the username on homepage');
-                } else if (app.quickForm.structure == null) {
+                //if (app.username == null || app.username == 'null' || app.username == '') {
+                //    alert('Please insert the username on homepage');
+                /*} else*/ if (app.quickForm.structure == null) {
                     alert('You have to select "Anatomical Structure" or "Character or character state" before clicking "Done" button.')
                     var jsonRequest = {
-                        'user_email': app.username,
+                        'user_email': app.$route.params.user,
                         'action': 'clicked Done',
-                        'action_details': app.username + ' submitted null for term ',
+                        'action_details': app.$route.params.user + ' submitted null for term ',
                         'abnormal_system_response': 'without entry',
                         'type': 'Quick Form'
                     };
-                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function (resp) {
                             console.log("activity-log resp", resp);
                         })
@@ -128,13 +128,13 @@
                         });
                 } else {
                     var jsonRequest = {
-                        'user_email': app.username,
+                        'user_email': app.$route.params.user,
                         'action': 'Submit Quick Form',
-                        'action_details': app.username + ' submitted for term ',
+                        'action_details': app.$route.params.user + ' submitted for term ',
                         'abnormal_system_response': null,
                         'type': 'Quick Form'
                     };
-                    axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function (resp) {
                             console.log("activity-log resp", resp);
                         })
@@ -142,11 +142,13 @@
                             console.log('activity-log error resp', resp);
                         });
                     var jsonClass = {
+                        "user":"",
+                        "ontology": app.$route.params.ontology,
                         "term": app.$route.params.term,
-                        "superclassIRI": null,
+                        "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": app.quickForm.definition,
                         "elucidation": "tba",
-                        "createdBy": app.username,
+                        "createdBy": app.$route.params.user,
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": app.quickForm.sentences + '[' + app.quickForm.taxa + ']',
@@ -160,7 +162,11 @@
                     axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
                         .then(function(resp) {
                             console.log('class resp', resp);
-                            axios.post('http://shark.sbs.arizona.edu:8080/save', {})
+                            var jsonSaveRequest = {
+                        "user":"",
+                        "ontology": app.$route.params.ontology
+                            };
+                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                 .then(function(resp) {
                                     console.log('save resp', resp);
                                 })

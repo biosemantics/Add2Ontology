@@ -24,25 +24,25 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontology/public/wizard/' + $route.params.term + '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontologymodular/public/wizard/' + $route.params.term + '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
                                     Guide by Wizard
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontology/public/quick-form/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontologymodular/public/quick-form/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Quick Form</p>
                                     Fill a form
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontology/public/web-protege/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontologymodular/public/web-protege/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">WebProtege</p>
                                     Add term to WP directly
                                 </a>
                             </div>
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontology/public/terms-wiki/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                <a :href="'/add2ontologymodular/public/terms-wiki/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
                                     Add term to wiki directly
                                 </a>
@@ -100,17 +100,17 @@
         methods: {
             saveUsername() {
                 var app = this;
-                sessionStorage.setItem('username', app.username);
+                sessionStorage.setItem('username', app.$route.params.user);
                 var jsonRequest = {
-                    'user_email': app.username,
+                    'user_email': app.$route.params.user,
                     'action': 'Save Username',
-                    'action_details': app.username + ' saved as username for term ',
+                    'action_details': app.$route.params.user + ' saved as username for term ',
                     'abnormal_system_response': null,
                     'type': 'Home'
                 };
                 var term = 'TTBA';
                 console.log('term', app.$route.params.term);
-                axios.post('/add2ontology/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                     .then(function (resp) {
                         console.log("activity-log resp", resp);
                     })
