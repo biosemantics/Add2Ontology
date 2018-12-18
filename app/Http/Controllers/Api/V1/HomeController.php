@@ -13,6 +13,9 @@ class HomeController extends Controller
         var_dump($request);
         exit;
 
+        #var_dump($request);
+        #exit;
+        
         $activityLog = ActivityLog::create([
             'user_email' => $request->input('user_email'),
             'action' => $request->input('action'),
