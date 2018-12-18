@@ -16,7 +16,7 @@ Route::group([
         'as' => 'api.'
     ], function () {
 
-   # Original Route::post('activity-log/{term}',                ['as' => 'meta_log',                    'uses' => 'HomeController@saveActivityLog']);
-   Route::post('activity-log/{term}/{user}/{ontology}',     ['as' => 'meta_log', 'uses' => 'HomeController@saveActivityLog']);
+   Route::post('activity-log/{term}',  ['as' => 'meta_log', 'uses' => 'HomeController@saveActivityLog']);
+   #Hong Route::post('activity-log/{term}/{user}/{ontology}',     ['as' => 'meta_log', 'uses' => 'HomeController@saveActivityLog']);
 
 });

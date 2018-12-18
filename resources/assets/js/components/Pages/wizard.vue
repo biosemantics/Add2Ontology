@@ -11,37 +11,37 @@
                         <div class="row">
                             <div class="col-md-offset-1 col-md-4">
                                 <div v-if="status == -1 || status > 0">
-                                    <b>Questions and Answered:</b>
+                                    <b style="color: green">Questions Answered:</b>
                                     <br>
                                     Please provide  a human readable definition for {{ $route.params.term }}:<br/>
                                     <b> {{ term.definition }}</b>
                                 </div>
                                 <div v-if="status == -1 || status > 1">
                                     Does {{ $route.params.term }} represent an anatomical structure or a character? :<br/>
-                                    <span v-if="term.represent == 'anatomical'" style="font-weight: bold;">an anatomical structure</span>
-                                    <span v-if="term.represent == 'character'" style="font-weight: bold;">a character</span>
+                                    <span v-if="term.represent == 'anatomical'" style="font-weight: bold;">an anatomical structure.</span>
+                                    <span v-if="term.represent == 'character'" style="font-weight: bold;">a character.</span>
                                 </div>
                                 <div v-if="status > 2 && term.represent == 'anatomical'">
                                     Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms?<br/>
-                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes</span>
-                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No</span>
+                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, the term is a synonym to another structure term. </span>
+                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, the term is not a synonym to another structure term.</span>
                                 </div>
                                 <div v-if="status > 3 && term.represent == 'anatomical' && term.instance != null">
                                     Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?<br/>
-                                    <span v-if="term.instance == 'yes'" style="font-weight: bold;">Yes</span>
+                                    <span v-if="term.instance == 'yes'" style="font-weight: bold;">Yes, it is part of some larger structure.</span>
                                     <span v-if="term.instance == 'no'" style="font-weight: bold;">No, I am not aware of such larger structures.</span>
-                                    <span v-if="term.instance == 'no-user'" style="font-weight: bold;">No, such larger structures are not shown in the tree.</span>
+                                    <span v-if="term.instance == 'no-user'" style="font-weight: bold;">No, such larger structures are not shown in the ontology.</span>
                                 </div>
                                 <div v-if="status > 4 && term.represent == 'anatomical' && term.hasPart != null">
                                     Are all instances of {{ $route.params.term }} have certain parts that are in the tree below?<br/>
-                                    <span v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes</span>
+                                    <span v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes, it has smaller parts.</span>
                                     <span v-if="term.hasPart == 'no'" style="font-weight: bold;">No, I am not aware of such smaller structures.</span>
-                                    <span v-if="term.hasPart == 'no-user'" style="font-weight: bold;">No, such smaller structures are not shown in the tree.</span>
+                                    <span v-if="term.hasPart == 'no-user'" style="font-weight: bold;">No, such smaller structures are not shown in the ontology.</span>
                                 </div>
                                 <div v-if="status == 5 && term.represent == 'character' && term.synonym != null">
                                     Is {{ $route.params.term }} a synonym to any of the existing quality terms?<br/>
-                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes</span>
-                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No</span>
+                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, it is a synonym to another quality term.</span>
+                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, it is not a synonym to another quality term.</span>
                                 </div>
 
                             </div>
@@ -319,7 +319,7 @@
                                     </div>
                                 </div>
                                 <div v-if="status == 5" class="col-md-12">
-                                    <label>Summary:</label>
+                                    <label style="color: green">Summary:</label>
                                     <div v-for="each in summary">
                                         {{ each }}
                                     </div>
@@ -331,7 +331,7 @@
                                     </div>
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-md-12">
-                                            <label>You are done!</label>
+                                            <label style="color: green">You are done!</label>
                                         </div>
                                     </div>
                                     <!--<a class="btn btn-primary" v-on:click="Submit('final')" style="margin-top: 10px;">Submit</a>-->
