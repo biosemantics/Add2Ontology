@@ -30,7 +30,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/' . $term) }}">
+                    <a class="navbar-brand" href="{{ url('/' . $term.'/'.$user.'/'.$ontology) }}">
                         {{ config('app.name', 'Add to Ontology') }}
                     </a>
                 </div>

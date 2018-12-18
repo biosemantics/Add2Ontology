@@ -44,27 +44,27 @@ class HomeController extends Controller
      
     public function index(Request $request, $term, $user, $ontology)
     {
-        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+        return view('home', ['term' => $term, 'user' => $user, 'ontology' =>$ontology]);
     }
 
-    public function wizard(Request $request, $term)
+    public function wizard(Request $request, $term, $user, $ontology)
     {
-        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+        return view('home', ['term' => $term, 'user' => $user, 'ontology' =>$ontology]);
     }
 
-    public function quickForm(Request $request, $term)
+    public function quickForm(Request $request, $term, $user, $ontology)
     {
-        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+        return view('home', ['term' => $term, 'user' => $user, 'ontology' =>$ontology]);
     }
 
-    public function webProtege(Request $request, $term)
+    public function webProtege(Request $request, $term, $user, $ontology)
     {
-        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+        return view('home', ['term' => $term, 'user' => $user, 'ontology' =>$ontology]);
     }
 
-    public function termsWiki(Request $request, $term)
+    public function termsWiki(Request $request, $term, $user, $ontology)
     {
-        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+        return view('home', ['term' => $term, 'user' => $user, 'ontology' =>$ontology]);
     }
 
 

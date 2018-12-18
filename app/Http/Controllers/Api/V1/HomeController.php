@@ -11,6 +11,9 @@ class HomeController extends Controller
 {
     public function saveActivityLog(Request $request, $term) {
 
+        #var_dump($request);
+        #exit;
+        
         $activityLog = ActivityLog::create([
             'user_email' => $request->input('user_email'),
             'action' => $request->input('action'),
