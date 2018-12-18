@@ -42,11 +42,18 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
+                    <!-- Hong 
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="{{ url('terms-wiki/' . $term.'/'.$user.'/'.$ontology) }}">Terms Wiki</a></li>
                         <li><a href="{{ url('web-protege/' . $term.'/'.$user.'/'.$ontology) }}">Web Protege</a></li>
                         <li><a href="{{ url('quick-form/' . $term.'/'.$user.'/'.$ontology) }}">Quick Form</a></li>
                         <li><a href="{{ url('wizard/' . $term.'/'.$user.'/'.$ontology) }}">Wizard</a></li>
+                    </ul> -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{ url('terms-wiki/' . $term) }}">Terms Wiki</a></li>
+                        <li><a href="{{ url('web-protege/' . $term) }}">Web Protege</a></li>
+                        <li><a href="{{ url('quick-form/' . $term) }}">Quick Form</a></li>
+                        <li><a href="{{ url('wizard/' . $term) }}">Wizard</a></li>
                     </ul>
                     </ul>
                 </div>

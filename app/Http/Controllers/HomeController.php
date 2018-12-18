@@ -16,6 +16,7 @@ class HomeController extends Controller
 //        $this->middleware('auth');
     }
 
+    // original
     public function index(Request $request, $term)
     {
         return view('home', ['term' => $term]);
@@ -40,5 +41,31 @@ class HomeController extends Controller
     {
         return view('home', ['term' => $term]);
     }
+     /*hong
+    public function index(Request $request, $term, $user, $ontology)
+    {
+        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+    }
+
+    public function wizard(Request $request, $term)
+    {
+        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+    }
+
+    public function quickForm(Request $request, $term)
+    {
+        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+    }
+
+    public function webProtege(Request $request, $term)
+    {
+        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+    }
+
+    public function termsWiki(Request $request, $term)
+    {
+        return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
+    }*/
+
 
 }
