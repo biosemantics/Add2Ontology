@@ -17,7 +17,7 @@ class HomeController extends Controller
     }
 
     // original
-    public function index(Request $request, $term)
+    /*public function index(Request $request, $term)
     {
         return view('home', ['term' => $term]);
     }
@@ -40,8 +40,8 @@ class HomeController extends Controller
     public function termsWiki(Request $request, $term)
     {
         return view('home', ['term' => $term]);
-    }
-     /*hong
+    }*/
+     
     public function index(Request $request, $term, $user, $ontology)
     {
         return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
@@ -65,7 +65,7 @@ class HomeController extends Controller
     public function termsWiki(Request $request, $term)
     {
         return view('home', ['term' => $term, user => $user, ontology =>$ontology]);
-    }*/
+    }
 
 
 }
