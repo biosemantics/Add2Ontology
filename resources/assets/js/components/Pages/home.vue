@@ -19,34 +19,40 @@
 
                         <div class="form-group">
                             <div class="col-md-12 " style="padding-top: 20px;">
-                                <h4>Use on of the following ways to add {{ $route.params.term }} to the CAREX ontology</h4>
+                                <h4>Use on of the following ways to add <b>{{ $route.params.term }}</b> to the CAREX Ontology</h4>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontologymodular/public/wizard/' + $route.params.term + '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
-                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
-                                    Guide by Wizard
+                                <a :href="'/add2ontologymodular/public/terms-wiki/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
+                                    CAREX Ontology on WikiData
                                 </a>
                             </div>
-                            <div class="col-md-3 text-center">
-                                <a :href="'/add2ontologymodular/public/quick-form/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
-                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Quick Form</p>
-                                    Fill a form
-                                </a>
-                            </div>
+
                             <div class="col-md-3 text-center">
                                 <a :href="'/add2ontologymodular/public/web-protege/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">WebProtege</p>
-                                    Add term to WP directly
+                                    CAREX Ontology in WP
                                 </a>
                             </div>
+
                             <div class="col-md-3 text-center">
-                                <a :href="'/add2ontologymodular/public/terms-wiki/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
-                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
-                                    Add term to wiki directly
+                                <a :href="'/add2ontologymodular/public/quick-form/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Quick Form</p>
+                                    Add Term via a Form
                                 </a>
                             </div>
+
+                            <div class="col-md-3 text-center">
+                                <a :href="'/add2ontologymodular/public/wizard/' + $route.params.term + '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wizard</p>
+                                    Guided by a Wizard
+                                </a>
+                            </div>
+                            
+
+
                         </div>
                         <div class="form-group" style="font-size: 15px;">
                             <div class="col-md-3 text-center">

@@ -11,17 +11,21 @@
                             WebProtege: <a href="https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b" target="_blank" style="cursor: pointer;">https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Click on the WebProtege link above and add [selected word/phrase] to CAREX Ontology.
+                            Click on the WebProtege link above and add <b>{{ $route.params.term }}</b> to CAREX Ontology.
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Then enter the term IRI here:
+                            Then enter the term IRI here (see the image below on where to find the IRI for a term):
                             <input v-model="webProtegeIRI" style="width: 100%;"/>
                         </div>
+                        <br/>
                         <div class="col-md-offset-2 col-md-8">
                             <img src="/add2ontologymodular/public/images/web_protege.png" style="width: 100%;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
+                            <div v-if="status == 9">
+                                <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -157,6 +161,7 @@
                         .catch(function(resp) {
                             console.log('class error resp', resp);
                         });
+                        app.status = 9;
                 }
             }
         }

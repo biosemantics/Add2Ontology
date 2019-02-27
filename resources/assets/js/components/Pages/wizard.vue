@@ -24,7 +24,7 @@
                                 <div v-if="status > 2 && term.represent == 'anatomical'">
                                     Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms?<br/>
                                     <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, the term is a synonym to another structure term. </span>
-                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, the term is not a synonym to another structure term.</span>
+                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, the term is not a synonym to another structure term. The term represents a type of an existing term</span>
                                 </div>
                                 <div v-if="status > 3 && term.represent == 'anatomical' && term.instance != null">
                                     Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?<br/>
@@ -48,13 +48,13 @@
                             <div class="col-md-6">
                                 <div v-if="status == 0" class="form-group">
                                     <label class="col-md-12">
-                                        Answer the following questions about "{{ $route.params.term }}". Your answer helps the computer understand the meaning of the term.
+                                        Answer the following questions about <b>{{ $route.params.term }}</b>. Your answer helps the computer understand the meaning of the term.
                                     </label>
                                 </div>
                                 <div v-if="status == 0">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Please provide  a human readable definition for "{{ $route.params.term }}".</label>
+                                            <label>Please provide  a human readable definition for <b>{{ $route.params.term }}</b>.</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input v-model="term.definition" style="width: 100%;"/>
@@ -72,15 +72,14 @@
                                 <div v-if="status == 1">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Does {{ $route.params.term }} represent</label>
+                                            <label>Does <i>{{ $route.params.term }}</i> represent</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question1-y" v-model="term.represent" value="anatomical" name="structure" />
                                             <label for="question1-y">an anatomical structure? </label>
                                             <div style="padding-left: 10px;">
-                                                If the term represents a physical object such as leaf, apex, pore, or imaginary anatomical structures such as axis.
-                                                <br>
-                                                More anatomical structure are listed below.
+                                                Select this if the term represents a physical object such as leaf, apex; imaginary anatomical structures such as axis; or confined space such as chamber, pore.
+                                                More example anatomical structures are listed below:
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
@@ -98,9 +97,8 @@
                                             <input type="radio" id="question1-n" v-model="term.represent" value="character" name="structure" />
                                             <label for="question1-n">a character?</label>
                                             <div style="padding-left: 10px;">
-                                                If the term represents a property such as color, shape, size, orientation, position etc. of a physical object.
-                                                <br>
-                                                More character terms are listed below.
+                                                Select this if the term represents a property (such as color, shape, size, orientation, position, etc.) of a physical object.
+                                                More example character terms are listed below:
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="margin-top: 20px; border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
@@ -126,7 +124,7 @@
                                 <div v-if="status == 2">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms? </label>
+                                            <label>Is <i>{{ $route.params.term }}</i> a synonym to any of the existing anatomical structure terms shown below? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
@@ -142,17 +140,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
-                                            <label for="question2-y">Yes </label>
-                                            <div style="padding-left: 10px;">
-                                                In the tree above, select the nodes that {{ $route.params.term }} is a synonym of.
-                                            </div>
+                                            <label for="question2-y">Yes</label>
+                                            <span style="padding-left: 10px;">
+                                                Then do this: in the tree above, select all the nodes that <b>{{ $route.params.term }}</b> is a synonym of.
+                                            </span>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="question2-n">No</label>
-                                            <div style="padding-left: 10px;">
-                                                In the tree above, select the nodes under which {{ $route.params.term }} should be added.
-                                            </div>
+                                            <span style="padding-left: 10px;">
+                                               Then do this: in the tree above, select all the more general terms of which <b>{{ $route.params.term }}</b> is a type.
+                                            </span>
                                         </div>
                                         <div v-if="status == 2" class="col-md-12">
                                             <a class="btn btn-primary" v-on:click="submit(2)">Save</a>
@@ -162,7 +160,7 @@
                                 <div v-if="status == -1">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Is {{ $route.params.term }} a synonym to any of the existing quality terms? </label>
+                                            <label>Is <i>{{ $route.params.term }}</i> a synonym to any of the existing quality terms? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <!--<v-jstree :data="treeData" show-checkbox multiple allow-batch whole-row @item-click="synonymItemClick"></v-jstree>-->
@@ -180,15 +178,15 @@
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="questionx-y">Yes </label>
-                                            <div style="padding-left: 10px;">
-                                                In the tree above, select the nodes that {{ $route.params.term }} is a synonym of.
+                                            <div style="padding-left: 10px;" v-if="term.synonym =='yes'">
+                                                In the tree above, select the nodes that <b>{{ $route.params.term }}</b> is a synonym of.
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="questionx-n">No</label>
-                                            <div style="padding-left: 10px;">
-                                                In the tree above, select the nodes under which {{ $route.params.term }} should be added.
+                                            <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
+                                                In the tree above, select the nodes under which <b>{{ $route.params.term }}</b> should be added.
                                             </div>
                                         </div>
                                         <div v-if="status == -1" class="col-md-12">
@@ -199,7 +197,7 @@
                                 <div v-if="status == 3">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below? </label>
+                                            <label>Are all instances of <i>{{ $route.params.term }}</i> part of some larger structures shown in the tree below? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
@@ -216,8 +214,8 @@
                                         <div class="col-md-12">
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
                                             <label for="question3-y">Yes </label>
-                                            <div style="padding-left: 10px;">
-                                                Select the larger structures to which all instances of {{ $route.params.term }} belong.
+                                            <div style="padding-left: 10px;" v-if="term.instance == 'yes'">
+                                                In the tree above, select the larger structures to which all instances of <b>{{ $route.params.term }}</b> belong.
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -260,7 +258,7 @@
                                 <div v-if="status == 4">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Are all instances of {{ $route.params.term }} have certain parts that are in the tree below? </label>
+                                            <label>Are all instances of <b>{{ $route.params.term }}</b> have certain parts that are in the tree below? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
@@ -277,8 +275,8 @@
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
                                             <label for="question4-y">Yes </label>
-                                            <div style="padding-left: 10px;">
-                                                Select the parts.
+                                            <div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
+                                                In the tree above, select the parts.
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -319,15 +317,15 @@
                                     </div>
                                 </div>
                                 <div v-if="status == 5" class="col-md-12">
-                                    <label style="color: green">Summary:</label>
+                                    <label style="color: green">Based on your answers, the following have been added to the ontology:</label>
                                     <div v-for="each in summary">
                                         {{ each }}
                                     </div>
                                     <div v-if="summaryPartOf.length > 0">
-                                        "{{ $route.params.term }}" is part of <p style="display: inline;" v-for="each in summaryPartOf">"{{ each }}", </p>
+                                        <b>{{ $route.params.term }}</b> is part of <p style="display: inline;" v-for="each in summaryPartOf">"{{ each }}", </p>
                                     </div>
                                     <div v-if="summaryHasPart.length > 0">
-                                        "{{ $route.params.term }}" has part <p style="display: inline;" v-for="each in summaryHasPart">"{{ each }}", </p>
+                                        <b>{{ $route.params.term }}</b> has part <p style="display: inline;" v-for="each in summaryHasPart">"{{ each }}", </p>
                                     </div>
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-md-12">
@@ -346,20 +344,20 @@
                                         <div class="modal-container">
 
                                             <div class="modal-header">
-                                                <h3>Confirm Dialog</h3>
+                                                <h3>Confirmation</h3>
                                             </div>
 
                                             <div class="modal-body">
                                                 <div class="row">
                                                     <div v-if="status == 2 || status == -1" class="col-md-12">
                                                         <div v-if="term.synonym == 'yes'">
-                                                            You are adding "{{ $route.params.term }}" as synonyms to
+                                                            You are adding <b>{{ $route.params.term }}</b> as a synonym to each of the following terms:
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.synonym == 'no'">
-                                                            You are adding "{{ $route.params.term }}" as subclass of
+                                                            You are adding <b>{{ $route.params.term }}</b> as a subclass to each of the following terms:
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
@@ -367,13 +365,13 @@
                                                     </div>
                                                     <div v-if="status == 3" class="col-md-12">
                                                         <div v-if="term.instance == 'yes'">
-                                                            Do you want to add part_of relation between {{temp.text}} and LSTs:
+                                                            Do you want to add part_of relation between <b>{{temp.text}}</b> and the following larger structures:
                                                             <div v-for="each in instances">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.instance == 'no-user'">
-                                                            Do you want to add part_of relation between {{temp.text}} and LSTs:
+                                                            Do you want to add part_of relation between <b>{{temp.text}}</b> and the following larger structures:
                                                             <div v-for="each in instances">
                                                                 {{ each.term }}
                                                             </div>
@@ -381,13 +379,13 @@
                                                     </div>
                                                     <div v-if="status == 4" class="col-md-12">
                                                         <div v-if="term.hasPart == 'yes'">
-                                                            Do you want to add has_part relation between {{temp.text}} and LSTs:
+                                                            Do you want to add has_part relation between {{temp.text}} and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.hasPart == 'no-user'">
-                                                            Do you want to add has_part relation between {{temp.text}} and LSTs:
+                                                            Do you want to add has_part relation between {{temp.text}} and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.term }}
                                                             </div>
@@ -17565,7 +17563,7 @@
                                 state: { checked: true }
                                 }, true);
                             if (app.synonyms == null) {
-                                alert('Please select the nodes before clicking Save button.');
+                                alert('Please select the relevant nodes in the tree before clicking Save button.');
 
                             } else {
                                 app.modalShowFlag = true;
@@ -17585,7 +17583,7 @@
                             }, true);
 
                             if (app.synonyms == null) {
-                                alert('Please select the nodes before clicking Save button.');
+                                alert('Please select relevant nodes in the tree before clicking Save button.');
                             } else {
                                 app.modalShowFlag = true;
                             }
@@ -17602,7 +17600,7 @@
                                 }, true);
                                 console.log('selected instances', app.instances);
                                 if (app.instances == null) {
-                                    alert('Please select the nodes before clicking Save button.');
+                                    alert('Please select relevant nodes in the tree before clicking Save button.');
                                 } else {
                                     app.modalShowFlag = true;
                                 }
