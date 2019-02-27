@@ -11,14 +11,15 @@
                             Use terms wiki: <a href="https://terms.tdwg.org/wiki/FloraTerms" target="_blank" style="cursor: pointer;">https://terms.tdwg.org/wiki/FloraTerms</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Click on the FloraTerms link above and add [selected word/phrase] to Flora Terms.
+                            Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology.
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Then enter the term IRI here:
+                            Then enter the term URI here (the image below shows where to find the URI for the term):
                             <input v-model="termsWikiIRI" style="width: 100%;"/>
+                            <p/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
-                            <img src="/add2ontologymodular/public/images/terms_wiki.png" style="width: 100%;"/>
+                            <img src="/add2ontologymodular/public/images/terms_wiki.png" style="width: 100%; border-style: solid;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
