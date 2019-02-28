@@ -23,6 +23,19 @@
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
+
+                            <!--status line -->
+                            <div v-if="status == 0"> <!-- before term is added -->
+                                    <b style="color: green">Questions Answered:</b>
+                                    <br>
+                                    Please provide  a human readable definition for {{ $route.params.term }}:<br/>
+                                    <b> {{ term.definition }}</b>
+                                </div>
+                                <div v-if="status == -1 || status > 1">
+                                    Does {{ $route.params.term }} represent an anatomical structure or a character? :<br/>
+                                    <span v-if="term.represent == 'anatomical'" style="font-weight: bold;">an anatomical structure.</span>
+                                    <span v-if="term.represent == 'character'" style="font-weight: bold;">a character.</span>
+                                </div>
                         </div>
                     </form>
                 </div>

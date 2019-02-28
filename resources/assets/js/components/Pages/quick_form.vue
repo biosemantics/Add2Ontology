@@ -51,7 +51,8 @@
                                 <a v-on:click="submit()" class="btn btn-primary">
                                     Done
                                 </a>
-                            <div v-if="status == 'done'">
+                            </div>
+                            <div v-if="status == 10">
                                 <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
                             </div>
                         </div>
@@ -178,6 +179,7 @@
                         .catch(function(resp) {
                             console.log('class error resp', resp);
                         });
+                    app.status = 10;    
                 }
 
             }
