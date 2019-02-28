@@ -52,9 +52,9 @@
                                     Done
                                 </a>
                             </div>
-                            <div v-if="status == 10">
+                            <!--<div v-if="status == 10">
                                 <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
-                            </div>
+                            </div>-->
                         </div>
                     </form>
                 </div>
@@ -179,7 +179,7 @@
                         .catch(function(resp) {
                             console.log('class error resp', resp);
                         });
-                    app.status = 10;    
+                    //app.status = 10;    
                 }
 
             }

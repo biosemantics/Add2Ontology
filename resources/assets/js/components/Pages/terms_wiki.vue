@@ -23,9 +23,9 @@
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
-                            <div v-if="status == 8">
+                            <!--<div v-if="status == 8">
                                 <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
-                            </div>
+                            </div>-->
                         </div>
                     </form>
                 </div>
@@ -142,7 +142,7 @@
                             console.log('class error resp', resp);
                         });
                 }
-                app.status = 8;
+                //app.status = 8;
             }
             
         }

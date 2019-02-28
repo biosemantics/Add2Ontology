@@ -227,7 +227,7 @@
                                             <label for="question3-n-user">No, such larger structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.instance == 'no-user'">
-                                            <label  style="color:blue">Here are these structures and their definitions:</label>
+                                            <label  style="color:dodgerBlue">Here are these structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -288,7 +288,7 @@
                                             <label for="question4-n-user">No, such component structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.hasPart == 'no-user'">
-                                            <label  style="color:blue">Here are these structures and their definitions:</label>
+                                            <label  style="color:dodgerBlue">Here are these structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -17505,7 +17505,7 @@
                     case 1:
                         sessionStorage.setItem('represent', app.term.represent);
                         if (app.term.represent == null) {
-                            alert("Please select the radio button for representing.")
+                            alert("Please select one of the radio buttons.")
                         } else {
                             if (app.term.represent == 'anatomical') {
                                 app.treeData.push(app.largeDataEntity);
