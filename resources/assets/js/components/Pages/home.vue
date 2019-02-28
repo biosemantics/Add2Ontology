@@ -19,21 +19,21 @@
 
                         <div class="form-group">
                             <div class="col-md-12 " style="padding-top: 20px;">
-                                <h4>Use on of the following ways to add <b>{{ $route.params.term }}</b> to the CAREX Ontology</h4>
+                                <h4>Use one of the following ways to add <b>{{ $route.params.term }}</b> to the CAREX Ontology</h4>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-3 text-center">
                                 <a :href="'/add2ontologymodular/public/terms-wiki/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
-                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Terms Wiki</p>
-                                    CAREX Ontology on WikiData
+                                    <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">Wiki Data</p>
+                                    CAREX on WikiData
                                 </a>
                             </div>
 
                             <div class="col-md-3 text-center">
                                 <a :href="'/add2ontologymodular/public/web-protege/' + $route.params.term+ '/'+ $route.params.user +'/'+$route.params.ontology" class="btn btn-primary text-center" style="width: 200px; height: 140px; color: black; padding-top: 10px;">
                                     <p style="font-size: 25px; padding-top: 20px; font-weight: bold;">WebProtege</p>
-                                    CAREX Ontology in WP
+                                    CAREX in WP
                                 </a>
                             </div>
 

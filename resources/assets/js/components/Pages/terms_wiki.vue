@@ -2,40 +2,30 @@
     <div slot="section" class="">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3>Terms Wiki</h3>
+                <h3>Wiki Data</h3>
             </div>
             <div class="panel-body table-responsive" style="min-height: 500px;">
                 <div class="tab-pane" id="" style="font-size: 15px;">
                     <form class="row" autocomplete="off">
                         <div class="col-md-8 col-md-offset-2">
-                            Use terms wiki: <a href="https://terms.tdwg.org/wiki/FloraTerms" target="_blank" style="cursor: pointer;">https://terms.tdwg.org/wiki/FloraTerms</a>
+                            Use Wiki Data: <a href="https://terms.tdwg.org/wiki/FloraTerms" target="_blank" style="cursor: pointer;">https://terms.tdwg.org/wiki/FloraTerms</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology.
+                            <label>Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Then enter the term URI here (the image below shows where to find the URI for the term):
+                            <label> enter the term URI here (the image below shows where to find the URI for the term):</label>
                             <input v-model="termsWikiIRI" style="width: 100%;"/>
-                            <p/>
+                            <div style="width:100%; height:20px;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
                             <img src="/add2ontologymodular/public/images/terms_wiki.png" style="width: 100%; border-style: solid;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
-
-                            <!--status line -->
-                            <div v-if="status == 0"> <!-- before term is added -->
-                                    <b style="color: green">Questions Answered:</b>
-                                    <br>
-                                    Please provide  a human readable definition for {{ $route.params.term }}:<br/>
-                                    <b> {{ term.definition }}</b>
-                                </div>
-                                <div v-if="status == -1 || status > 1">
-                                    Does {{ $route.params.term }} represent an anatomical structure or a character? :<br/>
-                                    <span v-if="term.represent == 'anatomical'" style="font-weight: bold;">an anatomical structure.</span>
-                                    <span v-if="term.represent == 'character'" style="font-weight: bold;">a character.</span>
-                                </div>
+                            <div v-if="status == 8">
+                                <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -62,7 +52,7 @@
                 'action': 'Module landed',
                 'action_details': 'TermsWiki module was landed for term',
                 'abnormal_system_response': null,
-                'type': 'Terms Wiki'
+                'type': 'Wiki Data'
             };
             //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
             //    alert('Please insert the username on homepage.');
@@ -84,7 +74,7 @@
                     'action': 'Save IRI',
                     'action_details': app.termsWikiIRI + ' saved for term',
                     'abnormal_system_response': null,
-                    'type': 'Terms Wiki'
+                    'type': 'Wiki Data'
                 };
                 //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
                 //    alert('Please insert the username on homepage');
@@ -152,7 +142,9 @@
                             console.log('class error resp', resp);
                         });
                 }
+                app.status = 8;
             }
+            
         }
     }
 </script>

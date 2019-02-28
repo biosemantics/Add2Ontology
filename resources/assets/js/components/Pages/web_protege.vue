@@ -11,13 +11,13 @@
                             WebProtege: <a href="https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b" target="_blank" style="cursor: pointer;">https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Click on the WebProtege link above and add <b>{{ $route.params.term }}</b> to CAREX Ontology.
+                            <label>Click on the WebProtege link above and add <i>{{ $route.params.term }}</i> to CAREX Ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            Then enter the term IRI here (see the image below on where to find the IRI for a term):
+                            <label> enter the term IRI here (see the image below on where to find the IRI for a term):</label>
                             <input v-model="webProtegeIRI" style="width: 100%;"/>
                         </div>
-                        <br/>
+                        <div style="width:100%; height:20px;"/>
                         <div class="col-md-offset-2 col-md-8">
                             <img src="/add2ontologymodular/public/images/web_protege.png" style="width: 100%;"/>
                         </div>

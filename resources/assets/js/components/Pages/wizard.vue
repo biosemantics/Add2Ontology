@@ -48,13 +48,13 @@
                             <div class="col-md-6">
                                 <div v-if="status == 0" class="form-group">
                                     <label class="col-md-12">
-                                        Answer the following questions about <b>{{ $route.params.term }}</b>. Your answer helps the computer understand the meaning of the term.
+                                        Answer the following questions about <i>{{ $route.params.term }}</i>. Your answer helps the computer understand the meaning of the term.
                                     </label>
                                 </div>
                                 <div v-if="status == 0">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Please provide  a human readable definition for <b>{{ $route.params.term }}</b>.</label>
+                                            <label>Please provide a human readable definition for <i>{{ $route.params.term }}</i>.</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input v-model="term.definition" style="width: 100%;"/>
@@ -141,16 +141,16 @@
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="question2-y">Yes</label>
-                                            <span style="padding-left: 10px;">
-                                                Then do this: in the tree above, select all the nodes that <b>{{ $route.params.term }}</b> is a synonym of.
-                                            </span>
+                                            <div style="padding-left: 10px;" v-if="term.synonym == 'yes'">
+                                               <label style="color:green">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="question2-n">No</label>
-                                            <span style="padding-left: 10px;">
-                                               Then do this: in the tree above, select all the more general terms of which <b>{{ $route.params.term }}</b> is a type.
-                                            </span>
+                                            <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
+                                                <label>In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type.</label>
+                                            </div>
                                         </div>
                                         <div v-if="status == 2" class="col-md-12">
                                             <a class="btn btn-primary" v-on:click="submit(2)">Save</a>
@@ -179,14 +179,14 @@
                                             <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="questionx-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.synonym =='yes'">
-                                                In the tree above, select the nodes that <b>{{ $route.params.term }}</b> is a synonym of.
+                                                <label>In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="questionx-n">No</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
-                                                In the tree above, select the nodes under which <b>{{ $route.params.term }}</b> should be added.
+                                                <label>In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added.</label>
                                             </div>
                                         </div>
                                         <div v-if="status == -1" class="col-md-12">
@@ -215,7 +215,7 @@
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
                                             <label for="question3-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.instance == 'yes'">
-                                                In the tree above, select the larger structures to which all instances of <b>{{ $route.params.term }}</b> belong.
+                                              <label>In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -258,7 +258,7 @@
                                 <div v-if="status == 4">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Are all instances of <b>{{ $route.params.term }}</b> have certain parts that are in the tree below? </label>
+                                            <label>Are all instances of <i>{{ $route.params.term }}</i> have certain parts that are in the tree below? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
@@ -276,7 +276,7 @@
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
                                             <label for="question4-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
-                                                In the tree above, select the parts.
+                                               <label> In the tree above, select the parts. </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -351,13 +351,13 @@
                                                 <div class="row">
                                                     <div v-if="status == 2 || status == -1" class="col-md-12">
                                                         <div v-if="term.synonym == 'yes'">
-                                                            You are adding <b>{{ $route.params.term }}</b> as a synonym to each of the following terms:
+                                                            You are adding <b>{{ $route.params.term }}</b> as a <b>synonym</b> to each of the following terms:
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.synonym == 'no'">
-                                                            You are adding <b>{{ $route.params.term }}</b> as a subclass to each of the following terms:
+                                                            You are adding <b>{{ $route.params.term }}</b> as a <b>subclass</b> to each of the following terms:
                                                             <div v-for="each in synonyms">
                                                                 {{ each.text }}
                                                             </div>
@@ -365,13 +365,13 @@
                                                     </div>
                                                     <div v-if="status == 3" class="col-md-12">
                                                         <div v-if="term.instance == 'yes'">
-                                                            Do you want to add part_of relation between <b>{{temp.text}}</b> and the following larger structures:
+                                                            Do you want to add <b>part_of</b> relation between <b>{{temp.text}}</b> and the following larger structures:
                                                             <div v-for="each in instances">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.instance == 'no-user'">
-                                                            Do you want to add part_of relation between <b>{{temp.text}}</b> and the following larger structures:
+                                                            Do you want to add <b>part_of</b> relation between <b>{{temp.text}}</b> and the following larger structures:
                                                             <div v-for="each in instances">
                                                                 {{ each.term }}
                                                             </div>
@@ -379,13 +379,13 @@
                                                     </div>
                                                     <div v-if="status == 4" class="col-md-12">
                                                         <div v-if="term.hasPart == 'yes'">
-                                                            Do you want to add has_part relation between {{temp.text}} and the following parts:
+                                                            Do you want to add <b>has_part</b> relation between {{temp.text}} and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.hasPart == 'no-user'">
-                                                            Do you want to add has_part relation between {{temp.text}} and the following parts:
+                                                            Do you want to add <b>has_part<b> relation between {{temp.text}} and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.term }}
                                                             </div>
