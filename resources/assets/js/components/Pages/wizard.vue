@@ -18344,6 +18344,7 @@
                                         );
                                         // app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") part_of " + app.instances[index].text + " is added.");
                                         app.summaryPartOf.push(app.instances[index].text);
+                                        alert("synonym:"+app.instances[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
                                         if (index < app.instances.length - 1) {
@@ -18414,6 +18415,7 @@
                                         );
                                         // app.summary.push(TTBA[optionIndex].text + " part_of " + app.instances[index].text + " is added.");
                                         app.summaryPartOf.push(app.instances[index].text);
+                                        alert("TTBA:"+app.instances[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
                                         if (index < app.instances.length - 1) {
@@ -18481,6 +18483,7 @@
                                     if (key == "partOf") {
                                         //   app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData.split('#')[1]);
+                                        alert("no-synonym:"+ optionData.split('#')[1]);
                                     } else {
                                         // app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData.split('#')[1]);
@@ -18536,6 +18539,7 @@
                                     if (key == "partOf") {
 //                                        app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData.split('#')[1]);
+                                        alert("no-TTBA:"+ optionData.split('#')[1]);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
                                     } else {
