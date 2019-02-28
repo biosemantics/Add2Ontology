@@ -379,13 +379,13 @@
                                                     </div>
                                                     <div v-if="status == 4" class="col-md-12">
                                                         <div v-if="term.hasPart == 'yes'">
-                                                            Do you want to add <b>has_part</b> relation between {{temp.text}} and the following parts:
+                                                            Do you want to add <b>has_part</b> relation between <b>{{temp.text}}</b> and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.text }}
                                                             </div>
                                                         </div>
                                                         <div v-if="term.hasPart == 'no-user'">
-                                                            Do you want to add <b>has_part<b> relation between {{temp.text}} and the following parts:
+                                                            Do you want to add <b>has_part</b> relation between <b>{{temp.text}}</b> and the following parts:
                                                             <div v-for="each in hasParts">
                                                                 {{ each.term }}
                                                             </div>
