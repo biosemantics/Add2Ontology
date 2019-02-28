@@ -142,14 +142,14 @@
                                             <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="question2-y">Yes</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'yes'">
-                                               <label style="color:blue">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
+                                              <label style="color:dodgerBlue">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of, then click Save.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="question2-n">No</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
-                                                <label style="color:blue">In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type.</label>
+                                               <label style="color:dodgerBlue">In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type, then click Save</label>
                                             </div>
                                         </div>
                                         <div v-if="status == 2" class="col-md-12">
@@ -179,14 +179,14 @@
                                             <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="questionx-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.synonym =='yes'">
-                                                <label style="color:blue">In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
+                                               <label style="color:dodgerBlue">In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of, then click Save.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="questionx-n">No</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
-                                                <label style="color:blue">In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added.</label>
+                                               <label style="color:dodgerBlue">In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added, then click Save.</label>
                                             </div>
                                         </div>
                                         <div v-if="status == -1" class="col-md-12">
@@ -215,7 +215,7 @@
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
                                             <label for="question3-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.instance == 'yes'">
-                                              <label style="color:blue">In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong.</label>
+                                             <label style="color:dodgerBlue">In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong, then click Save</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -276,7 +276,7 @@
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
                                             <label for="question4-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
-                                               <label style="color:blue"> In the tree above, select the parts. </label>
+                                              <label style="color:dodgerBlue"> In the tree above, select the parts, then click Save. </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -17482,7 +17482,7 @@
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
                                 'action': 'Save Human Readable Definition',
-                                'action_details': app.term.definition + ' saved as human readable definition for term',
+                                'action_details': app.term.definition + ' saved as definition for term',
                                 'abnormal_system_response': null,
                                 'type': 'Human Readable Definition'
                             };
@@ -17510,10 +17510,10 @@
                                 app.treeData.push(app.largeDataEntity);
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Save Representation',
-                                    'action_details': 'an anatomical structure saved as representation for term',
+                                    'action': 'Save term type',
+                                    'action_details': 'term is an anatomical structure',
                                     'abnormal_system_response': null,
-                                    'type': 'TTBA representation'
+                                    'type': 'term general type'
                                 };
                                 //if (app.username == null) {
                                 //    alert('Please insert the username on homepage');
@@ -17532,10 +17532,10 @@
                                 app.treeData.push(app.largeDataQuality);
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Save Representation',
-                                    'action_details': 'a character structure saved as representation for term',
+                                    'action': 'Save term type',
+                                    'action_details': 'term is a character',
                                     'abnormal_system_response': null,
-                                    'type': 'TTBA representation'
+                                    'type': 'term general type'
                                 };
                                // if (app.username == null) {
                                //     alert('Please insert the username on homepage');
@@ -17574,7 +17574,7 @@
                     case -1:
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
-                            alert("Please select 'Yes' or 'No' before clicking the Save button");
+                            alert("Please select 'Yes' or 'No' and perform required action before clicking the Save button");
                         } else {
                             app.synonyms = app.$refs.tree.find({
                                 state: {
@@ -17592,7 +17592,7 @@
                     case 3:
                         sessionStorage.setItem('instance', app.term.instance);
                         if (app.term.instance == null) {
-                            alert("Please select radio button before clicking 'Save' button");
+                            alert("Please select radio button and perform required action before clicking 'Save' button");
                         } else {
                             if (app.term.instance == 'yes') {
                                 app.instances = app.$refs.tree.find({
@@ -17604,7 +17604,7 @@
                                 } else {
                                     app.modalShowFlag = true;
                                 }
-
+                                app.summary.push('"' + app.temp.text + '"' + ' is part of ' + '"' +app.instances + '".');
                             } else if (app.term.instance == 'no') {
                                 app.status = 4;
                             } else if (app.term.instance == 'no-user') {
@@ -17635,7 +17635,7 @@
                     case 4:
                         sessionStorage.setItem('hasPart', app.term.hasPart);
                         if (app.term.hasPart == null) {
-                            alert("Please select radio button before clicking 'Save' button");
+                            alert("Please select radio button and perform required action before clicking 'Save' button");
                         } else {
                             if (app.term.hasPart == 'yes') {
                                 app.hasParts = app.$refs.tree.find({
