@@ -54,7 +54,7 @@
                                 <div v-if="status == 0">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Please provide a human readable definition for <i>{{ $route.params.term }}</i>.</label>
+                                            <label>Please provide a human readable definition for <i>{{ $route.params.term }}</i>:</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input v-model="term.definition" style="width: 100%;"/>
@@ -142,14 +142,14 @@
                                             <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="question2-y">Yes</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'yes'">
-                                               <label style="color:green">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
+                                               <label style="color:blue">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="question2-n">No</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
-                                                <label>In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type.</label>
+                                                <label style="color:blue">In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type.</label>
                                             </div>
                                         </div>
                                         <div v-if="status == 2" class="col-md-12">
@@ -179,14 +179,14 @@
                                             <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
                                             <label for="questionx-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.synonym =='yes'">
-                                                <label>In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
+                                                <label style="color:blue">In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
                                             <label for="questionx-n">No</label>
                                             <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
-                                                <label>In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added.</label>
+                                                <label style="color:blue">In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added.</label>
                                             </div>
                                         </div>
                                         <div v-if="status == -1" class="col-md-12">
@@ -215,7 +215,7 @@
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
                                             <label for="question3-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.instance == 'yes'">
-                                              <label>In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong.</label>
+                                              <label style="color:blue">In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong.</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -227,7 +227,7 @@
                                             <label for="question3-n-user">No, such larger structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.instance == 'no-user'">
-                                            <label>Here are these structures and their definitions:</label>
+                                            <label  style="color:blue">Here are these structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -276,7 +276,7 @@
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
                                             <label for="question4-y">Yes </label>
                                             <div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
-                                               <label> In the tree above, select the parts. </label>
+                                               <label style="color:blue"> In the tree above, select the parts. </label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -288,7 +288,7 @@
                                             <label for="question4-n-user">No, such component structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.hasPart == 'no-user'">
-                                            <label>Here are these structures and their definitions:</label>
+                                            <label  style="color:blue">Here are these structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -322,10 +322,10 @@
                                         {{ each }}
                                     </div>
                                     <div v-if="summaryPartOf.length > 0">
-                                        <b>{{ $route.params.term }}</b> is part of <p style="display: inline;" v-for="each in summaryPartOf">"{{ each }}", </p>
+                                       "{{ $route.params.term }}" is part of <p style="display: inline;" v-for="each in summaryPartOf">"{{ each }}", </p>
                                     </div>
                                     <div v-if="summaryHasPart.length > 0">
-                                        <b>{{ $route.params.term }}</b> has part <p style="display: inline;" v-for="each in summaryHasPart">"{{ each }}", </p>
+                                        "{{ $route.params.term }}" has part <p style="display: inline;" v-for="each in summaryHasPart">"{{ each }}", </p>
                                     </div>
                                     <div class="row" style="margin-top: 20px;">
                                         <div class="col-md-12">

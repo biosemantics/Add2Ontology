@@ -11,7 +11,7 @@
                             <div class=" col-md-offset-1 col-md-9" style="font-size: 16px;">Fill the form below to add <b> {{ $route.params.term }} </b> to CAREX Ontology.</div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4" style="padding-left: 130px;"><i>{{ $route.params.term }}</i> is a </label>
+                            <label class="col-md-4" style="padding-left: 130px;"><i>{{ $route.params.term }}</i> &nbsp; is a </label>
                             <div class="col-md-6 col-md-offset-4">
                                 <input type="radio" id="anatomical" v-model="quickForm.structure" value="anatomical" name="structure" />
                                 <label for="anatomical">Anatomical Structure</label>

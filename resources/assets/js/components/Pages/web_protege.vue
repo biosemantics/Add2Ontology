@@ -14,10 +14,10 @@
                             <label>Click on the WebProtege link above and add <i>{{ $route.params.term }}</i> to CAREX Ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            <label> enter the term IRI here (see the image below on where to find the IRI for a term):</label>
+                            <label>Then enter the term IRI here: (See the image below on where to find the URI for the term)</label>
                             <input v-model="webProtegeIRI" style="width: 100%;"/>
                         </div>
-                        <div style="width:100%; height:20px;"/>
+                        <div style="width:100%; height:40px;"/>
                         <div class="col-md-offset-2 col-md-8">
                             <img src="/add2ontologymodular/public/images/web_protege.png" style="width: 100%;"/>
                         </div>

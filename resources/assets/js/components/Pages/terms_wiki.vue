@@ -14,9 +14,9 @@
                             <label>Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            <label> enter the term URI here (the image below shows where to find the URI for the term):</label>
+                            <label>Then enter the term URI here: (See the image below on where to find the URI for the term)</label>
                             <input v-model="termsWikiIRI" style="width: 100%;"/>
-                            <div style="width:100%; height:20px;"/>
+                            <div style="width:100%; height:40px;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
                             <img src="/add2ontologymodular/public/images/terms_wiki.png" style="width: 100%; border-style: solid;"/>
