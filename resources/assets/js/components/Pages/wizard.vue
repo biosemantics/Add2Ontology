@@ -317,7 +317,8 @@
                                     </div>
                                 </div>
                                 <div v-if="status == 5" class="col-md-12">
-                                    <label style="color: green">Based on your answers, the following have been added to the ontology:</label>
+                                    <label style="color:green"> Summary </label>
+                                    <label>Based on your answers, the following have been added to the ontology:</label>
                                     <div v-for="each in summary">
                                         {{ each }}
                                     </div>
@@ -17604,7 +17605,7 @@
                                 } else {
                                     app.modalShowFlag = true;
                                 }
-                                app.summary.push('"' + app.temp.text + '"' + ' is part of ' + '"' +app.instances + '".');
+                               
                             } else if (app.term.instance == 'no') {
                                 app.status = 4;
                             } else if (app.term.instance == 'no-user') {
@@ -17830,7 +17831,7 @@
                         }
                         break;
                     case 3:
-                        if (app.term.instance == 'yes') {
+                        if (app.term.instance == 'yes') { //instance means part_of
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             console.log("TTBA", app.TTBA);
                             if (app.TTBA == null) {
@@ -18125,7 +18126,7 @@
                 axios.post("http://shark.sbs.arizona.edu:8080/" + key, jsonRequest)
                     .then(function(resp) {
                         console.log(key + " resp", resp);
-                        if (resp.data == 'NO_OPERATION' || resp.data == 'UNSUCCESSFULLY') {
+                        if (resp.data == 'NO_OPERATION' || resp.data == 'UNSUCCESSFULLY') { //why UNSUCCESSFULLY?
                             app.treeData = app.$refs.tree.model;
                             console.log("tree after updated", app.treeData);
                             if (status == -1) {
@@ -18287,8 +18288,6 @@
                                         console.log("activity-log error resp", resp);
                                     });
                             }
-
-
                             if (key == 'class') {
                                 app.temp.data.details[0].IRI = resp.data;
                                 app.synonyms[index].append(app.temp);
@@ -18334,7 +18333,7 @@
                                     } else {
                                         app.status = status + 1;
                                     }
-//                                    app.treeData = app.$refs.tree.model;
+                                    //app.treeData = app.$refs.tree.model;
                                 }
                             } else if (key == 'partOf' || key == 'hasPart') {
                                 if (setting == 'synonym') {
@@ -18343,7 +18342,7 @@
                                         app.synonyms[optionIndex].data.details[0][key].push(
                                             app.instances[index].data.details[0].IRI
                                         );
-//                                        app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") part_of " + app.instances[index].text + " is added.");
+                                        // app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") part_of " + app.instances[index].text + " is added.");
                                         app.summaryPartOf.push(app.instances[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
@@ -18356,13 +18355,13 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-//                                            app.treeData = app.$refs.tree.model;
+                                            //app.treeData = app.$refs.tree.model;
                                         }
                                     } else {
                                         app.synonyms[optionIndex].data.details[0][key].push(
                                             app.hasParts[index].data.details[0].IRI
                                         );
-//                                        app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") has_part " + app.hasParts[index].text + " is added.");
+                                        // app.summary.push(app.synonyms[optionIndex].text + "(synonym of " + app.temp.text + ") has_part " + app.hasParts[index].text + " is added.");
                                         app.summaryHasPart.push(app.hasParts[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
@@ -18404,7 +18403,7 @@
                                                         console.log("activity-log error resp", resp);
                                                     });
                                           //  }
-//                                            app.treeData = app.$refs.tree.model;
+                                        //app.treeData = app.$refs.tree.model;
                                         }
                                     }
 
@@ -18413,7 +18412,7 @@
                                         app.TTBA[optionIndex].data.details[0][key].push(
                                             app.instances[index].data.details[0].IRI
                                         );
-//                                        app.summary.push(TTBA[optionIndex].text + " part_of " + app.instances[index].text + " is added.");
+                                        // app.summary.push(TTBA[optionIndex].text + " part_of " + app.instances[index].text + " is added.");
                                         app.summaryPartOf.push(app.instances[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
@@ -18426,16 +18425,16 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-//                                            app.treeData = app.$refs.tree.model;
+                                            // app.treeData = app.$refs.tree.model;
                                         }
                                     } else {
                                         app.TTBA[optionIndex].data.details[0][key].push(
                                             app.hasParts[index].data.details[0].IRI
                                         );
-//                                        app.summary.push(TTBA[optionIndex].text + " has_part " + app.hasParts[index].text + " is added.");
+                                        // app.summary.push(TTBA[optionIndex].text + " has_part " + app.hasParts[index].text + " is added.");
                                         app.summaryHasPart.push(app.hasParts[index].text);
-//                                        app.treeData = app.$refs.tree.model;
-//                                        console.log("tree after updated", app.treeData);
+                                        //  app.treeData = app.$refs.tree.model;
+                                        //  console.log("tree after updated", app.treeData);
                                         if (index < app.hasParts.length - 1) {
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
@@ -18474,16 +18473,16 @@
                                                         console.log("activity-log error resp", resp);
                                                     });
                                            // }
-//                                            app.treeData = app.$refs.tree.model;
+                                            // app.treeData = app.$refs.tree.model;
                                         }
                                     }
 
                                 } else if (setting == 'no-synonym') {
                                     if (key == "partOf") {
-//                                        app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") part_of " + optionData2 + " is added.");
+                                        //   app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData.split('#')[1]);
                                     } else {
-//                                        app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") has_part " + optionData2 + " is added.");
+                                        // app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData.split('#')[1]);
                                     }
                                     app.synonyms[index].data.details[0][key].push(
@@ -18498,7 +18497,7 @@
                                         if (status == -1) {
                                             app.status = 5;
                                         } else {
-//                                            app.status = status + 1;
+                             //app.status = status + 1;
                                         }
                                         if (key == 'hasPart') {
                                               var jsonSaveRequest = {
