@@ -7,7 +7,7 @@
  * Node.js
  * Python 2.7 as python2 
  * MySQL
- * VCBuilder.exe (part of Visual C++ development environment)
+ * VCBuild.exe (part of Visual C++ development environment)
   
 ### How to use
 
