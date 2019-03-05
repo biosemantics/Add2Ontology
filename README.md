@@ -16,7 +16,7 @@
 - Run __composer install__
 - Run __php artisan key:generate__ [a new app needs a new APP Key in the .env file. This command should automatically insert a .env APP_KEY= in the .env file]
 - Run __php artisan migrate__
-- Run __npm install__ or __npm install -g --production windows-build-tools__ as admin when VCBuild.exe is not already installed
+- Run __npm install__ or run __npm install -g --production windows-build-tools__ as admin first, then __npm install__ , when VCBuild.exe is not already installed
 - Run __npm run dev__
 - That's it - load the homepage, use __Register__ link and use the CRUD
 
