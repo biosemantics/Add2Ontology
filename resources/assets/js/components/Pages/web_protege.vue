@@ -51,8 +51,8 @@
             var app = this;
             var jsonRequest = {
                 'user_email': app.$route.params.user,
-                'action': 'Module Landed',
-                'action_details': 'WebProtege module was landed for term',
+                'action': 'Module loaded',
+                'action_details': 'WebProtege module was loaded for term',
                 'abnormal_system_response': null,
                 'type': 'WebProtege'
             };

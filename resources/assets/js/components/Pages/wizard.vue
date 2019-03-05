@@ -428,7 +428,7 @@
                                                 <div class="row">
                                                     <div class="col-md-12 text-right" style="margin-top: 15px;">
                                                         <a v-on:click="confirmSave(status)" class="btn btn-primary">Confirm</a>
-                                                        <a v-on:click="cancelSave()" class="btn btn-danger">Undo</a>
+                                                        <a v-on:click="cancelSave(status)" class="btn btn-danger">Undo</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -465,6 +465,7 @@
             return {
                 username: sessionStorage.getItem('username'),
                 status: 0,
+                error: "",
                 term: {
                     definition: null,
                     sentence:null,
@@ -17516,14 +17517,38 @@
                 console.log("term", app.term);
                 console.log('status', status);
                 switch (status) {
-                    case 0:
+                    case 0: //definition, sentence, taxa
                         if (app.term.definition == null || app.term.sentence == null || app.term.taxa == null) {
                             alert('All fields on this page are required. Please provide definition, sentence, and taxa for the term');
+                            app.error = "please provide ";
+                            if(app.term.definition == null){
+                                app.error += "definition ";                        
+                            }
+                            if(app.term.sentence == null){
+                               app.error += "sentence ";
+                            }
+                            if(app.term.taxa == null){
+                                app.error += "taxa ";
+                            }
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Human Readable Definition',
+                                'action_details': 'term='+app.$route.params.term +': definition=' +app.term.definition,
+                                'abnormal_system_response': app.error,
+                                'type': 'Wizard'
+                            };
+                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             sessionStorage.setItem('definition', app.term.definition);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Save Human Readable Definition',
+                                'action': 'Saved Human Readable Definition',
                                 'action_details': 'term='+app.$route.params.term +': definition=' +app.term.definition,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17549,7 +17574,7 @@
                             sessionStorage.setItem('sentence', app.term.sentence);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Save Example Sentence',
+                                'action': 'Saved Example Sentence',
                                 'action_details': 'term='+app.$route.params.term +': sentence=' +app.term.sentence,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17577,7 +17602,7 @@
                             sessionStorage.setItem('taxa', app.term.taxa);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Save Applicable Taxa',
+                                'action': 'Saved Applicable Taxa',
                                 'action_details': 'term='+app.$route.params.term +': taxa=' +app.term.taxa,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17598,16 +17623,30 @@
                         }
                         
                         break;
-                    case 1:
+                    case 1: //anatomical vs. character
                         sessionStorage.setItem('represent', app.term.represent);
                         if (app.term.represent == null) {
-                            alert("Please select one of the radio buttons.")
+                            alert("Please select one of the radio buttons before Save.")
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Term Type (structure vs character)',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select one of the two radio buttons before Save",
+                                'type': 'Wizard'
+                            };
+                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             if (app.term.represent == 'anatomical') {
                                 app.treeData.push(app.largeDataEntity);
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Save term type',
+                                    'action': 'Saved term type',
                                     'action_details': 'term is an anatomical structure',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -17629,7 +17668,7 @@
                                 app.treeData.push(app.largeDataQuality);
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Save term type',
+                                    'action': 'Saved term type',
                                     'action_details': 'term is a character',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -17650,28 +17689,84 @@
                             }
                         }
                         break;
-                    case 2:
+                    case 2: //synonym vs. class for structure
                         app.parentNode = app.$refs.tree.find('material anatomical entity', true);
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Synonym vs Class Decision for structure term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select Yes/No before Save",
+                                'type': 'Wizard'
+                            };
+                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             app.synonyms = app.$refs.tree.find({
                                 state: { checked: true }
                                 }, true);
                             if (app.synonyms == null) {
                                 alert('Please select the relevant nodes in the tree before clicking Save button.');
-
+                                var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Synonym vs Class Decision for structure term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select nodes in the tree before Save",
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                             } else {
                                 app.modalShowFlag = true;
+
+                                 var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Saved Synonym vs Class Decision for structure term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': null,
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                             }
 
                         }
                         break;
-                    case -1:
+                    case -1: //synonym vs. class for quality term
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' and perform required action before clicking the Save button");
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Synonym vs Class Decision for character term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select Yes/No before Save",
+                                'type': 'Wizard'
+                            };
+                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             app.synonyms = app.$refs.tree.find({
                                 state: {
@@ -17681,15 +17776,57 @@
 
                             if (app.synonyms == null) {
                                 alert('Please select relevant nodes in the tree before clicking Save button.');
+                                var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Synonym vs Class Decision for character term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select nodes in the tree before Save",
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                             } else {
                                 app.modalShowFlag = true;
+                                 var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Saved Synonym vs Class Decision for character term',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': null,
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                             }
                         }
                         break;
-                    case 3:
+                    case 3: //part of
                         sessionStorage.setItem('instance', app.term.instance);
                         if (app.term.instance == null) {
                             alert("Please select radio button and perform required action before clicking 'Save' button");
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Part-Of Decision',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select radio button before Save",
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             if (app.term.instance == 'yes') {
                                 app.instances = app.$refs.tree.find({
@@ -17698,12 +17835,54 @@
                                 console.log('selected instances', app.instances);
                                 if (app.instances == null) {
                                     alert('Please select relevant nodes in the tree before clicking Save button.');
+                                    var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Attempt to Save Part-Of Decision',
+                                    'action_details': 'term='+app.$route.params.term,
+                                    'abnormal_system_response': "please select nodes in the tree before Save",
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                                 } else {
                                     app.modalShowFlag = true;
+                                     var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Saved Part-Of Decision',
+                                    'action_details': 'term='+app.$route.params.term,
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                                 }
                                
                             } else if (app.term.instance == 'no') {
                                 app.status = 4;
+                                var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Saved Part-Of Decision',
+                                    'action_details': 'no part-of relations for term='+app.$route.params.term,
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                             } else if (app.term.instance == 'no-user') {
                                 app.instances = app.userInstances;
                                 var jsonRequest = {
@@ -17729,10 +17908,24 @@
 
                         }
                         break;
-                    case 4:
+                    case 4://has prt
                         sessionStorage.setItem('hasPart', app.term.hasPart);
                         if (app.term.hasPart == null) {
                             alert("Please select radio button and perform required action before clicking 'Save' button");
+                              var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Attempt to Save Has-Part Decision',
+                                'action_details': 'term='+app.$route.params.term,
+                                'abnormal_system_response': "please select radio button before Save",
+                                'type': 'Wizard'
+                                };
+                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                         } else {
                             if (app.term.hasPart == 'yes') {
                                 app.hasParts = app.$refs.tree.find({
@@ -17741,8 +17934,36 @@
 
                                 if (app.hasParts == null) {
                                     alert('Please select the nodes before clicking Save button.');
+                                    var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Attempt to Save Has-Part Decision',
+                                    'action_details': 'term='+app.$route.params.term,
+                                    'abnormal_system_response': "please select nodes in the tree before Save",
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                                 } else {
                                     app.modalShowFlag = true;
+                                    var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Saved Has-Part Decision',
+                                    'action_details': 'term='+app.$route.params.term,
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
                                 }
 
                             } else if (app.term.hasPart == 'no') {
@@ -17757,10 +17978,26 @@
                                     .catch(function(resp) {
                                         console.log('save error resp', resp);
                                     });
+
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Summary landed',
-                                    'action_details': 'Summary Page was landed for term',
+                                    'action': 'Saved Has-Part Decision',
+                                    'action_details': 'no has-part relations for term='+app.$route.params.term,
+                                    'abnormal_system_response': null,
+                                    'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });    
+                                    
+                                var jsonRequest = {
+                                    'user_email': app.$route.params.user,
+                                    'action': 'Summary loaded',
+                                    'action_details': 'Summary Page was loaded for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -17813,12 +18050,28 @@
                 console.log('parentNode', app.parentNode);
                 app.parentNode.collapse();
             },
+
             confirmSave: function(status) {
                 var app = this;
                 app.modalShowFlag = false;
 
                 switch (status) {
-                    case 2:
+                    case 2: //synony vs. class on structure term
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Confirm',
+                        'action_details': 'confirmed synonym vs. class decision on structure term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+
                         if (app.term.synonym == 'yes') {
 
                             if (app.synonyms.length == 1) {
@@ -17879,7 +18132,23 @@
                             app.collapseAndUncheck();
                         }
                         break;
-                    case -1:
+                    case -1: //synonym vs. class on character term
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Confirm',
+                        'action_details': 'confirmed synonym vs. class decision on character term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+
+
                         if (app.term.synonym == 'yes') {
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
@@ -17888,7 +18157,7 @@
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
                                 };
-                                axios.post("http://shark.sbs.arizona.edu:8080/synonym", jsonRequest)
+                                axios.post("http://shark.sbs.arizona.edu:8080/esynonym", jsonRequest)
                                     .then(function(resp) {
                                         console.log("synonym resp", resp);
                                         if (resp.data == "SUCCESSFULLY") {
@@ -17926,7 +18195,22 @@
 
                         }
                         break;
-                    case 3:
+                    case 3: //part of
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Confirm',
+                        'action_details': 'confirmed part-of decision on term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+
                         if (app.term.instance == 'yes') { //instance means part_of
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             console.log("TTBA", app.TTBA);
@@ -18015,7 +18299,22 @@
                         }
                         break;
 
-                    case 4:
+                    case 4: //has_part
+                         var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Confirm',
+                        'action_details': 'confirmed has-part decision on term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+
                         if (app.term.hasPart == 'yes') {
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             console.log("TTBA", app.TTBA);
@@ -18252,8 +18551,8 @@
                                     });
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Summary landed',
-                                    'action_details': 'Summary Page was landed for term',
+                                    'action': 'Summary loaded',
+                                    'action_details': 'Summary Page was loaded for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -18415,8 +18714,8 @@
                                             });
                                         var jsonRequest = {
                                             'user_email': app.$route.params.user,
-                                            'action': 'Summary landed',
-                                            'action_details': 'Summary Page was landed for term',
+                                            'action': 'Summary loaded',
+                                            'action_details': 'Summary Page was loaded for term',
                                             'abnormal_system_response': null,
                                             'type': 'Wizard'
                                         };
@@ -18489,8 +18788,8 @@
                                                 });
                                             var jsonRequest = {
                                                 'user_email': app.$route.params.user,
-                                                'action': 'Summary landed',
-                                                'action_details': 'Summary Page was landed for term',
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
                                             };
@@ -18560,8 +18859,8 @@
                                                 });
                                             var jsonRequest = {
                                                 'user_email': app.$route.params.user,
-                                                'action': 'Summary landed',
-                                                'action_details': 'Summary Page was landed for term',
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
                                             };
@@ -18617,8 +18916,8 @@
                                                 });
                                             var jsonRequest = {
                                                 'user_email': app.$route.params.user,
-                                                'action': 'Summary landed',
-                                                'action_details': 'Summary Page was landed for term',
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
                                             };
@@ -18674,8 +18973,8 @@
                                                 });
                                             var jsonRequest = {
                                                 'user_email': app.$route.params.user,
-                                                'action': 'Summary landed',
-                                                'action_details': 'Summary Page was landed for term',
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
                                             };
@@ -18722,9 +19021,77 @@
                         console.log(key + " error", resp);
                     });
             },
-            cancelSave: function() {
+            cancelSave: function(status) {
                 var app = this;
                 app.modalShowFlag = false;
+                //add log
+                switch (status) {
+                    case -1:
+                         var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Undo',
+                        'action_details': 'undo synonym vs. class decision on character term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                        break;
+                    case 2:
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Undo',
+                        'action_details': 'undo synonym vs. class decision on structure term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                        break;
+                    case 3:
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Undo',
+                        'action_details': 'undo part-of decision on term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                        break;
+                    case 4:
+                        var jsonRequest = {
+                        'user_email': app.$route.params.user,
+                        'action': 'Undo',
+                        'action_details': 'undo has-part decision on term='+app.$route.params.term,
+                        'abnormal_system_response': null,
+                        'type': 'Wizard'
+                            };
+                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });  
+                        break;  
+                    }
+
             },
             onSynonymSelected: function(node) {
                 var app = this;
