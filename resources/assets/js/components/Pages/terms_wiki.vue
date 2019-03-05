@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Then enter the term URI here: (See the image below on where to find the URI for the term)</label>
-                            <input v-model="termsWikiIRI" style="width: 100%;"/>
+                            <input v-model="termsWikiURI" style="width: 100%;"/>
                             <div style="width:100%; height:40px;"/>
                         </div>
                         <div class="col-md-offset-2 col-md-8">
@@ -23,9 +23,9 @@
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
-                            <!--<div v-if="status == 8">
-                                <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
-                            </div>-->
+                            <div v-if="status == 1">
+                                <label><i>{{ $route.params.term }}</i> &nbsp; has been added to the ontology.</label> 
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -38,8 +38,9 @@
     export default {
         data: function() {
             return {
-                termsWikiIRI: null,
-                username: sessionStorage.getItem('username')
+                termsWikiURI: null,
+                username: sessionStorage.getItem('username'),
+                status: 0,
             }
         },
         beforeMount() {
@@ -69,16 +70,17 @@
         methods: {
             done: function() {
                 var app = this;
+              
                 var jsonRequest = {
                     'user_email': app.$route.params.user,
-                    'action': 'Save IRI',
-                    'action_details': app.termsWikiIRI + ' saved for term',
+                    'action': 'Save URI',
+                    'action_details': app.termsWikiURI + ' saved for term',
                     'abnormal_system_response': null,
                     'type': 'Wiki Data'
                 };
                 //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
                 //    alert('Please insert the username on homepage');
-                /*} else*/ if (app.termsWikiIRI == null) {
+                /*} else*/ if (app.termsWikiURI == null) {
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
                     jsonRequest.abnormal_system_response = 'without entry';
@@ -89,9 +91,9 @@
                         .catch(function(resp) {
                             console.log("activity-log error resp", resp);
                         });
-                    alert('You need to enter IRI in the input box.');
-                } else if (app.termsWikiIRI.substring(0, 7) != 'http://') {
-                    jsonRequest.action_details = app.$route.params.user + ' input invalid IRI for term ';
+                    alert('You need to enter the URI in the input box.');
+                } else if (app.termsWikiURI.substring(0, 7) != 'http://') {
+                    jsonRequest.action_details = app.$route.params.user + ' input invalid URI for term ';
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.abnormal_system_response = 'invalid entry';
                     axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
@@ -101,7 +103,7 @@
                         .catch(function(resp) {
                             console.log("activity-log error resp", resp);
                         });
-                    alert('The format you input is not valid.');
+                    alert('Enter the URI and make sure it is a complete URI.');
                 } else {
                     axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
@@ -113,8 +115,8 @@
                     var jsonClass = {
                         "user":"",
                         "ontology": app.$route.params.ontology,
-                        "term": app.$route.params.term + ' ' + app.termsWikiIRI,
-                        "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
+                        "term": app.$route.params.term + ' ' + app.termsWikiURI,
+                        "superclassURI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": "tba",
                         "elucidation": "tba",
                         "createdBy": app.$route.params.user +" via add2ontology terms wiki",
@@ -141,8 +143,9 @@
                         .catch(function(resp) {
                             console.log('class error resp', resp);
                         });
+                        app.status = 1;
                 }
-                //app.status = 8;
+            
             }
             
         }

@@ -17421,6 +17421,7 @@
         },
         mounted() {
             var app = this;
+            console.log('Status', app.status);
             if (sessionStorage.getItem('definition') != null) {
                 app.term.definition = sessionStorage.getItem('definition');
             }
@@ -17476,9 +17477,9 @@
                 console.log('status', status);
                 switch (status) {
                     case 0:
-                        //if (app.term.definition == null || app.username == null) {
-                        //    alert('Please insert the username and human readable text.');
-                        //} else {
+                        if (app.term.definition == null /*|| app.username == null*/) {
+                            alert('Please enter a definition for the term.');
+                        } else {
                             sessionStorage.setItem('definition', app.term.definition);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
@@ -17500,7 +17501,7 @@
                             //}
                             app.status = 1;
                             app.summary.push('"' + app.temp.text + '"' + ' is defined as ' + '"' +app.term.definition + '".');
-                        //}
+                        }
                         break;
                     case 1:
                         sessionStorage.setItem('represent', app.term.represent);

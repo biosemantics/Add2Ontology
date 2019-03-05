@@ -14,19 +14,18 @@
                             <label class="col-md-4" style="padding-left: 130px;"><i>{{ $route.params.term }}</i> &nbsp; is a </label>
                             <div class="col-md-6 col-md-offset-4">
                                 <input type="radio" id="anatomical" v-model="quickForm.structure" value="anatomical" name="structure" />
-                                <label for="anatomical">Anatomical Structure</label>
+                                <label for="anatomical">anatomical structure</label>
                             </div>
                             <div class="col-md-6 col-md-offset-4">
                                 <input type="radio" id="character" v-model="quickForm.structure" value="character" name="structure" />
-                                <label for="character">Character or character state</label>
+                                <label for="character">character or character state</label>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-4" style="padding-left: 130px;">Definition for the term: </label>
-
                             <div class="col-md-6">
-                                <input type="text" v-model="quickForm.definition" class="form-control" name="definition">
+                                <input type="text" v-model="quickForm.definition" class="form-control" name="definition" :placeholder="'what is a '+ $route.params.term +' and how it is related to other structures or characters'">
                             </div>
                         </div>
 
@@ -34,7 +33,7 @@
                             <label class="col-md-4" style="padding-left: 130px;">Sentences using the term: </label>
 
                             <div class="col-md-6">
-                                <input type="text" v-model="quickForm.sentences" class="form-control" name="sentences">
+                                <input type="text" v-model="quickForm.sentences" class="form-control" name="sentences" placeholder="provide a sentence or two where this term has been used">
                             </div>
                         </div>
 
@@ -42,7 +41,7 @@
                             <label class="col-md-4" style="padding-left: 130px;">Related taxa: </label>
 
                             <div class="col-md-6">
-                                <input type="text" v-model="quickForm.taxa" class="form-control" name="taxa">
+                                <input type="text" v-model="quickForm.taxa" class="form-control" name="taxa" placeholder="list a few taxa that the term is applicable, separated by semicolons ">
                             </div>
                         </div>
 
@@ -52,9 +51,12 @@
                                     Done
                                 </a>
                             </div>
-                            <!--<div v-if="status == 10">
-                                <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
-                            </div>-->
+                            <div v-if="status == 1" class="col-md-8 col-md-offset-4">
+                                <label><i>{{ $route.params.term }}</i>&nbsp; has been added to the ontology.</label> 
+                            </div>
+                            <div v-if="status == 2" class="col-md-8 col-md-offset-4">
+                                <label>System error.</label> 
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -66,11 +68,13 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.');
+            console.log('Status', app.status);
         },
         data: function() {
             return {
                 username: sessionStorage.getItem('username'),
+                status: 0,
                 quickForm: {
                     structure: null,
                     definition: null,
@@ -109,6 +113,8 @@
         methods: {
             submit() {
                 var app = this;
+                //app.status = 1;    
+                //console.log("qf_statusFlag", app.status);
                 console.log('quickForm submit', app.quickForm);
                 //if (app.username == null || app.username == 'null' || app.username == '') {
                 //    alert('Please insert the username on homepage');
@@ -178,8 +184,9 @@
                         })
                         .catch(function(resp) {
                             console.log('class error resp', resp);
+                            app.status = 2;   
                         });
-                    //app.status = 10;    
+                        app.status = 1;    
                 }
 
             }

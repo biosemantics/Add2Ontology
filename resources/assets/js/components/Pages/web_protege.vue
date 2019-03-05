@@ -24,9 +24,9 @@
                         </div>
                         <div class="col-md-offset-2 col-md-8 text-right" style="margin-top: 20px;">
                             <a class="btn btn-primary" v-on:click="done()">Done</a>
-                            <!--<div v-if="status == 9">
-                                <label><i>{{ $route.params.term }}</i> has been added to the ontology.</label> 
-                            </div>-->
+                            <div v-if="status == 1 ">
+                                <label><i>{{ $route.params.term }}</i> &nbsp; has been added to the ontology.</label> 
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -40,7 +40,8 @@
         data: function() {
             return {
                 webProtegeIRI: null,
-                username: sessionStorage.getItem('username')
+                username: sessionStorage.getItem('username'),
+                status: 0,
             }
         },
         beforeMount() {
@@ -90,6 +91,7 @@
             },
             done: function() {
                 var app = this;
+                //app.status = 1;
                 var jsonRequest = {
                     'user_email': app.$route.params.user,
                     'action': 'Save IRI',
@@ -122,7 +124,7 @@
                         .catch(function(resp) {
                             console.log("activity-log error resp", resp);
                         });
-                    alert('The input you provide is not valid.');
+                    alert('Enter the IRI and make sure it is a complete IRI.');
                 } else {
                     axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
@@ -162,7 +164,7 @@
                         .catch(function(resp) {
                             console.log('class error resp', resp);
                         });
-                        //app.status = 9;
+                        app.status = 1;
                 }
             }
         }
