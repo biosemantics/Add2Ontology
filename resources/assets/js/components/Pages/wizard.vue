@@ -16,6 +16,17 @@
                                     Please provide  a human readable definition for {{ $route.params.term }}:<br/>
                                     <b> {{ term.definition }}</b>
                                 </div>
+                                
+                                <div v-if="status == -1 || status > 0">
+                                   Sentences using {{ $route.params.term }}:<br/>
+                                    <b> {{ term.sentence }}</b>
+                                </div>
+
+                                <div v-if="status == -1 || status > 0">
+                                   Related taxa:<br/>
+                                    <b> {{ term.taxa }}</b>
+                                </div>
+
                                 <div v-if="status == -1 || status > 1">
                                     Does {{ $route.params.term }} represent an anatomical structure or a character? :<br/>
                                     <span v-if="term.represent == 'anatomical'" style="font-weight: bold;">an anatomical structure.</span>
@@ -57,9 +68,30 @@
                                             <label>Please provide a human readable definition for <i>{{ $route.params.term }}</i>:</label>
                                         </div>
                                         <div class="col-md-12">
-                                            <input v-model="term.definition" style="width: 100%;"/>
+                                            <input v-model="term.definition" style="width: 100%;" 
+                                            :placeholder="'what is a '+ $route.params.term +' and how it is related to other structures or characters'">
                                         </div>
                                     </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <label>Sentences using the term: </label>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <input type="text" v-model="term.sentence" style="width: 100%;" placeholder="provide a sentence or two where this term has been used">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12"> 
+                                        <label>Related taxa: </label>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <input type="text" v-model="term.taxa" style="width: 100%;" placeholder="list a few taxa that the term is applicable, separated by semicolons ">
+                                    </div>
+                                </div>
 
                                     <div class="form-group">
                                         <div class="col-md-12">
@@ -435,6 +467,8 @@
                 status: 0,
                 term: {
                     definition: null,
+                    sentence:null,
+                    taxa:null,
                     represent: null,
                     synonym: null,
                     instance: null,
@@ -17425,6 +17459,12 @@
             if (sessionStorage.getItem('definition') != null) {
                 app.term.definition = sessionStorage.getItem('definition');
             }
+            if (sessionStorage.getItem('sentence') != null) {
+                app.term.sentence = sessionStorage.getItem('sentence');
+            }
+            if (sessionStorage.getItem('taxa') != null) {
+                app.term.taxa = sessionStorage.getItem('taxa');
+            }
             if (sessionStorage.getItem('represent') != null) {
                 app.term.represent = sessionStorage.getItem('represent');
             }
@@ -17442,8 +17482,8 @@
             app.sortTreeData(app.largeDataQuality.children);
             var jsonRequest = {
                 'user_email': app.$route.params.user,
-                'action': 'Module landed',
-                'action_details': 'Wizard module was landed for term',
+                'action': 'Module loaded',
+                'action_details': 'Wizard module loaded for term='+app.$route.params.term,
                 'abnormal_system_response': null,
                 'type': 'Wizard'
             };
@@ -17477,16 +17517,70 @@
                 console.log('status', status);
                 switch (status) {
                     case 0:
-                        if (app.term.definition == null /*|| app.username == null*/) {
-                            alert('Please enter a definition for the term.');
+                        if (app.term.definition == null || app.term.sentence == null || app.term.taxa == null) {
+                            alert('All fields on this page are required. Please provide definition, sentence, and taxa for the term');
                         } else {
                             sessionStorage.setItem('definition', app.term.definition);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
                                 'action': 'Save Human Readable Definition',
-                                'action_details': app.term.definition + ' saved as definition for term',
+                                'action_details': 'term='+app.$route.params.term +': definition=' +app.term.definition,
                                 'abnormal_system_response': null,
-                                'type': 'Human Readable Definition'
+                                'type': 'Wizard'
+                            };
+                            //if (app.username == null) {
+                            //    alert('Please insert the username on homepage');
+                            //} else {
+                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            //}
+                            //app.status = 1;
+                            app.summary.push('"' + app.temp.text + '"' + ' is defined as ' + '"' +app.term.definition + '".');
+                        //}
+                        /* sentence */
+                        //if (app.term.sentence == null) {
+                        //    alert('Please enter an example sentence for the term.');
+                        //} else {
+                            sessionStorage.setItem('sentence', app.term.sentence);
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Save Example Sentence',
+                                'action_details': 'term='+app.$route.params.term +': sentence=' +app.term.sentence,
+                                'abnormal_system_response': null,
+                                'type': 'Wizard'
+                            };
+                            //if (app.username == null) {
+                            //    alert('Please insert the username on homepage');
+                            //} else {
+                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                    .then(function(resp) {
+                                        console.log("activity-log resp", resp);
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("activity-log error resp", resp);
+                                    });
+                            //}
+                            //app.status = 1;
+                            app.summary.push('"' + app.temp.text + '"' + ' is used in ' + '"' +app.term.sentence + '".');
+                        //}
+
+
+                        /* taxa */
+                        //if (app.term.taxa == null) {
+                        //    alert('Please enter applicable taxa for the term.');
+                        //} else {
+                            sessionStorage.setItem('taxa', app.term.taxa);
+                            var jsonRequest = {
+                                'user_email': app.$route.params.user,
+                                'action': 'Save Applicable Taxa',
+                                'action_details': 'term='+app.$route.params.term +': taxa=' +app.term.taxa,
+                                'abnormal_system_response': null,
+                                'type': 'Wizard'
                             };
                             //if (app.username == null) {
                             //    alert('Please insert the username on homepage');
@@ -17500,8 +17594,9 @@
                                     });
                             //}
                             app.status = 1;
-                            app.summary.push('"' + app.temp.text + '"' + ' is defined as ' + '"' +app.term.definition + '".');
+                            app.summary.push('"' + app.temp.text + '"' + ' is applicable to ' + '"' +app.term.taxa + '".');
                         }
+                        
                         break;
                     case 1:
                         sessionStorage.setItem('represent', app.term.represent);
@@ -17515,7 +17610,7 @@
                                     'action': 'Save term type',
                                     'action_details': 'term is an anatomical structure',
                                     'abnormal_system_response': null,
-                                    'type': 'term general type'
+                                    'type': 'Wizard'
                                 };
                                 //if (app.username == null) {
                                 //    alert('Please insert the username on homepage');
@@ -17537,7 +17632,7 @@
                                     'action': 'Save term type',
                                     'action_details': 'term is a character',
                                     'abnormal_system_response': null,
-                                    'type': 'term general type'
+                                    'type': 'Wizard'
                                 };
                                // if (app.username == null) {
                                //     alert('Please insert the username on homepage');
@@ -17667,7 +17762,7 @@
                                     'action': 'Summary landed',
                                     'action_details': 'Summary Page was landed for term',
                                     'abnormal_system_response': null,
-                                    'type': 'Summary'
+                                    'type': 'Wizard'
                                 };
                                 //if (app.username == null || app.username == 'null' || app.username == '') {
                                 //    alert('Please insert the username on homepage.');
@@ -17877,9 +17972,9 @@
                                     "elucidation": null,
                                     "createdBy": app.$route.params.user +" via add2ontology wizard",
                                     "creationDate": new Date(),
-                                    "definitionSrc": "tba",
+                                    "definitionSrc": app.$route.params.user,
                                     "examples": "tba",
-                                    "logicDefinition": "tba",
+                                    "logicDefinition": null,
                                 };
                                 app.tempIndex = app.userInstances[i].term;
                                 axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
@@ -17967,9 +18062,9 @@
                                     "elucidation": null,
                                     "createdBy": app.$route.params.user +" via add2ontology wizard",
                                     "creationDate": new Date(),
-                                    "definitionSrc": "tba",
-                                    "examples": "tba",
-                                    "logicDefinition": "tba",
+                                    "definitionSrc": app.$route.params.user,
+                                    "examples":  "tba",
+                                    "logicDefinition": null,
                                 };
                                 axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
                                     .then(function(resp) {
@@ -18035,7 +18130,12 @@
                         "term": app.temp.text,
                         "superclassIRI": app.synonyms[index].data.details[0].IRI,
                         "definition": app.term.definition,
-                        "elucidation": null
+                        "elucidation": null,
+                        "createdBy": app.$route.params.user +" via add2ontology wizard",
+                        "creationDate": new Date(),
+                        "definitionSrc":  app.$route.params.user,
+                        "examples":  app.term.sentence + '[' + app.term.taxa + ']',
+                        "logicDefinition": null,
                     };
                 } else if (key == 'partOf' || key == 'hasPart') {
 
@@ -18155,7 +18255,7 @@
                                     'action': 'Summary landed',
                                     'action_details': 'Summary Page was landed for term',
                                     'abnormal_system_response': null,
-                                    'type': 'Summary'
+                                    'type': 'Wizard'
                                 };
                               // if (app.username == null || app.username == 'null' || app.username == '') {
                                  //   alert('Please insert the username on homepage.');
@@ -18318,7 +18418,7 @@
                                             'action': 'Summary landed',
                                             'action_details': 'Summary Page was landed for term',
                                             'abnormal_system_response': null,
-                                            'type': 'Summary'
+                                            'type': 'Wizard'
                                         };
                                        // if (app.username == null || app.username == 'null' || app.username == '') {
                                        //     alert('Please insert the username on homepage.');
@@ -18392,7 +18492,7 @@
                                                 'action': 'Summary landed',
                                                 'action_details': 'Summary Page was landed for term',
                                                 'abnormal_system_response': null,
-                                                'type': 'Summary'
+                                                'type': 'Wizard'
                                             };
                                            // if (app.username == null || app.username == 'null' || app.username == '') {
                                             //    alert('Please insert the username on homepage.');
@@ -18463,7 +18563,7 @@
                                                 'action': 'Summary landed',
                                                 'action_details': 'Summary Page was landed for term',
                                                 'abnormal_system_response': null,
-                                                'type': 'Summary'
+                                                'type': 'Wizard'
                                             };
                                            // if (app.username == null || app.username == 'null' || app.username == '') {
                                             //    alert('Please insert the username on homepage.');
@@ -18520,7 +18620,7 @@
                                                 'action': 'Summary landed',
                                                 'action_details': 'Summary Page was landed for term',
                                                 'abnormal_system_response': null,
-                                                'type': 'Summary'
+                                                'type': 'Wizard'
                                             };
                                            // if (app.username == null || app.username == 'null' || app.username == '') {
                                            //     alert('Please insert the username on homepage.');
@@ -18577,7 +18677,7 @@
                                                 'action': 'Summary landed',
                                                 'action_details': 'Summary Page was landed for term',
                                                 'abnormal_system_response': null,
-                                                'type': 'Summary'
+                                                'type': 'Wizard'
                                             };
                                             //if (app.username == null || app.username == 'null' || app.username == '') {
                                             //    alert('Please insert the username on homepage.');
