@@ -13,7 +13,7 @@
                                 <div v-if="status == -1 || status > 0">
                                     <b style="color: green">Questions Answered:</b>
                                     <br>
-                                    Please provide  a human readable definition for {{ $route.params.term }}:<br/>
+                                   Please provide  a human readable definition for {{ $route.params.term }}:<br/>
                                     <b> {{ term.definition }}</b>
                                 </div>
                                 
@@ -59,13 +59,13 @@
                             <div class="col-md-6">
                                 <div v-if="status == 0" class="form-group">
                                     <label class="col-md-12">
-                                        Answer the following questions about <i>{{ $route.params.term }}</i>. Your answer helps the computer understand the meaning of the term.
+                                        Answer the following questions about <i>{{ $route.params.term }}</i>. Your answer helps the computer understand the meaning of the term. * indicates required fields.
                                     </label>
                                 </div>
                                 <div v-if="status == 0">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Please provide a human readable definition for <i>{{ $route.params.term }}</i>:</label>
+                                            <label>* Please provide a human readable definition for <i>{{ $route.params.term }}</i>:</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input v-model="term.definition" style="width: 100%;" 
@@ -75,7 +75,7 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <label>Sentences using the term: </label>
+                                        <label>* Sentences using the term: </label>
                                     </div>
 
                                     <div class="col-md-12">
@@ -85,7 +85,7 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12"> 
-                                        <label>Related taxa: </label>
+                                        <label>* Related taxa: </label>
                                     </div>
 
                                     <div class="col-md-12">
@@ -259,11 +259,11 @@
                                             <label for="question3-n-user">No, such larger structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.instance == 'no-user'">
-                                            <label  style="color:dodgerBlue">Here are these structures and their definitions:</label>
+                                            <label  style="color:dodgerBlue">Let me enter these parent structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        Term
+                                                        Parent Structure Term
                                                     </div>
                                                     <div class="col-md-6">
                                                         Human readable definition
@@ -320,11 +320,11 @@
                                             <label for="question4-n-user">No, such component structures are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.hasPart == 'no-user'">
-                                            <label  style="color:dodgerBlue">Here are these structures and their definitions:</label>
+                                            <label  style="color:dodgerBlue">Let me add these component structures and their definitions:</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        Term
+                                                        Component Structure Term
                                                     </div>
                                                     <div class="col-md-6">
                                                         Human readable definition
@@ -466,6 +466,7 @@
                 username: sessionStorage.getItem('username'),
                 status: 0,
                 error: "",
+                list: "", 
                 term: {
                     definition: null,
                     sentence:null,
@@ -17548,7 +17549,7 @@
                             sessionStorage.setItem('definition', app.term.definition);
                             var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Saved Human Readable Definition',
+                                'action': 'Clicked Save for Human Readable Definition',
                                 'action_details': 'term='+app.$route.params.term +': definition=' +app.term.definition,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17647,7 +17648,7 @@
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
                                     'action': 'Saved term type',
-                                    'action_details': 'term is an anatomical structure',
+                                    'action_details': 'term' +app.$route.params.term+' is an anatomical structure',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -17669,7 +17670,7 @@
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
                                     'action': 'Saved term type',
-                                    'action_details': 'term is a character',
+                                    'action_details': 'term '+app.$route.params.term+' is a character',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -17733,7 +17734,7 @@
 
                                  var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Saved Synonym vs Class Decision for structure term',
+                                'action': 'Clicked Save for Synonym vs Class Decision for structure term',
                                 'action_details': 'term='+app.$route.params.term,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17794,7 +17795,7 @@
                                 app.modalShowFlag = true;
                                  var jsonRequest = {
                                 'user_email': app.$route.params.user,
-                                'action': 'Saved Synonym vs Class Decision for character term',
+                                'action': 'Clicked Save for Synonym vs Class Decision for character term',
                                 'action_details': 'term='+app.$route.params.term,
                                 'abnormal_system_response': null,
                                 'type': 'Wizard'
@@ -17853,7 +17854,7 @@
                                     app.modalShowFlag = true;
                                      var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Saved Part-Of Decision',
+                                    'action': 'Clicked Save for Part-Of Decision',
                                     'action_details': 'term='+app.$route.params.term,
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -17871,7 +17872,7 @@
                                 app.status = 4;
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Saved Part-Of Decision',
+                                    'action': 'Clicked Save for Part-Of Decision',
                                     'action_details': 'no part-of relations for term='+app.$route.params.term,
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -17885,10 +17886,19 @@
                                     });
                             } else if (app.term.instance == 'no-user') {
                                 app.instances = app.userInstances;
+                                if(app.userInstances.length<1){
+                                     alert("Please enter parent structure terms before clicking 'Save' buttom");
+                                }
+                                //constract user supplied list
+                                app.list = "";
+                                for (var i = 0; i < app.userInstances.length; i++) {
+                                     app.list += app.userInstances[i].term+" | ";
+                                }
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
                                     'action': 'user supply',
-                                    'action_details': 'User supplied ' + app.userInstances[app.userInstances.length - 1].term + ' for term',
+                                    //'action_details': 'User supplied ' + app.userInstances[app.userInstances.length - 1].term + ' for term',
+                                    'action_details': 'User supplied parent structure terms:' + app.list + ' for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -17952,7 +17962,7 @@
                                     app.modalShowFlag = true;
                                     var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Saved Has-Part Decision',
+                                    'action': 'Clicked Save for Has-Part Decision',
                                     'action_details': 'term='+app.$route.params.term,
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -17968,7 +17978,7 @@
 
                             } else if (app.term.hasPart == 'no') {
                                  var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -17981,7 +17991,7 @@
 
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
-                                    'action': 'Saved Has-Part Decision',
+                                    'action': 'Clicked Save for Has-Part Decision',
                                     'action_details': 'no has-part relations for term='+app.$route.params.term,
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
@@ -18015,10 +18025,18 @@
                                 app.status = 5;
                             } else if (app.term.hasPart == 'no-user') {
                                 app.hasParts = app.userHasParts;
+                                 if(app.userHasParts.length<1){
+                                     alert("Please enter component structure terms before clicking 'Save' buttom");
+                                }
+                                app.list = "";
+                                for (var i = 0; i < app.userHasParts.length; i++) {
+                                     app.list += app.userHasParts[i].term + " | ";
+                                }
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
                                     'action': 'user supply',
-                                    'action_details': 'User supplied ' + app.userHasParts[app.userHasParts.length - 1].term + ' for term',
+                                    //'action_details': 'User supplied ' + app.userHasParts[app.userHasParts.length - 1].term + ' for term',
+                                    'action_details': 'User supplied component terms: ' + app.list + ' for term',
                                     'abnormal_system_response': null,
                                     'type': 'Wizard'
                                 };
@@ -18059,7 +18077,7 @@
                     case 2: //synony vs. class on structure term
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Confirm',
+                        'action': 'Confirmed synonym vs. class',
                         'action_details': 'confirmed synonym vs. class decision on structure term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -18076,7 +18094,7 @@
 
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                 "user":"",
+                                 "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
@@ -18135,7 +18153,7 @@
                     case -1: //synonym vs. class on character term
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Confirm',
+                        'action': 'Confirmed synonym vs.class',
                         'action_details': 'confirmed synonym vs. class decision on character term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -18152,7 +18170,7 @@
                         if (app.term.synonym == 'yes') {
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
@@ -18198,7 +18216,7 @@
                     case 3: //part of
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Confirm',
+                        'action': 'Confirmed part-of',
                         'action_details': 'confirmed part-of decision on term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -18248,7 +18266,7 @@
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
                                 var jsonClassRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
@@ -18302,7 +18320,7 @@
                     case 4: //has_part
                          var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Confirm',
+                        'action': 'Confirmed has-part',
                         'action_details': 'confirmed has-part decision on term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -18353,7 +18371,7 @@
                             for (var i = 0; i < app.userHasParts.length; i++) {
                                 app.tempIndex = app.userHasParts[i].term;
                                   var jsonClassRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
@@ -18413,18 +18431,24 @@
                 var jsonRequest;
 
 
-                console.log("status", status);
+                console.log("callLoopApi status", status);
+                console.log("callLoopApi setting", setting);
+                console.log("callLoopApi key", key);
+                console.log("callLoopApi app.synonyms", app.synonyms);
+                console.log("callLoopApi app.instances", app.instances);
+                console.log("callLoopApi app.hasParts", app.hasParts);
+                console.log("callLoopApi app.TTBA", app.hasTTBA);
 
                 if (key == 'bsynonym') {
                     jsonRequest = {
-                      "user":"",
+                      "user":app.$route.params.user,
                          "ontology": app.$route.params.ontology,
                         "term": app.temp.text,
                         "classIRI": app.synonyms[index].data.details[0].IRI
                     };
                 } else if (key == 'class') {
                     jsonRequest = {
-                      "user":"",
+                      "user":app.$route.params.user,
                          "ontology": app.$route.params.ontology,
                         "term": app.temp.text,
                         "superclassIRI": app.synonyms[index].data.details[0].IRI,
@@ -18441,14 +18465,14 @@
                     if (setting == 'synonym') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.synonyms[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
@@ -18457,14 +18481,14 @@
                     } else if (setting == 'TTBA') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.TTBA[optionIndex].data.details[0].IRI
                             };
                         } else {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
@@ -18475,7 +18499,7 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                   "ontology": app.$route.params.ontology,
                                 "bearerIRI": optionData,
                                 "partIRI": app.synonyms[index].data.details[0].IRI
@@ -18485,7 +18509,7 @@
                             }
                         } else {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.synonyms[index].data.details[0].IRI,
                                 "partIRI": optionData
@@ -18499,7 +18523,7 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                 "bearerIRI": optionData,
                                 "partIRI": app.TTBA[index].data.details[0].IRI
@@ -18509,7 +18533,7 @@
                             }
                         } else {
                             jsonRequest = {
-                              "user":"",
+                              "user":app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.TTBA[index].data.details[0].IRI,
                                 "partIRI": optionData
@@ -18539,7 +18563,7 @@
                             }
                             if (app.status == 5) {
                                   var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18702,7 +18726,7 @@
                                     if (status == -1) {
                                         app.status = 5;
                                           var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                         axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18776,7 +18800,7 @@
                                                 app.status = status + 1;
                                             }
                                               var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18847,7 +18871,7 @@
                                                 app.status = status + 1;
                                             }
                                               var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18904,7 +18928,7 @@
                                         }
                                         if (key == 'hasPart') {
                                               var jsonSaveRequest = {
-                                  "user":"",
+                                  "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18961,7 +18985,7 @@
                                         }
                                         if (key == 'hasPart') {
                                               var jsonSaveRequest = {
-                                    "user":"",
+                                    "user":app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19029,7 +19053,7 @@
                     case -1:
                          var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Undo',
+                        'action': 'Undo synonym vs. class',
                         'action_details': 'undo synonym vs. class decision on character term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -19045,7 +19069,7 @@
                     case 2:
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Undo',
+                        'action': 'Undo synonym vs. class',
                         'action_details': 'undo synonym vs. class decision on structure term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -19061,7 +19085,7 @@
                     case 3:
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Undo',
+                        'action': 'Undo part-of',
                         'action_details': 'undo part-of decision on term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'
@@ -19077,7 +19101,7 @@
                     case 4:
                         var jsonRequest = {
                         'user_email': app.$route.params.user,
-                        'action': 'Undo',
+                        'action': 'Undo has-part',
                         'action_details': 'undo has-part decision on term='+app.$route.params.term,
                         'abnormal_system_response': null,
                         'type': 'Wizard'

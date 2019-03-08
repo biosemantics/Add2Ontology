@@ -8,7 +8,7 @@
                 <div class="tab-pane" id="" style="font-size: 15px;">
                     <form class="row" autocomplete="off">
                         <div class="col-md-8 col-md-offset-2">
-                            WebProtege: <a href="https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b" target="_blank" style="cursor: pointer;">https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b</a>
+                            WebProtege: <a href="https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes" target="_blank" style="cursor: pointer;" @click="logClick">https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Click on the WebProtege link above and add <i>{{ $route.params.term }}</i> to CAREX Ontology. </label>
@@ -42,6 +42,7 @@
                 webProtegeIRI: null,
                 username: sessionStorage.getItem('username'),
                 status: 0,
+                clicked: 0,
             }
         },
         beforeMount() {
@@ -69,39 +70,72 @@
            //}
         },
         methods: {
-            clickLink: function() {
+            logClick: function(){
                 var app = this;
+                app.clicked = 1;
                 var jsonRequest = {
                     'user_email': app.$route.params.user,
-                    'type': 2,
-                    'detail': app.$route.params.user + ' entered URL',
-                    'detail_addition': 'URL: https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b'
+                    'action': 'Clicked WebProtege link',
+                    'action_details': 'Clicked WebProtege link for term=' +  app.$route.params.term,
+                    'abnormal_system_response': null,
+                    'type': 'Web Protege'
                 };
-                //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
-                //   alert('Please insert the username on homepage');
-                //} else {
-                    axios.post('/add2ontologymodular/public/api/v1/activity-log', jsonRequest)
+                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                         .then(function(resp) {
                             console.log("activity-log resp", resp);
                         })
                         .catch(function(resp) {
                             console.log("activity-log error resp", resp);
                         });
-                //}
+                
             },
+            //clickLink: function() {
+            //    var app = this;
+            //    var jsonRequest = {
+            //        'user_email': app.$route.params.user,
+            //        'type': 2,
+            //        'detail': app.$route.params.user + ' entered URL',
+            //        'detail_addition': 'URL: https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b'
+            //    };
+             //   //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
+             //   //   alert('Please insert the username on homepage');
+             //   //} else {
+             //       axios.post('/add2ontologymodular/public/api/v1/activity-log', jsonRequest)
+             //           .then(function(resp) {
+             //               console.log("activity-log resp", resp);
+              //          })
+             //           .catch(function(resp) {
+             //               console.log("activity-log error resp", resp);
+             //           });
+                //}
+            //},
             done: function() {
                 var app = this;
                 //app.status = 1;
                 var jsonRequest = {
                     'user_email': app.$route.params.user,
-                    'action': 'Save IRI',
+                    'action': 'Saved IRI',
                     'action_details': app.webProtegeIRI + ' saved for term',
                     'abnormal_system_response': null,
                     'type': 'Web Protege'
                 };
                // if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
                //     alert('Please insert the username on homepage');
-               /*} else*/ if (app.webProtegeIRI == null) {
+               /*} else*/
+               if(app.clicked == 0){
+                    jsonRequest.action = 'clicked Done';
+                    jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
+                    jsonRequest.abnormal_system_response = 'did not click open WebProtege link';
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                    alert('You need to click on the WebProtege link and add the term in WebProtege.');
+               }
+               else if (app.webProtegeIRI == null) {
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
                     jsonRequest.abnormal_system_response = 'without entry';
@@ -134,7 +168,7 @@
                             console.log("activity-log error resp", resp);
                         });
                     var jsonClass = {
-                        "user":"",
+                        "user":app.$route.params.user,
                         "ontology":app.$route.params.ontology,
                         "term": app.$route.params.term + ' ' + app.webProtegeIRI,
                         "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
@@ -144,13 +178,13 @@
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": "tba",
-                        "logicDefinition": "tba",
+                        "logicDefinition": null,
                     };
                     axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
                         .then(function(resp) {
                             console.log('class resp', resp);
                                var jsonSaveRequest = {
-                        "user":"",
+                        "user":app.$route.params.user,
                         "ontology":app.$route.params.ontology
                                };
                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)

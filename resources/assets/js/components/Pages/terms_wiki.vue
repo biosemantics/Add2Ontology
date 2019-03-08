@@ -8,7 +8,7 @@
                 <div class="tab-pane" id="" style="font-size: 15px;">
                     <form class="row" autocomplete="off">
                         <div class="col-md-8 col-md-offset-2">
-                            Use Wiki Data: <a href="https://terms.tdwg.org/wiki/FloraTerms" target="_blank" style="cursor: pointer;">https://terms.tdwg.org/wiki/FloraTerms</a>
+                            Use Wiki Data: <a href="https://test.wikidata.org/wiki/Wikidata:Main_Page" target="_blank" style="cursor: pointer;"  @click="logClick">https://test.wikidata.org/wiki/Wikidata:Main_Page</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology. </label>
@@ -41,6 +41,7 @@
                 termsWikiURI: null,
                 username: sessionStorage.getItem('username'),
                 status: 0,
+                clicked: 0,
             }
         },
         beforeMount() {
@@ -50,8 +51,8 @@
             var app = this;
             var jsonRequest = {
                 'user_email': app.$route.params.user,
-                'action': 'Module landed',
-                'action_details': 'TermsWiki module was landed for term',
+                'action': 'Module loaded',
+                'action_details': 'TermsWiki module was load for term='+app.$route.params.term,
                 'abnormal_system_response': null,
                 'type': 'Wiki Data'
             };
@@ -68,19 +69,51 @@
             //}
         },
         methods: {
+            logClick: function(){
+                var app = this;
+                app.clicked = 1;
+                 var jsonRequest = {
+                    'user_email': app.$route.params.user,
+                    'action': 'Clicked Wiki link',
+                    'action_details': 'Clicked on the Wiki link for term='+app.$route.params.term,
+                    'abnormal_system_response': null,
+                    'type': 'Wiki Data'
+                };
+                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+            
+            },
             done: function() {
                 var app = this;
               
                 var jsonRequest = {
                     'user_email': app.$route.params.user,
-                    'action': 'Save URI',
+                    'action': 'Saved URI',
                     'action_details': app.termsWikiURI + ' saved for term',
                     'abnormal_system_response': null,
                     'type': 'Wiki Data'
                 };
                 //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
                 //    alert('Please insert the username on homepage');
-                /*} else*/ if (app.termsWikiURI == null) {
+                /*} else*/ if(app.clicked == 0){
+                    jsonRequest.action = 'clicked Done';
+                    jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
+                    jsonRequest.abnormal_system_response = 'did not click open Wiki link';
+                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                        .then(function(resp) {
+                            console.log("activity-log resp", resp);
+                        })
+                        .catch(function(resp) {
+                            console.log("activity-log error resp", resp);
+                        });
+                    alert('You need to click on the Wiki link and add the term in the Wiki.');
+                }
+                else if (app.termsWikiURI == null) {
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.action_details = app.$route.params.user + ' clicked Done for term ';
                     jsonRequest.abnormal_system_response = 'without entry';
@@ -113,23 +146,23 @@
                             console.log("activity-log error resp", resp);
                         });
                     var jsonClass = {
-                        "user":"",
+                        "user":app.$route.params.user,
                         "ontology": app.$route.params.ontology,
                         "term": app.$route.params.term + ' ' + app.termsWikiURI,
-                        "superclassURI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
+                        "superclassIRI": "http://biosemantics.arizona.edu/ontologies/carex#toreview",
                         "definition": "tba",
                         "elucidation": "tba",
-                        "createdBy": app.$route.params.user +" via add2ontology terms wiki",
+                        "createdBy": app.$route.params.user +" via add2ontology WikiData",
                         "creationDate": new Date(),
                         "definitionSrc": "tba",
                         "examples": "tba",
-                        "logicDefinition": "tba",
+                        "logicDefinition": null,
                     };
                     axios.post('http://shark.sbs.arizona.edu:8080/class', jsonClass)
                         .then(function(resp) {
                             console.log('class resp', resp);
                             var jsonSaveRequest = {
-                        "user":"",
+                        "user":app.$route.params.user,
                         "ontology": app.$route.params.ontology
                         };
                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
