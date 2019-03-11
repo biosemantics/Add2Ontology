@@ -11,7 +11,7 @@
                             Use Wiki Data: <a href="https://test.wikidata.org/wiki/Wikidata:Main_Page" target="_blank" style="cursor: pointer;"  @click="logClick">https://test.wikidata.org/wiki/Wikidata:Main_Page</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            <label>Click on the link above and add <b>"{{ $route.params.term }}"</b> to the ontology. </label>
+                            <label>Click on the link above and add <span style="color:dodgerBlue"><i>"{{ $route.params.term }}"</i></span> to the ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Then enter the term URI here: (See the image below on where to find the URI for the term)</label>

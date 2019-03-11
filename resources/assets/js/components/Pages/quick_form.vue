@@ -8,7 +8,7 @@
                 <div class="tab-pane">
                     <form class="form-horizontal" autocomplete="off">
                         <div class="form-group">
-                            <div class=" col-md-offset-1 col-md-9" style="font-size: 16px;">Fill the form below to add <b> {{ $route.params.term }} </b> to CAREX Ontology. * indicates required fields</div>
+                            <div class=" col-md-offset-1 col-md-9" style="font-size: 16px;">Fill the form below to add <span style="color:dodgerBlue"><b> {{ $route.params.term }} </b></span> to CAREX Ontology. * indicates required fields</div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4" style="padding-left: 130px;"><i>{{ $route.params.term }}</i> &nbsp; is a * </label>
@@ -114,7 +114,6 @@
             submit() {
                 var app = this;
                 //app.status = 1;    
-                //console.log("qf_statusFlag", app.status);
                 console.log('quickForm submit', app.quickForm);
                 //if (app.username == null || app.username == 'null' || app.username == '') {
                 //    alert('Please insert the username on homepage');

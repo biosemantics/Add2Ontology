@@ -11,7 +11,7 @@
                             WebProtege: <a href="https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes" target="_blank" style="cursor: pointer;" @click="logClick">https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
-                            <label>Click on the WebProtege link above and add <i>{{ $route.params.term }}</i> to CAREX Ontology. </label>
+                            <label>Click on the WebProtege link above and add <span style="color:dodgerBlue"><i>{{ $route.params.term }}</i></span> to CAREX Ontology. </label>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Then enter the term IRI here: (See the image below on where to find the URI for the term)</label>
