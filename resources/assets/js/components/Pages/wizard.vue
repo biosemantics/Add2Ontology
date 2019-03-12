@@ -18058,7 +18058,7 @@
                 var temp = app.$refs.tree.findAll({
                     state: { checked: true }
                 }, true);
-                temp.uncheck(); //reset all nodes to uncheck
+                if(temp!=null) temp.uncheck(); //reset all nodes to uncheck
                 console.log('parentNode', app.parentNode);
                 app.parentNode.collapse();
             },
@@ -18246,7 +18246,7 @@
                                         ];
                                     }
 
-                                    app.callLoopApi(0, 'partOf', 'synonym', i, null, null, status);
+                                    app.callLoopApi(0, 'partOf', 'synonym', i, null, null, status); //loop through optionIndex i, classes TTBA is a bsynonym to.
                                     app.collapseAndUncheck();
                                 }
 
@@ -18260,7 +18260,7 @@
 
                                         ];
                                     }
-                                    app.callLoopApi(0, 'partOf', 'TTBA', i, null, null, status);
+                                    app.callLoopApi(0, 'partOf', 'TTBA', i, null, null, status); //loop through optionIndex i, class of the TTBA (should be one, but this code treated it as multiple copies of one thing, if there are multiple superclasses)
                                     app.collapseAndUncheck();
                                 }
 
@@ -18635,6 +18635,7 @@
 
                         //} else { //?api call not successful
                             //log activities
+                            alert("log activity for key="+key);
                             if (key == 'bsynonym') {
                                 var jsonRequest = {
                                     'user_email': app.$route.params.user,
@@ -18668,7 +18669,7 @@
                                     });
                             } else if (key == 'partOf') {
                                 var jsonLog = {};
-                                if (setting == 'synonym') {//setting 
+                                if (setting == 'synonym') {//setting synonym, different from key bsynonym 
                                     jsonLog = {
                                         'user_email': app.$route.params.user,
                                         'action': 'Add part_of',
@@ -18716,24 +18717,26 @@
                                         'user_email': app.$route.params.user,
                                         'action': 'Add has_part',
                                         //'action_details': app.instances[index].text  + ' is added as has_part of ' + app.synonyms[optionIndex].text +' for term',
-                                        'action_details': app.synonyms[optionIndex].text+ ' has_part '+ app.hasPart[index].text  +' is added for term',
+                                        'action_details': app.synonyms[optionIndex].text+ ' has_part '+ app.hasParts[index].text  +' is added for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
 
                                 } else if (setting == 'TTBA') {
+                                    alert("log key="+key +" optionIndex="+optionIndex +" index="+index+" : ");
+                                    alert("log key="+key +": "+app.TTBA[optionIndex].text   + ' has_part ' + app.hasParts[index].text)
                                     jsonLog = {
                                         'user_email': app.$route.params.user,
-                                        'action': 'Add part_of',
+                                        'action': 'Add has_part',
                                         //'action_details': app.instances[index].text  + ' is added as has_part of ' + app.TTBA[optionIndex].text +' for term',
-                                        'action_details': app.TTBA[optionIndex].text   + ' has_part ' + app.hasPart[index].text +' is added for term',
+                                        'action_details': app.TTBA[optionIndex].text   + ' has_part ' + app.hasParts[index].text +' is added for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
                                     };
                                 } else if (setting == 'no-synonym') {
                                     jsonLog = {
                                         'user_email': app.$route.params.user,
-                                        'action': 'Add part_of',
+                                        'action': 'Add has_part',
                                         'action_details': app.synonyms[index].text + ' has_part ' + optionData2 +' is added for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
@@ -18741,7 +18744,7 @@
                                 } else if (setting == 'no-TTBA') {
                                     jsonLog = {
                                         'user_email': app.$route.params.user,
-                                        'action': 'Add part_of',
+                                        'action': 'Add has_part',
                                         'action_details': app.TTBA[index].text + ' has_part ' + optionData2 +' is added for term',
                                         'abnormal_system_response': null,
                                         'type': 'Wizard'
@@ -18781,6 +18784,7 @@
                                     if (status == -1) {
                                         app.status = 5;
                                         alert("status=5, log summery and save ontology");
+                                        /* hong 3/12
                                         var jsonSaveRequest = {
                                             "user":app.$route.params.user,
                                             "ontology": app.$route.params.ontology,
@@ -18808,7 +18812,7 @@
                                                 })
                                                 .catch(function(resp) {
                                                     console.log("activity-log error resp", resp);
-                                                });
+                                                });*/
                                         //}
                                     } else {
                                         alert("increase status by 1")
@@ -18816,10 +18820,41 @@
                                     }
                                     alert("end of class list, after status="+app.status)
                                     //app.treeData = app.$refs.tree.model;
+                                    //hong 3/12
+                                    if(app.status == 5){
+                                        var jsonSaveRequest = {
+                                                    "user":app.$route.params.user,
+                                                    "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                                
+                                                var jsonRequest = {
+                                                'user_email': app.$route.params.user,
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                                 };
+                                                    // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                    //     alert('Please insert the username on homepage.');
+                                                    // } else {
+                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                });
+                                    }
                                 }
                             } else if (key == 'partOf' || key == 'hasPart') {
                                 if (setting == 'synonym') {
-
                                     if (key == 'partOf') {
                                         app.synonyms[optionIndex].data.details[0][key].push(
                                             app.instances[index].data.details[0].IRI
@@ -18829,48 +18864,83 @@
                                         //alert("synonym:"+app.instances[index].text);
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
-                                        if (index < app.instances.length - 1) {
+                                        if (index < app.instances.length - 1) { //loop through index
                                             app.callLoopApi(index + 1, key, setting, optionIndex, optionData, optionData2, status);
                                         } else {
                                             app.modalShowFlag = false;
                                             if (status == -1) {
                                                 app.status = 5;
                                                 //hong inserted 
-                                                alert("status=5, log summery and save ontology");
-                                        var jsonSaveRequest = {
-                                            "user":app.$route.params.user,
-                                            "ontology": app.$route.params.ontology,
-                                        };
-                                         axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
-                                            .then(function(resp) {
-                                                console.log('save resp', resp);
-                                            })
-                                            .catch(function(resp) {
-                                                console.log('save error resp', resp);
-                                            });
-                                        var jsonRequest = {
-                                            'user_email': app.$route.params.user,
-                                            'action': 'Summary loaded',
-                                            'action_details': 'Summary Page was loaded for term',
-                                            'abnormal_system_response': null,
-                                            'type': 'Wizard'
-                                        };
-                                       // if (app.username == null || app.username == 'null' || app.username == '') {
-                                       //     alert('Please insert the username on homepage.');
-                                       // } else {
-                                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                alert("should not land here: status=5, log summery and save ontology");
+                                            
+                                                /* hong 3/12
+                                                var jsonSaveRequest = {
+                                                    "user":app.$route.params.user,
+                                                    "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
-                                                    console.log("activity-log resp", resp);
+                                                    console.log('save resp', resp);
                                                 })
                                                 .catch(function(resp) {
-                                                    console.log("activity-log error resp", resp);
+                                                    console.log('save error resp', resp);
                                                 });
+                                                
+                                                var jsonRequest = {
+                                                'user_email': app.$route.params.user,
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                                 };
+                                                    // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                    //     alert('Please insert the username on homepage.');
+                                                    // } else {
+                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });*/
                                             } else {
                                                 app.status = status + 1;
                                             }
                                             //app.treeData = app.$refs.tree.model;
+                                            //Hong 3/12
+                                            if(app.status == 5){
+                                                var jsonSaveRequest = {
+                                                    "user":app.$route.params.user,
+                                                    "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
+                                                .then(function(resp) {
+                                                    console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log('save error resp', resp);
+                                                });
+                                                
+                                                var jsonRequest = {
+                                                'user_email': app.$route.params.user,
+                                                'action': 'Summary loaded',
+                                                'action_details': 'Summary Page was loaded for term',
+                                                'abnormal_system_response': null,
+                                                'type': 'Wizard'
+                                                 };
+                                                    // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                    //     alert('Please insert the username on homepage.');
+                                                    // } else {
+                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                    .then(function(resp) {
+                                                        console.log("activity-log resp", resp);
+                                                    })
+                                                    .catch(function(resp) {
+                                                        console.log("activity-log error resp", resp);
+                                                    });
+                                            }
                                         }
-                                    } else {
+                                    } else { //hasPart
                                         app.synonyms[optionIndex].data.details[0][key].push(
                                             app.hasParts[index].data.details[0].IRI
                                         );
@@ -18887,36 +18957,39 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-                                            
-                                            var jsonSaveRequest = {
-                                                "user":app.$route.params.user,
-                                                "ontology": app.$route.params.ontology,
-                                            };
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
+                                            alert("hasPart status="+app.status);
+                                            if(app.status == 5){ //hong 3/12, added this condition
+                                                var jsonSaveRequest = {
+                                                    "user":app.$route.params.user,
+                                                    "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
-                                                    console.log('save resp', resp);
+                                                       console.log('save resp', resp);
                                                 })
                                                 .catch(function(resp) {
-                                                    console.log('save error resp', resp);
+                                                     console.log('save error resp', resp);
                                                 });
-                                            var jsonRequest = {
-                                                'user_email': app.$route.params.user,
-                                                'action': 'Summary loaded',
-                                                'action_details': 'Summary Page was loaded for term',
-                                                'abnormal_system_response': null,
-                                                'type': 'Wizard'
-                                            };
-                                           // if (app.username == null || app.username == 'null' || app.username == '') {
-                                            //    alert('Please insert the username on homepage.');
-                                           // } else {
+
+                                                var jsonRequest = {
+                                                    'user_email': app.$route.params.user,
+                                                    'action': 'Summary loaded',
+                                                    'action_details': 'Summary Page was loaded for term',
+                                                    'abnormal_system_response': null,
+                                                    'type': 'Wizard'
+                                                };
+                                                // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                //    alert('Please insert the username on homepage.');
+                                                // } else {
                                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
-                                                    .then(function(resp) {
-                                                        console.log("activity-log resp", resp);
-                                                    })
-                                                    .catch(function(resp) {
-                                                        console.log("activity-log error resp", resp);
-                                                    });
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
                                           //  }
+                                           }
                                         //app.treeData = app.$refs.tree.model;
                                         }
                                     }
@@ -18940,9 +19013,42 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
+
+                                            if(app.status == 5){ //hong 3/12
+                                                var jsonSaveRequest = {
+                                                    "user":app.$route.params.user,
+                                                    "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
+                                                .then(function(resp) {
+                                                       console.log('save resp', resp);
+                                                })
+                                                .catch(function(resp) {
+                                                     console.log('save error resp', resp);
+                                                });
+
+                                                var jsonRequest = {
+                                                    'user_email': app.$route.params.user,
+                                                    'action': 'Summary loaded',
+                                                    'action_details': 'Summary Page was loaded for term',
+                                                    'abnormal_system_response': null,
+                                                    'type': 'Wizard'
+                                                };
+                                                // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                //    alert('Please insert the username on homepage.');
+                                                // } else {
+                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
+                                                //  }
+                                           }
                                             // app.treeData = app.$refs.tree.model;
                                         }
-                                    } else {
+                                    } else {//hasPart
                                         app.TTBA[optionIndex].data.details[0][key].push(
                                             app.hasParts[index].data.details[0].IRI
                                         );
@@ -18959,27 +19065,30 @@
                                             } else {
                                                 app.status = status + 1;
                                             }
-                                              var jsonSaveRequest = {
-                                  "user":app.$route.params.user,
-                                   "ontology": app.$route.params.ontology,
-                                    };
-                                            axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
+                                            alert("hasPart/TTBA app.status="+app.status); 
+                                            if(app.status == 5){ //hong 3/12, added this condition
+                                                var jsonSaveRequest = {
+                                                "user":app.$route.params.user,
+                                                "ontology": app.$route.params.ontology,
+                                                };
+                                                axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
                                                 })
                                                 .catch(function(resp) {
                                                     console.log('save error resp', resp);
                                                 });
-                                            var jsonRequest = {
+
+                                                var jsonRequest = {
                                                 'user_email': app.$route.params.user,
                                                 'action': 'Summary loaded',
                                                 'action_details': 'Summary Page was loaded for term',
                                                 'abnormal_system_response': null,
                                                 'type': 'Wizard'
-                                            };
-                                           // if (app.username == null || app.username == 'null' || app.username == '') {
-                                            //    alert('Please insert the username on homepage.');
-                                           // } else {
+                                                };
+                                                // if (app.username == null || app.username == 'null' || app.username == '') {
+                                                    //    alert('Please insert the username on homepage.');
+                                                // } else {
                                                 axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                                                     .then(function(resp) {
                                                         console.log("activity-log resp", resp);
@@ -18987,7 +19096,8 @@
                                                     .catch(function(resp) {
                                                         console.log("activity-log error resp", resp);
                                                     });
-                                           // }
+                                                // }
+                                            }
                                             // app.treeData = app.$refs.tree.model;
                                         }
                                     }
@@ -18997,7 +19107,7 @@
                                         //   app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData.split('#')[1]);
                                         //alert("no-synonym:"+ optionData.split('#')[1]);
-                                    } else {
+                                    } else {//hasPart
                                         // app.summary.push(app.synonyms[index].text + "(synonym of " + app.temp.text + ") has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData.split('#')[1]);
                                     }
@@ -19013,13 +19123,15 @@
                                         if (status == -1) {
                                             app.status = 5;
                                         } else {  
-                                        //app.status = status + 1;
+                                            //app.status = status + 1;
+                                            app.status = status + 1; //hong 3/12
                                         }
-                                        if (key == 'hasPart') {
-                                              var jsonSaveRequest = {
-                                          "user":app.$route.params.user,
-                                          "ontology": app.$route.params.ontology,
-                                    };
+                                        //if (key == 'hasPart') {
+                                        if(app.status == 5){ //hong 3/12, switched the condition
+                                            var jsonSaveRequest = {
+                                                "user":app.$route.params.user,
+                                                "ontology": app.$route.params.ontology,
+                                            };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
@@ -19036,14 +19148,14 @@
                                             };
                                            // if (app.username == null || app.username == 'null' || app.username == '') {
                                            //     alert('Please insert the username on homepage.');
-                                          // } else {
-                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                            // } else {
+                                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
                                                     .then(function(resp) {
                                                         console.log("activity-log resp", resp);
                                                     })
                                                     .catch(function(resp) {
                                                         console.log("activity-log error resp", resp);
-                                                    });
+                                            });
                                           //  }
                                         }
                                     }
@@ -19056,7 +19168,7 @@
                                         app.treeData = app.$refs.tree.model;
                                         console.log("tree after updated", app.treeData);
                                     } else {
-                                 //app.summary.push(app.TTBA[index].text + " has_part " + optionData2 + " is added.");
+                                        //app.summary.push(app.TTBA[index].text + " has_part " + optionData2 + " is added.");
                                         app.summaryHasPart.push(optionData.split('#')[1]);
                                     }
                                     app.TTBA[index].data.details[0][key].push(
@@ -19071,12 +19183,14 @@
                                             app.status = 5;
                                         } else {
                                            // app.status = status + 1;
+                                           app.status = status + 1; //hong 3/12
                                         }
-                                        if (key == 'hasPart') {
-                                              var jsonSaveRequest = {
-                                    "user":app.$route.params.user,
-                                   "ontology": app.$route.params.ontology,
-                                    };
+                                        //if (key == 'hasPart') {
+                                        if(app.status == 5){ //hong 3/12 switched the condition
+                                            var jsonSaveRequest = {
+                                                "user":app.$route.params.user,
+                                                "ontology": app.$route.params.ontology,
+                                            };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
                                                 .then(function(resp) {
                                                     console.log('save resp', resp);
@@ -19094,13 +19208,13 @@
                                             //if (app.username == null || app.username == 'null' || app.username == '') {
                                             //    alert('Please insert the username on homepage.');
                                            //} else {
-                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
-                                                    .then(function(resp) {
-                                                        console.log("activity-log resp", resp);
-                                                    })
-                                                    .catch(function(resp) {
-                                                        console.log("activity-log error resp", resp);
-                                                    });
+                                            axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                                .then(function(resp) {
+                                                    console.log("activity-log resp", resp);
+                                                })
+                                                .catch(function(resp) {
+                                                    console.log("activity-log error resp", resp);
+                                                });
                                           //  }
                                         }
                                     // app.treeData = app.$refs.tree.model;
