@@ -18271,61 +18271,65 @@
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
-                                if(!app.userInstances[i].term && !app.userInstances[i].definition){ //filter out (partially) empty rows
-                                    var jsonClassRequest = {
-                                    "user":app.$route.params.user,
-                                        "ontology": app.$route.params.ontology,
-                                        "term": app.userInstances[i].term,
-                                        "superclassIRI": superClass.data.details[0].IRI,
-                                        "definition": app.userInstances[i].definition,
-                                        "elucidation": null,
-                                        "createdBy": app.$route.params.user +" via add2ontology wizard",
-                                        "creationDate": new Date(),
-                                        "definitionSrc": app.$route.params.user,
-                                        "examples": "tba",
-                                        "logicDefinition": null,
-                                    };
-                                    app.tempIndex = app.userInstances[i].term;
-                                    axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
-                                        .then(function(resp) {
-                                            console.log("class resp", resp);
-                                            var userTermIRI = resp.data;
-                                            if (resp.data == 'UNSUCCESSFULLY' || resp.data == 'NO_OPERATION') {
-                                                //Hong: log /class error
-                                                userTermIRI = "http://example.org/"+app.tempIndex;
-                                            } else {
-                                                var jsonRequest = {
-                                                    'user_email': app.$route.params.user,
-                                                    'action': 'Add Class',
-                                                    'action_details': app.tempIndex  + ' is added as subclass of ' + superClass.text +' for term',
-                                                    'abnormal_system_response': null,
-                                                    'type': 'Wizard'
-                                                };
-                                                axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
-                                                    .then(function(resp) {
-                                                        console.log("activity-log resp", resp);
-                                                    })
-                                                    .catch(function(resp) {
-                                                        console.log("activity-log error resp", resp);
-                                                    });
+                                if(app.userInstances[i].term==null || app.userInstances[i].definition==null || app.userInstances[i].term.trim().length <= 0 || app.userInstances[i].definition.trim().length <= 0){
+                                    alert("Please enter term and definition");
+                                } //filter out (partially) empty rows
+                                var jsonClassRequest = {
+                                "user":app.$route.params.user,
+                                    "ontology": app.$route.params.ontology,
+                                    "term": app.userInstances[i].term,
+                                    "superclassIRI": superClass.data.details[0].IRI,
+                                    "definition": app.userInstances[i].definition,
+                                    "elucidation": null,
+                                    "createdBy": app.$route.params.user +" via add2ontology wizard",
+                                    "creationDate": new Date(),
+                                    "definitionSrc": app.$route.params.user,
+                                    "examples": "tba",
+                                    "logicDefinition": null,
+                                };
+                                //app.tempIndex = app.userInstances[i].term; //hong 3/12, app.tempIndex secretly change value
+                                
+                                axios.post("http://shark.sbs.arizona.edu:8080/class", jsonClassRequest)
+                                    .then(function(resp) {
+                                        console.log("class resp", resp);
+                                        var userTermIRI = resp.data;
+                                        if (resp.data == 'UNSUCCESSFULLY' || resp.data == 'NO_OPERATION') {
+                                            //Hong: log /class error
+                                            userTermIRI = "http://example.org/terms#"+userTermIRI.split('#')[1]; //must use #
+                                        } 
+                                        var jsonRequest = {
+                                            'user_email': app.$route.params.user,
+                                            'action': 'Add Class',
+                                            'action_details': userTermIRI.split('#')[1]  + ' is added as subclass of ' + superClass.text +' for term',
+                                            'abnormal_system_response': null,
+                                            'type': 'Wizard'
+                                        };
+                                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                            .then(function(resp) {
+                                                console.log("activity-log resp", resp);
+                                            })
+                                            .catch(function(resp) {
+                                                console.log("activity-log error resp", resp);
+                                            });
 
-                                                if (app.TTBA == null) {
-                                                    //app.callLoopApi(0, 'partOf', 'no-synonym', null, resp.data, app.tempIndex, app.status);
-                                                    app.callLoopApi(0, 'partOf', 'no-synonym', null, userTermIRI, app.tempIndex, app.status);
-                                                    app.collapseAndUncheck();
-                                                } else if (app.TTBA.length > 0) {
-                                                    //app.callLoopApi(0, 'partOf', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
-                                                    app.callLoopApi(0, 'partOf', 'no-TTBA', null, userTermIRI, app.tempIndex, app.status);
-                                                    app.collapseAndUncheck();
-                                                }
-                                            }
-                                        })
-                                        .catch(function(resp) {
-                                            console.log("class error", resp);
-                                        });
-                                }
+                                        if (app.TTBA == null) {
+                                            //app.callLoopApi(0, 'partOf', 'no-synonym', null, resp.data, app.tempIndex, app.status);
+                                            app.callLoopApi(0, 'partOf', 'no-synonym', null, userTermIRI, userTermIRI.split('#')[1], app.status);
+                                            app.collapseAndUncheck();
+                                        } else if (app.TTBA.length > 0) {
+                                            //app.callLoopApi(0, 'partOf', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
+                                            alert("!!should be the same: userTermIRI="+userTermIRI +" userTermIRI.split('#')[1]="+userTermIRI.split('#')[1]);
+                                            app.callLoopApi(0, 'partOf', 'no-TTBA', null, userTermIRI, userTermIRI.split('#')[1], app.status);
+                                            app.collapseAndUncheck();
+                                        }
+                                        
+                                    })
+                                    .catch(function(resp) {
+                                        console.log("class error", resp);
+                                    });
+                            
                             }
-                            app.status = 4;
+                            //app.status = 4; //hong 3/12
                         }
                         break;
 
@@ -18374,7 +18378,7 @@
                                 }
 
                             }
-                            app.status = 5;
+                            //app.status = 5;  //hong 3/12
                         } else if (app.term.hasPart == 'no-user') { //user supplies component terms #######################3
                             var superClass = app.$refs.tree.find({
                                 text: "material anatomical entity"
@@ -18383,11 +18387,11 @@
                             for (var i = 0; i < app.userHasParts.length; i++) {
                                 //alert("Please enter component term and definition. app.userHasParts[i].term="+app.userHasParts[i].term +" app.userHasParts[i].definition"+app.userHasParts[i].definition);
                                   
-                                if(app.userHasParts[i].term.length <= 0 || app.userHasParts[i].definition.length <= 0){
-                                    alert("Please enter component term and definition.");
+                                if(app.userHasParts[i].term == null || app.userHasParts[i].definition == null || app.userHasParts[i].term.trim().length <= 0 || app.userHasParts[i].definition.trim().length <= 0){
+                                    alert("Please enter term and definition.");
                                 }
                                 //alert("check entry for comp term and def success!");
-                                app.tempIndex = app.userHasParts[i].term;
+                                //app.tempIndex = app.userHasParts[i].term; //hong 3/12
                                 var jsonClassRequest = {
                                 "user":app.$route.params.user,
                                 "ontology": app.$route.params.ontology,
@@ -18409,32 +18413,33 @@
                                     var userTermIRI = resp.data;
                                     if (resp.data == 'UNSUCCESSFULLY' || resp.data == 'NO_OPERATION') {
                                         //hong: log unsuccessfully error
-                                        userTermIRI = "http://example.org/"+app.tempIndex;
-                                    } else {
-                                        var jsonRequest = {
-                                            'user_email': app.$route.params.user,
-                                            'action': 'Add Class',
-                                            'action_details': app.tempIndex  + ' is added as subclass of ' + superClass.text +' for term',
-                                            'abnormal_system_response': null,
-                                            'type': 'Wizard'
-                                        };
-                                        axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
-                                            .then(function(resp) {
-                                                console.log("activity-log resp", resp);
-                                            })
-                                            .catch(function(resp) {
-                                                console.log("activity-log error resp", resp);
-                                            });
-                                        if (app.TTBA == null) {
-                                            //alert("resp.data="+resp.data + " app.tempIndex="+app.tempIndex);
-                                            //app.callLoopApi(0, 'hasPart', 'no-synonym', null, resp.data, app.tempIndex, app.status);
-                                            app.callLoopApi(0, 'hasPart', 'no-synonym', null, userTermIRI, app.tempIndex, app.status);
-                                        } else if (app.TTBA.length > 0) {
-                                            //app.callLoopApi(0, 'hasPart', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
-                                            app.callLoopApi(0, 'hasPart', 'no-TTBA', null, userTermIRI, app.tempIndex, app.status);
+                                        userTermIRI = "http://example.org/terms#"+userTermIRI.split('#')[1]; //must use #
+                                    } 
+                                    var jsonRequest = {
+                                        'user_email': app.$route.params.user,
+                                        'action': 'Add Class',
+                                        'action_details': userTermIRI.split('#')[1] + ' is added as subclass of ' + superClass.text +' for term',
+                                        'abnormal_system_response': null,
+                                        'type': 'Wizard'
+                                    };
+                                    axios.post('/add2ontologymodular/public/api/v1/activity-log/' + app.$route.params.term, jsonRequest)
+                                        .then(function(resp) {
+                                            console.log("activity-log resp", resp);
+                                        })
+                                        .catch(function(resp) {
+                                            console.log("activity-log error resp", resp);
+                                        });
+                                    if (app.TTBA == null) {
+                                        alert("resp.data="+resp.data + " userTermIRI.split('#')[1]="+userTermIRI.split('#')[1]);
+                                        //app.callLoopApi(0, 'hasPart', 'no-synonym', null, resp.data, app.tempIndex, app.status);
+                                        app.callLoopApi(0, 'hasPart', 'no-synonym', null, userTermIRI, userTermIRI.split('#')[1], app.status);
+                                    } else if (app.TTBA.length > 0) {
+                                        alert("!!should be the same: userTermIRI="+userTermIRI +" userTermIRI.split('#')[1]="+userTermIRI.split('#')[1]);
+                                        //app.callLoopApi(0, 'hasPart', 'no-TTBA', null, resp.data, app.tempIndex, app.status);
+                                        app.callLoopApi(0, 'hasPart', 'no-TTBA', null, userTermIRI, userTermIRI.split('#')[1], app.status);
 
-                                        }
                                     }
+                                    
                                 })
                                 .catch(function(resp) {
                                     console.log("class error", resp);
@@ -18442,7 +18447,7 @@
                                 });
                                 
                             }
-                            app.status = 5;
+                            //app.status = 5; //hong 3/12
                         }
 
                         break;
@@ -18452,7 +18457,7 @@
 
 
             },
-            //optionData = IRI, optionData2 = label, both are for user supplied terms
+            //optionData = IRI, optionData2 = label, both are user supplied terms. Depending on 'key', they may be parent or component terms
             callLoopApi: function(index, key, setting = null, optionIndex = null, optionData = null, optionData2 = null, status = null) {
                 var app = this;
                 var jsonRequest;
@@ -18586,7 +18591,7 @@
 
                         //if (resp.data == 'NO_OPERATION' || resp.data == 'UNSUCCESSFULLY') { //?why UNSUCCESSFULLY?
                         if (resp.data == 'NO_OPERATION' || resp.data == 'SUCCESSFULLY' || resp.data.indexOf("http")==0) { //?why UNSUCCESSFULLY?
-                            if(key !="hasPart"){//this throws error for key=hasPart, hong commented it out for the moment
+                            if(key !="hasPart" && key != "partOf"){//this throws error for key=hasPart, hong commented it out for the moment
                                 app.treeData = app.$refs.tree.model; //??
                                 console.log("tree after updated", app.treeData);
                             }
@@ -19160,7 +19165,8 @@
                                         }
                                     }
                                 } else if (setting == 'no-TTBA') {
-                                    console.log("*******testing******", key + ' *** ' + optionData.split('#')[1]);
+                                    console.log("*******testing******", key + ' *** ' + optionData.split('#')[1]); //take the lable part of the URI
+
                                     if (key == "partOf") {
                                         //app.summary.push(app.TTBA[index].text + " part_of " + optionData2 + " is added.");
                                         app.summaryPartOf.push(optionData.split('#')[1]);
