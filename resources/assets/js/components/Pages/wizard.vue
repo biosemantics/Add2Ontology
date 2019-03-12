@@ -13,7 +13,7 @@
                                 <div v-if="status == -1 || status > 0">
                                     <b style="color: green">Questions Answered:</b>
                                     <br>
-                                   Please provide  a human readable definition for {{ $route.params.term }}:<br/>
+                                   Please provide a human readable definition for {{ $route.params.term }}:<br/>
                                     <b> {{ term.definition }}</b>
                                 </div>
                                 
@@ -34,26 +34,60 @@
                                 </div>
                                 <div v-if="status > 2 && term.represent == 'anatomical'">
                                     Is {{ $route.params.term }} a synonym to any of the existing anatomical structure terms?<br/>
-                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, the term is a synonym to another structure term. </span>
-                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, the term is not a synonym to another structure term. The term represents a type of an existing term</span>
+                                    <div v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, the term is a synonym to:
+                                        <span v-for="each in synonyms">
+                                             {{ each.text }}
+                                        </span> 
+                                    </div>
+
+                                    <!--<span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, the term is a synonym to {{ another structure term}}. </span> -->
+                                    <div v-if="term.synonym == 'no'" style="font-weight: bold;">No, the term is not a synonym. It is a type of: 
+                                         <span v-for="each in synonyms">
+                                             {{ each.text }}
+                                        </span> 
+                                    </div>
                                 </div>
                                 <div v-if="status > 3 && term.represent == 'anatomical' && term.instance != null">
                                     Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?<br/>
-                                    <span v-if="term.instance == 'yes'" style="font-weight: bold;">Yes, it is part of some larger structure.</span>
+                                    <div v-if="term.instance == 'yes'" style="font-weight: bold;">Yes, it is a part of: 
+                                        <span v-for="each in instances">
+                                            {{ each.text }}
+                                        </span>
+                                    </div>
                                     <span v-if="term.instance == 'no'" style="font-weight: bold;">No, I am not aware of such larger structures.</span>
-                                    <span v-if="term.instance == 'no-user'" style="font-weight: bold;">No, such larger structures are not shown in the ontology.</span>
+                                    <div v-if="term.instance == 'no-user'" style="font-weight: bold;">Not in the tree, but the larger structures are: 
+                                        <span v-for="each in userInstances">
+                                            {{ each.term }}
+                                        </span>
+                                    </div>
                                 </div>
                                 <div v-if="status > 4 && term.represent == 'anatomical' && term.hasPart != null">
                                     Are all instances of {{ $route.params.term }} have certain parts that are in the tree below?<br/>
-                                    <span v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes, it has smaller parts.</span>
+                                    <div v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes, it has smaller parts: 
+                                        <span v-for="each in hasParts">
+                                            {{ each.text }}
+                                        </span>
+                                    </div>
                                     <span v-if="term.hasPart == 'no'" style="font-weight: bold;">No, I am not aware of such smaller structures.</span>
-                                    <span v-if="term.hasPart == 'no-user'" style="font-weight: bold;">No, such smaller structures are not shown in the ontology.</span>
+                                    <div v-if="term.hasPart == 'no-user'" style="font-weight: bold;">Not in the tree, but the smaller parts are:
+                                        <span v-for="each in userHasParts">
+                                             {{ each.term}}
+                                        </span>
+                                        </div>
                                 </div>
                                 <div v-if="status == 5 && term.represent == 'character' && term.synonym != null">
                                     Is {{ $route.params.term }} a synonym to any of the existing quality terms?<br/>
-                                    <span v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, it is a synonym to another quality term.</span>
-                                    <span v-if="term.synonym == 'no'" style="font-weight: bold;">No, it is not a synonym to another quality term.</span>
-                                </div>
+                                    <div v-if="term.synonym == 'yes'" style="font-weight: bold;">Yes, it is a synonym to: 
+                                        <span v-for="each in synonyms"> 
+                                            {{ each.text }}
+                                        </span>
+                                    </div>
+                                    <div v-if="term.synonym == 'no'" style="font-weight: bold;">No, it is not a synonym. It is a type of: 
+                                        <span v-for="each in synonyms">
+                                            {{ each.text }}.
+                                            </span>
+                                        </div>
+                                </div> 
 
                             </div>
                             <div class="col-md-6">
