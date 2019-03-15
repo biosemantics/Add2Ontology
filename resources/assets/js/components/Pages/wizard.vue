@@ -206,17 +206,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-y" v-model="term.synonym" value="yes" name="structure" />
-                                            <label for="question2-y">Yes</label>
-                                            <div style="padding-left: 10px;" v-if="term.synonym == 'yes'">
+                                            <label for="question2-y">Yes. Select all the synonyms in the tree above.</label>
+                                            <!--<div style="padding-left: 10px;" v-if="term.synonym == 'yes'">
                                               <label style="color:dodgerBlue">In the tree above, select all the nodes that <i>{{ $route.params.term }}</i> is a synonym of, then click Save.</label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question2-n" v-model="term.synonym" value="no" name="structure" />
-                                            <label for="question2-n">No</label>
-                                            <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
+                                            <label for="question2-n">No. Select all the more general terms of which <i>{{ $route.params.term }}</i> &nbsp; is a type </label>
+                                            <!--<div style="padding-left: 10px;" v-if="term.synonym == 'no'">
                                                <label style="color:dodgerBlue">In the tree above, select all the more general terms of which <i>{{ $route.params.term }}</i> is a type, then click Save</label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div v-if="status == 2" class="col-md-12">
                                             <a class="btn btn-primary" v-on:click="submit(2)">Save</a>
@@ -243,17 +243,17 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-y" v-model="term.synonym" value="yes" name="structure" />
-                                            <label for="questionx-y">Yes </label>
-                                            <div style="padding-left: 10px;" v-if="term.synonym =='yes'">
+                                            <label for="questionx-y">Yes. Select all the synonyms in the tree above. </label>
+                                            <!--<div style="padding-left: 10px;" v-if="term.synonym =='yes'">
                                                <label style="color:dodgerBlue">In the tree above, select the nodes that <i>{{ $route.params.term }}</i> is a synonym of, then click Save.</label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="questionx-n" v-model="term.synonym" value="no" name="structure" />
-                                            <label for="questionx-n">No</label>
-                                            <div style="padding-left: 10px;" v-if="term.synonym == 'no'">
+                                            <label for="questionx-n">No. Select the nodes of which <i>{{ $route.params.term }}</i> &nbsp; is a type </label>
+                                            <!--<div style="padding-left: 10px;" v-if="term.synonym == 'no'">
                                                <label style="color:dodgerBlue">In the tree above, select the nodes under which <i>{{ $route.params.term }}</i> should be added, then click Save.</label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div v-if="status == -1" class="col-md-12">
                                             <a class="btn btn-primary" v-on:click="submit(-1)">Save</a>
@@ -279,10 +279,10 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
-                                            <label for="question3-y">Yes </label>
-                                            <div style="padding-left: 10px;" v-if="term.instance == 'yes'">
+                                            <label for="question3-y">Yes. Select the larger structures in the tree above. </label>
+                                            <!--div style="padding-left: 10px;" v-if="term.instance == 'yes'">
                                              <label style="color:dodgerBlue">In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong, then click Save</label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question3-n" v-model="term.instance" value="no" name="structure" />
@@ -290,7 +290,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question3-n-user" v-model="term.instance" value="no-user" name="structure" />
-                                            <label for="question3-n-user">No, such larger structures are not shown in the tree.</label>
+                                            <label for="question3-n-user">No, such larger structures exist but are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.instance == 'no-user'">
                                             <label  style="color:dodgerBlue">Please enter these parent structures and their definitions (all required):</label>
@@ -340,18 +340,18 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
-                                            <label for="question4-y">Yes </label>
-                                            <div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
+                                            <label for="question4-y">Yes. Then select all the parts in the tree above. </label>
+                                            <!--<div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
                                               <label style="color:dodgerBlue"> In the tree above, select the parts, then click Save. </label>
-                                            </div>
+                                            </div>-->
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-n" v-model="term.hasPart" value="no" name="structure" />
-                                            <label for="question4-n"> No, I am not aware of such smaller structures.</label>
+                                            <label for="question4-n"> No, I am not aware of such component structures.</label>
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-n-user" v-model="term.hasPart" value="no-user" name="structure" />
-                                            <label for="question4-n-user">No, such component structures are not shown in the tree.</label>
+                                            <label for="question4-n-user">No, such component structures exist but are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.hasPart == 'no-user'">
                                             <label  style="color:dodgerBlue">Please enter these component structures and their definitions (all required):</label>
@@ -2053,16 +2053,6 @@
                                 }
                             ],
                             "text": "bristle"
-                        },
-                        {
-                            "data": {
-                                "details": [
-                                    {
-                                        "IRI": "http://biosemantics.arizona.edu/ontologies/carex#leaf%20sheath"
-                                    }
-                                ]
-                            },
-                            "text": "leaf sheath"
                         },
                         {
                             "data": {
