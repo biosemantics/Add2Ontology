@@ -340,7 +340,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
-                                            <label for="question4-y">Yes. Then select all the parts in the tree above. </label>
+                                            <label for="question4-y">Yes. Select all the parts in the tree above. </label>
                                             <!--<div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
                                               <label style="color:dodgerBlue"> In the tree above, select the parts, then click Save. </label>
                                             </div>-->

@@ -8,7 +8,7 @@
                 <div class="tab-pane" id="" style="font-size: 15px;">
                     <form class="row" autocomplete="off">
                         <div class="col-md-8 col-md-offset-2">
-                            Use Wiki Data: <a href="https://test.wikidata.org/wiki/Wikidata:Main_Page" target="_blank" style="cursor: pointer;"  @click="logClick">https://test.wikidata.org/wiki/Wikidata:Main_Page</a>
+                            Use Wiki Data: <a href="https://test.wikidata.org/" target="_blank" style="cursor: pointer;"  @click="logClick">https://test.wikidata.org/</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Click on the link above and add <span style="color:dodgerBlue"><i>"{{ $route.params.term }}"</i></span> to the ontology. </label>

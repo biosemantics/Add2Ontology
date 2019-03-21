@@ -8,7 +8,7 @@
                 <div class="tab-pane" id="" style="font-size: 15px;">
                     <form class="row" autocomplete="off">
                         <div class="col-md-8 col-md-offset-2">
-                            WebProtege: <a href="https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes" target="_blank" style="cursor: pointer;" @click="logClick">https://webprotege.stanford.edu/#projects/c3c453e2-39a5-4b4f-9886-43cc24477d2e/edit/Classes</a>
+                            WebProtege: <a href="https://webprotege.stanford.edu/" target="_blank" style="cursor: pointer;" @click="logClick">https://webprotege.stanford.edu/</a>
                         </div>
                         <div class="col-md-offset-2 col-md-8" style="margin-top: 20px;">
                             <label>Click on the WebProtege link above and add <span style="color:dodgerBlue"><i>{{ $route.params.term }}</i></span> to CAREX Ontology. </label>
@@ -95,7 +95,7 @@
             //        'user_email': app.$route.params.user,
             //        'type': 2,
             //        'detail': app.$route.params.user + ' entered URL',
-            //        'detail_addition': 'URL: https://webprotege.stanford.edu/#projects/ef6a650d-ca8d-4a20-8231-71b638b5f88b'
+            //        'detail_addition': 'URL: https://webprotege.stanford.edu/'
             //    };
              //   //if (app.$route.params.user == null || app.$route.params.user == 'null' || app.$route.params.user == '') {
              //   //   alert('Please insert the username on homepage');
