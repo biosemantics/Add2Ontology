@@ -125,7 +125,7 @@
                             console.log("activity-log error resp", resp);
                         });
                     alert('You need to enter the URI in the input box.');
-                } else if (app.termsWikiURI.substring(0, 7) != 'http://') {
+                } else if (app.termsWikiURI.substring(0, 7) != 'http://' && app.termsWikiURI.substring(0, 8) != 'https://') {
                     jsonRequest.action_details = app.$route.params.user + ' input invalid URI for term ';
                     jsonRequest.action = 'clicked Done';
                     jsonRequest.abnormal_system_response = 'invalid entry';
