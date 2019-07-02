@@ -49,27 +49,27 @@
                                 </div>
                                 <div v-if="status > 3 && term.represent == 'anatomical' && term.instance != null">
                                     Are all instances of {{ $route.params.term }} part of some larger structures shown in the tree below?<br/>
-                                    <div v-if="term.instance == 'yes'" style="font-weight: bold;">Yes, it is a part of: 
+                                    <div v-if="term.instance == 'yes'" style="font-weight: bold;">Yes, they are a part of: 
                                         <span v-for="each in instances">
                                             {{ each.text }}
                                         </span>
                                     </div>
                                     <span v-if="term.instance == 'no'" style="font-weight: bold;">No, I am not aware of such larger structures.</span>
-                                    <div v-if="term.instance == 'no-user'" style="font-weight: bold;">Not in the tree, but the larger structures are: 
+                                    <div v-if="term.instance == 'no-user'" style="font-weight: bold;">Not in the tree, but here are some larger structures: 
                                         <span v-for="each in userInstances">
                                             {{ each.term }}
                                         </span>
                                     </div>
                                 </div>
                                 <div v-if="status > 4 && term.represent == 'anatomical' && term.hasPart != null">
-                                    Are all instances of {{ $route.params.term }} have certain parts that are in the tree below?<br/>
-                                    <div v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes, it has smaller parts: 
+                                    Do all instances of {{ $route.params.term }} have certain parts that are in the tree below?<br/>
+                                    <div v-if="term.hasPart == 'yes'" style="font-weight: bold;">Yes, they all have smaller parts: 
                                         <span v-for="each in hasParts">
                                             {{ each.text }}
                                         </span>
                                     </div>
                                     <span v-if="term.hasPart == 'no'" style="font-weight: bold;">No, I am not aware of such smaller structures.</span>
-                                    <div v-if="term.hasPart == 'no-user'" style="font-weight: bold;">Not in the tree, but the smaller parts are:
+                                    <div v-if="term.hasPart == 'no-user'" style="font-weight: bold;">Not in the tree, but here are some smaller parts:
                                         <span v-for="each in userHasParts">
                                              {{ each.term}}
                                         </span>
@@ -293,7 +293,7 @@
                                             <label for="question3-n-user">No, such larger structures exist but are not shown in the tree.</label>
                                         </div>
                                         <div class="col-md-12" v-if="term.instance == 'no-user'">
-                                            <label  style="color:dodgerBlue">Please enter these parent structures and their definitions (all required):</label>
+                                            <label  style="color:dodgerBlue">Please enter these larger structures and their definitions (all required):</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
                                                     <div class="col-md-6">
@@ -324,7 +324,7 @@
                                 <div v-if="status == 4">
                                     <div class="form-group">
                                         <div class="col-md-12">
-                                            <label>Are all instances of <i>{{ $route.params.term }}</i> have certain parts that are in the tree below? </label>
+                                            <label>Do all instances of <i>{{ $route.params.term }}</i> have certain parts that are in the tree below? </label>
                                         </div>
                                         <div class="col-md-6" style="border: 1px solid grey; border-radius: 5px; max-height: 500px; overflow-y: scroll;">
                                             <tree
