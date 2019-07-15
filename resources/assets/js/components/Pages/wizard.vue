@@ -300,7 +300,7 @@
                                                         <label>Parent Structure Term* </label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Human readable definition* </label>
+                                                        <label>Human Readable Definition* </label>
                                                     </div>
                                                 </div>
                                                 <div class="row" v-for="i in userInstances.length" style="padding-top: 5px;">
@@ -361,7 +361,7 @@
                                                         <label>Component Structure Term*</label>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label>Human readable definition*</label>
+                                                        <label>Human Readable Definition*</label>
                                                     </div>
                                                 </div>
                                                 <div class="row" v-for="i in userHasParts.length" style="padding-top: 5px;">
@@ -492,7 +492,7 @@
 
     Vue.use(LiquorTree);
     Vue.use(VJstree);
-
+    var shared = true;
 
     export default {
         data: function() {
@@ -17994,7 +17994,7 @@
 
                             } else if (app.term.hasPart == 'no') {
                                  var jsonSaveRequest = {
-                                  "user":app.$route.params.user,
+                                  "user": shared? "" : app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18114,7 +18114,7 @@
 
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                 "user":app.$route.params.user,
+                                 "user": shared? "" : app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
@@ -18211,7 +18211,7 @@
                         if (app.term.synonym == 'yes') { //is a synonym
                             if (app.synonyms.length == 1) {
                                 var jsonRequest = {
-                                  "user":app.$route.params.user,
+                                  "user":shared? "" :app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                     "term": app.temp.text,
                                     "classIRI": app.synonyms[0].data.details[0].IRI
@@ -18330,7 +18330,7 @@
                                     alert("Please enter term and definition");
                                 } //filter out (partially) empty rows
                                 var jsonClassRequest = {
-                                "user":app.$route.params.user,
+                                "user":shared? "" :app.$route.params.user,
                                     "ontology": app.$route.params.ontology,
                                     "term": app.userInstances[i].term,
                                     "superclassIRI": superClass.data.details[0].IRI,
@@ -18463,7 +18463,7 @@
                                 //alert("check entry for comp term and def success!");
                                 //app.tempIndex = app.userHasParts[i].term; //hong 3/12
                                 var jsonClassRequest = {
-                                "user":app.$route.params.user,
+                                "user":shared? "" :app.$route.params.user,
                                 "ontology": app.$route.params.ontology,
                                 //"term": app.userInstances[i].term,
                                 "term": app.userHasParts[i].term,
@@ -18578,14 +18578,14 @@
                 //create jsonRequest ontology calls
                 if (key == 'bsynonym') {
                     jsonRequest = {
-                      "user":app.$route.params.user,
+                      "user":shared? "" :app.$route.params.user,
                          "ontology": app.$route.params.ontology,
                         "term": app.temp.text,
                         "classIRI": app.synonyms[index].data.details[0].IRI //?index=0, dealing with the first bsynonym only?
                     };
                 } else if (key == 'class') {
                     jsonRequest = {
-                      "user":app.$route.params.user,
+                      "user":shared? "" :app.$route.params.user,
                          "ontology": app.$route.params.ontology,
                         "term": app.temp.text,
                         "superclassIRI": app.synonyms[index].data.details[0].IRI, //? index=0, dealing with the first class only
@@ -18602,7 +18602,7 @@
                     if (setting == 'synonym') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI,
                                 "partIRI": app.synonyms[optionIndex].data.details[0].IRI 
@@ -18611,7 +18611,7 @@
                             };
                         } else { //hasPart
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.synonyms[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
@@ -18620,14 +18620,14 @@
                     } else if (setting == 'TTBA') {
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.instances[index].data.details[0].IRI, 
                                 "partIRI": app.TTBA[optionIndex].data.details[0].IRI //?TTBA size = 1
                             };
                         } else {
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.TTBA[optionIndex].data.details[0].IRI,
                                 "partIRI": app.hasParts[index].data.details[0].IRI
@@ -18638,7 +18638,7 @@
 
                         if (key == 'partOf') { 
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                   "ontology": app.$route.params.ontology,
                                 "bearerIRI": optionData, 
                                 "partIRI": app.synonyms[index].data.details[0].IRI
@@ -18648,7 +18648,7 @@
                             }
                         } else { //hasPart
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                  "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.synonyms[index].data.details[0].IRI,
                                 "partIRI": optionData 
@@ -18662,7 +18662,7 @@
 
                         if (key == 'partOf') {
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                 "bearerIRI": optionData,
                                 "partIRI": app.TTBA[index].data.details[0].IRI
@@ -18672,7 +18672,7 @@
                             }
                         } else {//hasPart
                             jsonRequest = {
-                              "user":app.$route.params.user,
+                              "user":shared? "" :app.$route.params.user,
                                      "ontology": app.$route.params.ontology,
                                 "bearerIRI": app.TTBA[index].data.details[0].IRI,
                                 "partIRI": optionData
@@ -18710,7 +18710,7 @@
                             if (app.status == 5) {
                                  alert("called save api");
                                   var jsonSaveRequest = {
-                                  "user":app.$route.params.user,
+                                  "user":shared? "" :app.$route.params.user,
                                    "ontology": app.$route.params.ontology,
                                     };
                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18894,7 +18894,7 @@
                                         //alert("status=5, log summery and save ontology");
                                         /* hong 3/12
                                         var jsonSaveRequest = {
-                                            "user":app.$route.params.user,
+                                            "user":shared? "" :app.$route.params.user,
                                             "ontology": app.$route.params.ontology,
                                         };
                                          axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18931,7 +18931,7 @@
                                     //hong 3/12
                                     if(app.status == 5){
                                         var jsonSaveRequest = {
-                                                    "user":app.$route.params.user,
+                                                    "user":shared? "" :app.$route.params.user,
                                                     "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -18983,7 +18983,7 @@
                                             
                                                 /* hong 3/12
                                                 var jsonSaveRequest = {
-                                                    "user":app.$route.params.user,
+                                                    "user":shared? "" :app.$route.params.user,
                                                     "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19018,7 +19018,7 @@
                                             //Hong 3/12
                                             if(app.status == 5){
                                                 var jsonSaveRequest = {
-                                                    "user":app.$route.params.user,
+                                                    "user":shared? "" :app.$route.params.user,
                                                     "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19068,7 +19068,7 @@
                                             //alert("hasPart status="+app.status);
                                             if(app.status == 5){ //hong 3/12, added this condition
                                                 var jsonSaveRequest = {
-                                                    "user":app.$route.params.user,
+                                                    "user":shared? "" :app.$route.params.user,
                                                     "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19124,7 +19124,7 @@
 
                                             if(app.status == 5){ //hong 3/12
                                                 var jsonSaveRequest = {
-                                                    "user":app.$route.params.user,
+                                                    "user":shared? "" :app.$route.params.user,
                                                     "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19176,7 +19176,7 @@
                                             //alert("hasPart/TTBA app.status="+app.status); 
                                             if(app.status == 5){ //hong 3/12, added this condition
                                                 var jsonSaveRequest = {
-                                                "user":app.$route.params.user,
+                                                "user":shared? "" :app.$route.params.user,
                                                 "ontology": app.$route.params.ontology,
                                                 };
                                                 axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19237,7 +19237,7 @@
                                         //if (key == 'hasPart') {
                                         if(app.status == 5){ //hong 3/12, switched the condition
                                             var jsonSaveRequest = {
-                                                "user":app.$route.params.user,
+                                                "user":shared? "" :app.$route.params.user,
                                                 "ontology": app.$route.params.ontology,
                                             };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19297,7 +19297,7 @@
                                         //if (key == 'hasPart') {
                                         if(app.status == 5){ //hong 3/12 switched the condition
                                             var jsonSaveRequest = {
-                                                "user":app.$route.params.user,
+                                                "user":shared? "" :app.$route.params.user,
                                                 "ontology": app.$route.params.ontology,
                                             };
                                             axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
@@ -19343,7 +19343,7 @@
                                         app.status = 5;
                                         //alert("status=5, log summery and save ontology");
                                         var jsonSaveRequest = {
-                                            "user":app.$route.params.user,
+                                            "user":shared? "" :app.$route.params.user,
                                             "ontology": app.$route.params.ontology,
                                         };
                                          axios.post('http://shark.sbs.arizona.edu:8080/save', jsonSaveRequest)
