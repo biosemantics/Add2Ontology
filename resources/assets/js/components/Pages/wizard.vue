@@ -279,7 +279,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question3-y" v-model="term.instance" value="yes" name="structure" />
-                                            <label for="question3-y">Yes. Select the larger structures in the tree above. </label>
+                                            <label for="question3-y">Yes. Select the most <i>general</i> larger structures in the tree above (if selecting <i>leaf</i>, no need to select <i>basal leaf</i>). </label>
                                             <!--div style="padding-left: 10px;" v-if="term.instance == 'yes'">
                                              <label style="color:dodgerBlue">In the tree above, select the larger structures to which all instances of <i>{{ $route.params.term }}</i> belong, then click Save</label>
                                             </div>-->
@@ -296,20 +296,26 @@
                                             <label  style="color:dodgerBlue">Please enter these larger structures and their definitions (all required):</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <label>Parent Structure Term* </label>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <label>Human Readable Definition* </label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label>&nbsp;</label>
                                                     </div>
                                                 </div>
                                                 <div class="row" v-for="i in userInstances.length" style="padding-top: 5px;">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <input v-model="userInstances[i-1].term"/>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <input v-model="userInstances[i-1].definition"/>
                                                     </div>
+                                                    <div class="col-md-2">
+                                                         <a class="btn btn-primary "  v-on:click="removeUserDefinition(i-1)"><span class="glyphicon glyphicon-minus"></span></a>
+                                                    </div>    
                                                 </div>
                                             </div>
                                             <div style="padding-left: 10px; margin-top: 20px;">
@@ -340,7 +346,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <input type="radio" id="question4-y" v-model="term.hasPart" value="yes" name="structure" />
-                                            <label for="question4-y">Yes. Select all the parts in the tree above. </label>
+                                            <label for="question4-y">Yes. Select the most <i>general</i> parts in the tree above (if selecting <i>leaf</i>, no need to select <i>basal leaf</i>). </label>
                                             <!--<div style="padding-left: 10px;" v-if="term.hasPart == 'yes'">
                                               <label style="color:dodgerBlue"> In the tree above, select the parts, then click Save. </label>
                                             </div>-->
@@ -357,19 +363,25 @@
                                             <label  style="color:dodgerBlue">Please enter these component structures and their definitions (all required):</label>
                                             <div style="padding-left: 10px;">
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <label>Component Structure Term*</label>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <label>Human Readable Definition*</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label>&nbsp;</label>
                                                     </div>
                                                 </div>
                                                 <div class="row" v-for="i in userHasParts.length" style="padding-top: 5px;">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <input v-model="userHasParts[i-1].term"/>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <input v-model="userHasParts[i-1].definition"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <a class="btn btn-primary "  v-on:click="removeUserHasPart(i-1)"><span class="glyphicon glyphicon-minus"></span></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -17900,14 +17912,15 @@
                                     });
                             } else if (app.term.instance == 'no-user') {
                                 app.instances = app.userInstances;
-                                if(app.userInstances.length<1){
-                                     alert("Please enter parent structure terms before clicking 'Save' buttom");
-                                }
+                                var hasTerms = true;
+                                
                                 //constract user supplied list
                                 app.list = "";
                                 for (var i = 0; i < app.userInstances.length; i++) {
-                                    if(app.userInstances[i].term.trim().length > 0){
+                                    if(app.userInstances[i].term!=null && app.userInstances[i].term.trim().length > 0){
                                         app.list += app.userInstances[i].term+" | ";
+                                    }else{
+                                        hasTerms = false;
                                     }
                                 }
                                 var jsonRequest = {
@@ -17929,12 +17942,13 @@
                                             console.log("activity-log error resp", resp);
                                         });
                                 //}
-                                app.modalShowFlag = true;
+                                if(hasTerms) app.modalShowFlag = true; //hong 7/16/19
+                                else alert("Please fill out parent structure terms and definitions");
                             }
 
                         }
                         break;
-                    case 4://has prt
+                    case 4://has part
                         sessionStorage.setItem('hasPart', app.term.hasPart);
                         if (app.term.hasPart == null) {
                             alert("Please select radio button and perform required action before clicking 'Save' button");
@@ -18041,13 +18055,14 @@
                                 app.status = 5;
                             } else if (app.term.hasPart == 'no-user') {
                                 app.hasParts = app.userHasParts;
-                                if(app.userHasParts.length<1){
-                                     alert("Please enter component structure terms before clicking 'Save' buttom");
-                                }
+                                var hasTerms = true;
+                               
                                 app.list = "";
                                 for (var i = 0; i < app.userHasParts.length; i++) {
-                                    if(app.userHasParts[i].term.trim().length > 0){
-                                     app.list += app.userHasParts[i].term + " | ";
+                                    if(app.userHasParts[i].term !=null && app.userHasParts[i].term.trim().length > 0){
+                                        app.list += app.userHasParts[i].term + " | ";
+                                    }else{
+                                        hasTerms = false;
                                     }
                                 }
                                 var jsonRequest = {
@@ -18069,7 +18084,8 @@
                                             console.log("activity-log error resp", resp);
                                         });
                                 //}
-                                app.modalShowFlag = true;
+                                if(hasTerms) app.modalShowFlag = true; //hong 7/16/19
+                                else alert("Please fill out component terms and definitions");
                             }
                         }
                         break;
@@ -18326,9 +18342,11 @@
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
+
                                 if(app.userInstances[i].term==null || app.userInstances[i].definition==null || app.userInstances[i].term.trim().length <= 0 || app.userInstances[i].definition.trim().length <= 0){
-                                    alert("Please enter term and definition");
-                                } //filter out (partially) empty rows
+                                    alert("Please enter term and definition, or remove empty rows");
+                                } 
+                                                                
                                 var jsonClassRequest = {
                                 "user":shared? "" :app.$route.params.user,
                                     "ontology": app.$route.params.ontology,
@@ -18397,7 +18415,8 @@
                                     .catch(function(resp) {
                                         console.log("class error", resp);
                                     });
-                            
+                                
+                               
                             }
                             //app.status = 4; //hong 3/12
                         }
@@ -18455,20 +18474,17 @@
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userHasParts.length; i++) {
-                                //alert("Please enter component term and definition. app.userHasParts[i].term="+app.userHasParts[i].term +" app.userHasParts[i].definition"+app.userHasParts[i].definition);
                                   
                                 if(app.userHasParts[i].term == null || app.userHasParts[i].definition == null || app.userHasParts[i].term.trim().length <= 0 || app.userHasParts[i].definition.trim().length <= 0){
-                                    alert("Please enter term and definition.");
-                                }
-                                //alert("check entry for comp term and def success!");
+                                   alert("Please enter term and definition, or remove empty rows.");
+                                } 
+                              
                                 //app.tempIndex = app.userHasParts[i].term; //hong 3/12
                                 var jsonClassRequest = {
                                 "user":shared? "" :app.$route.params.user,
                                 "ontology": app.$route.params.ontology,
-                                //"term": app.userInstances[i].term,
                                 "term": app.userHasParts[i].term,
                                 "superclassIRI": superClass.data.details[0].IRI,
-                                //"definition": app.userInstances[i].definition,
                                 "definition": app.userHasParts[i].definition,
                                 "elucidation": null,
                                 "createdBy": app.$route.params.user +" via add2ontology wizard",
@@ -18527,6 +18543,7 @@
                                     }
                                     
                                 })
+
                                 .catch(function(resp) {
                                     console.log("class error", resp);
                                     //Hong log /class error
@@ -18548,7 +18565,8 @@
                                             console.log("activity-log error resp", resp);
                                         });
                                 });
-                                
+                                    
+                               
                             }
                             //app.status = 5; //hong 3/12
                         }
@@ -19516,12 +19534,24 @@
                     "definition": null
                 });
             },
+            removeUserDefinition: function(index) {
+                var app = this;
+                if(app.userInstances.length == 1) app.term.instance=null; //always keep one row there
+                else app.userInstances.splice(index, 1); //hong 7/16/19, index starting from 0
+               
+            },
             addUserHasPart: function() {
                 var app = this;
                 app.userHasParts.push({
                     "term": null,
                     "definition": null
                 });
+            },
+            removeUserHasPart: function(index) {
+                var app = this;
+                if(app.userHasParts.length == 1) term.hasPart =null;
+                else app.userHasParts.splice(index, 1);
+                
             },
             sorting: function(js_object, key_to_sort_by) {
                 function sortByKey(a, b) {
