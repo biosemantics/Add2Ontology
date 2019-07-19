@@ -20330,13 +20330,15 @@
             //use then, not async/await, works. "Then" waits for the result is returned 
             app.getLargeDataEntity().then((result) => {
                 app.largeDataEntity = result.data;
-                console.log("result", result.data);
-                app.sortTreeData(app.largeDataEntity.children);
+                console.log("result data", result.data.data);
+                if(result.data.data !=null) app.sortTreeData(app.largeDataEntity.children);
+                else app.largeDataEntity = {"text": "failed to fetch structure terms, try again later"};
             });
             app.getLargeDataQuality().then((result) => {
                 app.largeDataQuality = result.data;
-                app.sortTreeData(app.largeDataQuality.children);
-            })
+                if(result.data.data !=null)  app.sortTreeData(app.largeDataQuality.children);
+                else app.largeDataQuality = {"text": "failed to fetch quality terms, try again later"};
+            });
            
             //console.log('mounted largeDataQuality', app.largeDataQuality);
 
