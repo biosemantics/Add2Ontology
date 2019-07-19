@@ -577,7 +577,7 @@
                 tempIndex: 0,
                 tempJ: 0,
                 TTBA: [],
-                largeDataEntity:{
+                /*largeDataEntity:{
   "data": {
     "details": [
       {
@@ -4785,10 +4785,10 @@
     }
   ],
   "text": "anatomical structure"
-},
+                },*/
 
-                //largeDataEntity:{},
-                largeDataQuality:{
+                largeDataEntity:{},
+                /*largeDataQuality:{
   "data": {
     "details": [
       {
@@ -20188,9 +20188,9 @@
     }
   ],
   "text": "quality"
-},
+                },*/
                
-                //largeDataQuality:{},
+                largeDataQuality:{},
                 sampleEntityAllFields: {
                     "children": [
                         {
@@ -20296,7 +20296,7 @@
                 parentNode: null,
             }
         },
-        //async mounted() {
+        
         mounted() {
             var app = this;
             console.log('Status', app.status);
@@ -20324,10 +20324,20 @@
             window.addEventListener('click', this.mousedown);
             //app.largeDataEntity = await app.getLargeDataEntity();
             //app.largeDataQuality = await app.getLargeDataQuality();
-            
-            app.sortTreeData(app.largeDataEntity.children);
-            app.sortTreeData(app.largeDataQuality.children);
-            
+            //app.sortTreeData(app.largeDataEntity.children);
+            //app.sortTreeData(app.largeDataQuality.children);
+
+            //use then, not async/await, works. "Then" waits for the result is returned 
+            app.getLargeDataEntity().then((result) => {
+                app.largeDataEntity = result.data;
+                console.log("result", result.data);
+                app.sortTreeData(app.largeDataEntity.children);
+            });
+            app.getLargeDataQuality().then((result) => {
+                app.largeDataQuality = result.data;
+                app.sortTreeData(app.largeDataQuality.children);
+            })
+           
             //console.log('mounted largeDataQuality', app.largeDataQuality);
 
             var jsonRequest = {
@@ -20539,7 +20549,7 @@
                         }
                         break;
                     case 2: //synonym vs. class for structure
-                        app.parentNode = app.$refs.tree.find('material anatomical entity', true);
+                        app.parentNode = app.$refs.tree.find('anatomical structure', true);
                         sessionStorage.setItem('synonym', app.term.synonym);
                         if (app.term.synonym == null) {
                             alert("Please select 'Yes' or 'No' before clicking the Save button");
@@ -21160,7 +21170,7 @@
                             }
                         } else if (app.term.instance == 'no-user') { 
                             var superClass = app.$refs.tree.find({
-                                text: "material anatomical entity"
+                                text: "anatomical structure"
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userInstances.length; i++) {
@@ -21292,7 +21302,7 @@
                             //app.status = 5;  //hong 3/12
                         } else if (app.term.hasPart == 'no-user') { //user supplies component terms #######################3
                             var superClass = app.$refs.tree.find({
-                                text: "material anatomical entity"
+                                text: "anatomical structure"
                             })[0];
                             app.TTBA = app.$refs.tree.find(app.temp.text, true);
                             for (var i = 0; i < app.userHasParts.length; i++) {
@@ -22392,13 +22402,21 @@
                         app.sortTreeData(children[i].children);
             },
 
-            getLargeDataQuality: async function(){
-                await axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=quality')
+            getLargeDataQuality: function(){
+                 return axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=quality')
+            },
+
+            getLargeDataEntity: function(){
+                 return axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=anatomical-structure')
+            },
+
+            /*getLargeDataQuality: function(){
+                 axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=quality')
                         .then ( (resp) => {
                        //.then(function(resp) {
                             console.log("quality term tree", resp.data);
                             //use retrieved data
-                            //app.largeDataQuality = resp.data;
+                            app.largeDataQuality = resp.data;
                             //console.log("qulity terms", app.largeDataQuality);
                             return resp.data;
 
@@ -22410,13 +22428,13 @@
                     });
             },
 
-            getLargeDataEntity: async function(){
-                await axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=anatomical-structure')
+            getLargeDataEntity: function(){
+                 axios.get('http://shark.sbs.arizona.edu:8080/carex/getSubclasses?baseIri=http://biosemantics.arizona.edu/ontologies/carex&term=anatomical-structure')
                         .then ((resp) => {
                         //.then(function(resp) {
                             console.log('entity term tree', resp.data);
                             //use retrieved data
-                            //app.largeDataEntity = resp.data;
+                            app.largeDataEntity = resp.data;
                             //console.log("entity terms", app.largeDataEntity);
                             return resp.data;
 
@@ -22427,7 +22445,7 @@
                         console.log("activity-log error resp", resp);
                         return app.largeDataEntity;
                     });
-            },
+            },*/
 
 
         }
